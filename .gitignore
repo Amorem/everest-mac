@@ -1,0 +1,16 @@
+# build output
+.build/
+Everest.app/
+# local material that must not be published: Mountain's installer and what
+# was extracted / decompiled from it, Python venv, third-party reference repo
+*.msi
+extracted/
+venv/
+reference/
+tools/*.png
+.DS_Store
+# personal photo and local experiments (some of the scripts write to the
+# keyboard's flash and contain local paths)
+1791082007666.jpg
+tools/*.py
+Everest-*.zip

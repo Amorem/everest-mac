@@ -1,0 +1,17 @@
+name: build
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unit tests (no keyboard needed)
+        run: swift test
+      - name: Build
+        run: swift build -c release
+      - name: Build the app bundle
+        run: ./make-app.sh --zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Everest-app
+          path: Everest-*.zip
