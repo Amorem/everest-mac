@@ -226,7 +226,8 @@ final class Keyboard {
                                     progress: ((Double) -> Void)?) -> Bool {
         let start = Date()
         while Date().timeIntervalSince(start) < timeout {
-            try? transport.setFeature(descriptor)
+            // A failed write means the keyboard is gone: nothing to wait for.
+            guard (try? transport.setFeature(descriptor)) != nil else { return false }
             usleep(150_000)
             let r = transport.getFeature()
             if r.count >= 4, r[0] == 0xAA, r[1] == 0x55, r[2] == 0x10 {
@@ -240,8 +241,9 @@ final class Keyboard {
     }
 
     /// Stream the image chunks, following the running byte count the device
-    /// reports. Never exits early: an abandoned transfer leaves the keyboard
-    /// waiting for data.
+    /// reports. Never exits early while the keyboard is there: an abandoned
+    /// transfer leaves it waiting for data. A failed write (unplugged) ends
+    /// it, and so do 600 answers in a row that do not move it forward.
     private func streamChunks(_ image: [UInt8], range: ClosedRange<Int> = 52...97,
                               progress: ((Int) -> Void)?) -> Bool {
         let total = image.count
@@ -252,10 +254,16 @@ final class Keyboard {
             let end = min(offset + 64, total)
             var chunk = Array(image[offset..<end])
             if chunk.count < 64 { chunk.append(contentsOf: [UInt8](repeating: 0, count: 64 - chunk.count)) }
-            try? transport.setFeature(chunk)
+            guard (try? transport.setFeature(chunk)) != nil else { return false }
             usleep(30_000)
             let r = transport.getFeature()
-            guard let ack = transferAck(r) else { continue }
+            guard let ack = transferAck(r) else {
+                // No answer at all (an unplugged keyboard returns nothing):
+                // counts as a stall, or this would spin for ever.
+                stalls += 1
+                if stalls > 600 { return false }
+                continue
+            }
             if ack.ok, ack.received > offset {
                 offset = ack.received
                 stalls = 0
