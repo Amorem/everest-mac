@@ -108,14 +108,14 @@ struct ProfilesPage: View {
                  icon: "wand.and.rays", tint: tint) {
                 HStack(spacing: 18) {
                     Toggle(isOn: Binding(get: { model.config.autoSwitch },
-                                         set: { model.config.autoSwitch = $0; model.config.save() })) {
+                                         set: { model.config.autoSwitch = $0; model.persist() })) {
                         Text(tr("profiles.enable")).font(.ui(12.5, .medium)).foregroundStyle(Theme.text)
                     }
                     .toggleStyle(.switch)
                     Divider().frame(height: 20)
                     Text(tr("profiles.otherwise")).font(.ui(12.5)).foregroundStyle(Theme.textSecondary)
                     Picker("", selection: Binding(get: { model.config.defaultProfile },
-                                                  set: { model.config.defaultProfile = $0; model.config.save() })) {
+                                                  set: { model.config.defaultProfile = $0; model.persist() })) {
                         ForEach(model.profiles) { p in Text(p.title).tag(p.id) }
                     }
                     .labelsHidden()

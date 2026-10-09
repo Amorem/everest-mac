@@ -489,7 +489,7 @@ struct SystemPage: View {
                     settingRow(tr("system.keepRunning"),
                                tr("system.keepRunningNote"),
                                Binding(get: { model.config.keepRunning },
-                                       set: { model.config.keepRunning = $0; model.config.save() }))
+                                       set: { model.config.keepRunning = $0; model.persist() }))
                     Divider().overlay(Theme.stroke)
                     settingRow(tr("system.autoDaemon"),
                                tr("system.autoDaemonNote"),
@@ -518,7 +518,7 @@ struct SystemPage: View {
                 Card(tr("system.monitoring"), subtitle: tr("system.monitoringNote"),
                      icon: "chart.xyaxis.line", tint: Theme.emerald) {
                     Toggle(isOn: Binding(get: { model.config.monitorMode },
-                                         set: { model.config.monitorMode = $0; model.config.save() })) {
+                                         set: { model.config.monitorMode = $0; model.persist() })) {
                         Text(tr("system.sendMetrics"))
                             .font(.ui(12.5)).foregroundStyle(Theme.text)
                     }

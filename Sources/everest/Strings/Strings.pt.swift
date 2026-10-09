@@ -473,6 +473,8 @@ extension L10n {
         "upload.phase.prepare": "O teclado está preparando o slot",
         "upload.phase.send": "Enviando a imagem",
 
+        "status.configReloaded": "As definições foram alteradas fora da app e foram recarregadas.",
+
         // MARK: pad
         "pad.keysActive": "Teclas P1–P12 ativas",
         "pad.overview.keys": "%1$@ de 12 teclas configuradas",

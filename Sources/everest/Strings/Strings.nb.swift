@@ -473,6 +473,8 @@ extension L10n {
         "upload.phase.prepare": "Tastaturet forbereder plassen",
         "upload.phase.send": "Sender bildet",
 
+        "status.configReloaded": "Innstillingene ble endret utenfor appen og er lastet inn på nytt.",
+
         // MARK: pad
         "pad.keysActive": "P1–P12-taster aktive",
         "pad.overview.keys": "%1$@ av 12 taster satt opp",

@@ -237,17 +237,35 @@ struct Config: Codable {
         do {
             return try JSONDecoder().decode(Config.self, from: data)
         } catch {
-            stderr("warning: \(file.path) is invalid JSON (\(error)) — using defaults")
+            // Keep the broken file: the next save would otherwise replace a
+            // hand-edited configuration with the defaults.
+            let f = DateFormatter()
+            f.dateFormat = "yyyyMMdd-HHmmss"
+            let bad = directory.appendingPathComponent("config.json.bad-\(f.string(from: Date()))")
+            try? FileManager.default.moveItem(at: file, to: bad)
+            stderr("warning: \(file.path) is invalid JSON (\(error)) — moved to \(bad.lastPathComponent), using defaults")
             return Config()
         }
     }
 
+    /// Modification date of the file, to notice changes made by another
+    /// process (the app, the daemon, the CLI or a text editor).
+    static var fileStamp: Date? {
+        (try? FileManager.default.attributesOfItem(atPath: file.path))?[.modificationDate] as? Date
+    }
+
+    /// Written atomically (a reader never sees half a file) and readable by
+    /// the user only: it holds shell commands that run with the app's
+    /// Accessibility permission.
     func save() {
         let enc = JSONEncoder()
         enc.outputFormatting = [.prettyPrinted, .sortedKeys]
         do {
-            try FileManager.default.createDirectory(at: Config.directory, withIntermediateDirectories: true)
-            try enc.encode(self).write(to: Config.file)
+            let fm = FileManager.default
+            try fm.createDirectory(at: Config.directory, withIntermediateDirectories: true,
+                                   attributes: [.posixPermissions: 0o700])
+            try enc.encode(self).write(to: Config.file, options: .atomic)
+            try fm.setAttributes([.posixPermissions: 0o600], ofItemAtPath: Config.file.path)
         } catch {
             stderr("warning: could not write \(Config.file.path): \(error)")
         }

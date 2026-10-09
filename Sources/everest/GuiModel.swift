@@ -132,6 +132,9 @@ final class EverestModel: ObservableObject {
     private var daemonProcess: Process?
     private var pendingApply: DispatchWorkItem?
     private var pendingSave: DispatchWorkItem?
+    private var pendingTextSave: DispatchWorkItem?
+    /// Date of config.json as this process last read or wrote it.
+    private var configStamp = Config.fileStamp
     let device = DispatchQueue(label: "everest.device", qos: .userInitiated)
 
     init() {
@@ -195,6 +198,7 @@ final class EverestModel: ObservableObject {
         accessibilityOK = ActionRunner.accessibilityGranted()
         padConnected = DisplayPad.isPresent
         padState = daemonRunning && padConnected ? PadState.read() : nil
+        reloadConfigIfChanged()
         // Stay off the channel during a picture upload — ours, or one started
         // from the command line (it leaves the FlashBusy marker).
         guard keyUpload == nil, !FlashBusy.active else { return }
@@ -262,7 +266,7 @@ final class EverestModel: ObservableObject {
         firmwareLighting = lighting.firmware
         effect = lighting.mac
         painting = false
-        config.save()
+        persist()
         if config.lighting?.source == .mac { startPlayer() }
     }
 
@@ -296,14 +300,14 @@ final class EverestModel: ObservableObject {
         guard let id = (1...ProfileSwitch.maxProfiles).first(where: { config.profileIndex($0) == nil }) else { return }
         config.profiles.append(newProfile(id: id))
         config.profiles.sort { $0.id < $1.id }
-        config.save()
+        persist()
         switchProfile(to: id)
     }
 
     func updateProfile(_ id: Int, _ mutate: (inout ProfileConfig) -> Void) {
         guard let i = config.profileIndex(id) else { return }
         mutate(&config.profiles[i])
-        config.save()
+        persist()
     }
 
     func deleteProfile(_ id: Int) {
@@ -311,7 +315,7 @@ final class EverestModel: ObservableObject {
         let wasActive = id == config.selectedProfile
         config.profiles.remove(at: i)
         if config.defaultProfile == id { config.defaultProfile = config.profiles[0].id }
-        config.save()
+        persist()
         if wasActive { switchProfile(to: config.defaultProfile) }
         report(tr("status.profileRemoved", id))
     }
@@ -464,7 +468,7 @@ final class EverestModel: ObservableObject {
                     if self?.detectedLayout != detected {
                         self?.detectedLayout = detected
                         self?.config.lastLayout = detected
-                        self?.config.save()
+                        self?.persist()
                     }
                     self?.applyLayout()
                 }
@@ -487,7 +491,7 @@ final class EverestModel: ObservableObject {
     /// Force a layout, or nil to follow the keyboard.
     func setLayoutOverride(_ l: KeyboardLayout?) {
         config.layoutOverride = l
-        config.save()
+        persist()
         applyLayout()
         report(l.map { tr("status.layoutForced", $0.title) } ?? tr("status.layoutAuto"))
     }
@@ -503,7 +507,7 @@ final class EverestModel: ObservableObject {
     func setLanguage(_ language: Language?) {
         L10n.use(language)
         config.language = language?.rawValue
-        config.save()
+        persist()
         if firmwareBlock != nil { enforceFirmwareBlock() } else { report(tr("status.ready")) }
         refreshDevice()
     }
@@ -511,8 +515,51 @@ final class EverestModel: ObservableObject {
     // MARK: - Config
 
     func saveConfig() {
-        config.save()
+        persist()
         report(tr("status.configSaved"))
+    }
+
+    /// Save, and remember the file's date so our own write is not mistaken
+    /// for an outside change.
+    func persist() {
+        pendingTextSave?.cancel()
+        pendingTextSave = nil
+        config.save()
+        configStamp = Config.fileStamp
+    }
+
+    /// For text fields: save once typing pauses, not on every keystroke (the
+    /// daemon reloads the file each time it changes).
+    func persistSoon() {
+        pendingTextSave?.cancel()
+        let work = DispatchWorkItem { [weak self] in
+            Task { @MainActor in self?.persist() }
+        }
+        pendingTextSave = work
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6, execute: work)
+    }
+
+    /// The file was changed by someone else (the daemon, `everest`, a text
+    /// editor): take their version instead of overwriting it on the next save.
+    func reloadConfigIfChanged() {
+        let stamp = Config.fileStamp
+        guard stamp != configStamp, pendingTextSave == nil, pendingSave == nil else { return }
+        configStamp = stamp
+        guard stamp != nil else { return }
+        let fresh = Config.load()
+        let lighting = fresh.lighting ?? LightingConfig()
+        let lightingChanged = fresh.selectedProfile != config.selectedProfile
+            || lighting.source != source
+        config = fresh
+        L10n.use(fresh.language.flatMap(Language.init(rawValue:)))
+        if lightingChanged {
+            stopPlayer()
+            source = lighting.source
+            firmwareLighting = lighting.firmware
+            effect = lighting.mac
+            if source == .mac { startPlayer() }
+        }
+        report(tr("status.configReloaded"))
     }
 
     func setButton(_ index: Int, name: String? = nil, type: String? = nil, value: String? = nil, iconPath: String? = nil) {
@@ -521,7 +568,7 @@ final class EverestModel: ObservableObject {
         if let type { config.buttons[index].action.type = type }
         if let value { config.buttons[index].action.value = value }
         if let iconPath { config.buttons[index].iconPath = iconPath }
-        config.save()
+        if type == nil && iconPath == nil { persistSoon() } else { persist() }
     }
 
     /// What each display key shows in the app — the image being sent while
@@ -615,7 +662,7 @@ final class EverestModel: ObservableObject {
             config.buttons[button].action = action
             config.buttons[button].name = preset.name
         }
-        config.save()
+        persist()
         uploadIcon(button: button, url: url)
     }
 
@@ -628,7 +675,7 @@ final class EverestModel: ObservableObject {
         config.buttons[button].action = ButtonAction(type: "app", value: app.path)
         config.buttons[button].name = FileManager.default.displayName(atPath: app.path)
             .replacingOccurrences(of: ".app", with: "")
-        config.save()
+        persist()
         uploadIcon(button: button, url: icon)
     }
 
@@ -636,7 +683,7 @@ final class EverestModel: ObservableObject {
     /// the default action, name included.
     func restoreFactory(_ button: Int) {
         config.buttons[button] = FactoryKeys.button(button)
-        config.save()
+        persist()
         resetButtonIcon(button)
     }
 
@@ -654,7 +701,7 @@ final class EverestModel: ObservableObject {
             return tr("status.factoryIconRestored", "D\(button + 1)")
         }
         config.buttons[button].iconPath = nil
-        config.save()
+        persist()
     }
 
     func uploadDialImage(url: URL) {
@@ -673,7 +720,7 @@ final class EverestModel: ObservableObject {
                 }
                 DispatchQueue.main.async {
                     self?.config.dialImagePath = url.path
-                    self?.config.save()
+                    self?.persist()
                     self?.progress = nil
                     self?.report(tr("status.dialImageSent"))
                     self?.refreshDevice()
@@ -689,7 +736,7 @@ final class EverestModel: ObservableObject {
 
     func setDialMode(_ mode: Proto.MainMode, label: String) {
         config.mainDisplayMode = mode.rawValue
-        config.save()
+        persist()
         runDevice(tr("status.displayLabel")) { kb in
             kb.setMainMode(mode)
             return tr("status.dialMode", label)
@@ -699,7 +746,7 @@ final class EverestModel: ObservableObject {
     func syncClock() {
         let style: UInt8 = config.clockStyle == "digital" ? 0x01 : 0x00
         let twelve = config.clockFormat == "12h"
-        config.save()
+        persist()
         runDevice(tr("mode.clock")) { kb in
             kb.setTime(style: style, twelveHour: twelve)
             return tr("status.clockSynced")
@@ -904,8 +951,9 @@ final class EverestModel: ObservableObject {
     }
 
     func persistLighting() {
+        pendingSave = nil
         config.lighting = LightingConfig(source: source, firmware: firmwareLighting, mac: effect)
-        config.save()
+        persist()
     }
 
     // MARK: - Daemon & recovery
@@ -914,7 +962,7 @@ final class EverestModel: ObservableObject {
     /// on, the app starts it at launch and restarts it if it ever dies.
     func toggleDaemon() {
         config.daemonEnabled = daemonProcess == nil
-        config.save()
+        persist()
         if config.daemonEnabled { startDaemon() } else { stopDaemon() }
     }
 

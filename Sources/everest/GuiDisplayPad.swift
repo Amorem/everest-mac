@@ -4,12 +4,13 @@ import SwiftUI
 // MARK: - Model
 
 extension EverestModel {
-    /// Change one pad key of the selected profile and save.
-    func updatePadKey(_ i: Int, _ change: (inout ButtonConfig) -> Void) {
+    /// Change one pad key of the selected profile and save (`typing`: once
+    /// the typing pauses).
+    func updatePadKey(_ i: Int, typing: Bool = false, _ change: (inout ButtonConfig) -> Void) {
         var b = config.padButtons
         change(&b[i])
         config.padButtons = b
-        config.save()
+        if typing { persistSoon() } else { persist() }
     }
 
     /// The pad forgets its pictures when unplugged and they are sent again
@@ -52,7 +53,7 @@ extension EverestModel {
     func setPadBrightness(_ percent: Int, commit: Bool = true) {
         config.padBrightness = PadProto.brightnessLevel(percent)
         guard commit else { return }
-        config.save()
+        persist()
         guard !daemonRunning, padConnected else { return }   // the daemon applies it
         let level = config.padBrightness
         let buttons = config.padButtons

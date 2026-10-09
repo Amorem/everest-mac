@@ -473,6 +473,8 @@ extension L10n {
         "upload.phase.prepare": "Die Tastatur bereitet den Slot vor",
         "upload.phase.send": "Bild wird gesendet",
 
+        "status.configReloaded": "Die Einstellungen wurden außerhalb der App geändert und neu geladen.",
+
         // MARK: pad
         "pad.keysActive": "Tasten P1–P12 aktiv",
         "pad.overview.keys": "%1$@ von 12 Tasten belegt",

@@ -41,7 +41,7 @@ extension EverestModel {
 
     func setButton(_ t: KeyTarget, name: String? = nil, type: String? = nil, value: String? = nil) {
         guard t.isPad else { return setButton(t.index, name: name, type: type, value: value) }
-        updatePadKey(t.index) { b in
+        updatePadKey(t.index, typing: type == nil) { b in
             if let name { b.name = name }
             if let type { b.action.type = type }
             if let value { b.action.value = value }

@@ -473,6 +473,8 @@ extension L10n {
         "upload.phase.prepare": "Tangentbordet förbereder platsen",
         "upload.phase.send": "Skickar bilden",
 
+        "status.configReloaded": "Inställningarna ändrades utanför appen och har lästs in igen.",
+
         // MARK: pad
         "pad.keysActive": "P1–P12-tangenter aktiva",
         "pad.overview.keys": "%1$@ av 12 tangenter inställda",

@@ -473,6 +473,8 @@ extension L10n {
         "upload.phase.prepare": "Le clavier prépare l'emplacement",
         "upload.phase.send": "Envoi de l'image",
 
+        "status.configReloaded": "Les réglages ont été modifiés en dehors de l'app et ont été rechargés.",
+
         // MARK: pad
         "pad.keysActive": "Touches P1–P12 actives",
         "pad.overview.keys": "%1$@ touches sur 12 configurées",

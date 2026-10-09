@@ -17,6 +17,28 @@ final class LogicTests: XCTestCase {
         LedLayout.use(.uk)
     }
 
+    // MARK: Config file
+
+    func testSaveIsPrivateAndReadable() throws {
+        var cfg = Config()
+        cfg.clockFormat = "12h"
+        cfg.save()
+        let attrs = try FileManager.default.attributesOfItem(atPath: Config.file.path)
+        XCTAssertEqual((attrs[.posixPermissions] as? NSNumber)?.intValue, 0o600)
+        XCTAssertEqual(Config.load().clockFormat, "12h")
+        XCTAssertNotNil(Config.fileStamp)
+    }
+
+    /// A typo in a hand-edited file must not be replaced by the defaults.
+    func testInvalidFileIsKeptAside() throws {
+        try FileManager.default.createDirectory(at: Config.directory, withIntermediateDirectories: true)
+        try Data(#"{"clockFormat": 12h}"#.utf8).write(to: Config.file)
+        XCTAssertEqual(Config.load().clockFormat, "24h", "defaults")
+        let kept = try FileManager.default.contentsOfDirectory(atPath: dir.path).filter { $0.hasPrefix("config.json.bad-") }
+        XCTAssertEqual(kept.count, 1)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: Config.file.path))
+    }
+
     // MARK: Factory defaults
 
     func testFactoryKeys() {

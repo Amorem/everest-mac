@@ -473,6 +473,8 @@ extension L10n {
         "upload.phase.prepare": "Näppäimistö valmistelee paikkaa",
         "upload.phase.send": "Lähetetään kuvaa",
 
+        "status.configReloaded": "Asetuksia muutettiin sovelluksen ulkopuolella, ja ne ladattiin uudelleen.",
+
         // MARK: pad
         "pad.keysActive": "Näppäimet P1–P12 käytössä",
         "pad.overview.keys": "%1$@/12 näppäintä määritetty",

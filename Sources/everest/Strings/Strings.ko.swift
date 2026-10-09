@@ -473,6 +473,8 @@ extension L10n {
         "upload.phase.prepare": "키보드가 슬롯을 준비하는 중",
         "upload.phase.send": "이미지 전송 중",
 
+        "status.configReloaded": "앱 밖에서 설정이 변경되어 다시 불러왔습니다.",
+
         // MARK: pad
         "pad.keysActive": "P1–P12 키 활성",
         "pad.overview.keys": "12개 중 %1$@개 키 설정됨",

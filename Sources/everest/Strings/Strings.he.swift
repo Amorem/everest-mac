@@ -473,6 +473,8 @@ extension L10n {
         "upload.phase.prepare": "המקלדת מכינה את החריץ",
         "upload.phase.send": "שולח את התמונה",
 
+        "status.configReloaded": "ההגדרות שונו מחוץ לאפליקציה ונטענו מחדש.",
+
         // MARK: pad
         "pad.keysActive": "מקשי P1–P12 פעילים",
         "pad.overview.keys": "%1$@ מתוך 12 מקשים הוגדרו",
