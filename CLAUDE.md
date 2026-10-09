@@ -28,6 +28,7 @@ Dev aids (not user features): `EVEREST_SNAPSHOT=<dir> Everest.app/Contents/MacOS
 - It has a single command buffer: send one query, wait for its answer.
 - During picture uploads the `FlashBusy` marker file (`Daemon.swift`) tells the daemon, LED player and GUI polling to stay off the channel. Anything new that polls the device must honour `FlashBusy.active`.
 - Daemon and LED player drop and reopen their HID session when a write fails (unplug/replug); each session must re-run its startup steps.
+- Only one `everest listen` runs at a time (`listen.lock` in the config directory; a second one exits with status 75). The app passes `--parent-pid` so its listener stops with it, and restarts a dead listener with a back-off. While the daemon runs it owns front-app profile switching and key-action neutralisation (once per profile per connection: each one writes flash).
 
 **Firmware gate.** `Keyboard.init` only opens a keyboard whose `11 00` reply reports firmware `0x57` (`Keyboard.supportedFirmware`); anything else, or an unreadable version, throws `Keyboard.OpenError` and nothing is written. Only read-only callers (`info`, `sniff`, the GUI status polling) pass `allowUnsupported: true` — never write through such a keyboard. Do not add a firmware-update feature.
 

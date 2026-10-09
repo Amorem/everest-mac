@@ -163,6 +163,8 @@ final class EverestModel: ObservableObject {
     var profileTimer: Timer?
     let switcher = AutoSwitcher()
     var unreadableStreak = 0
+    /// Restarts of the daemon in a row, for the back-off.
+    var daemonRestarts = 0
     @Published var keyUpload: KeyUpload?
     var quitting = false
     @Published var launchAtLogin = LoginItem.enabled
@@ -175,7 +177,8 @@ final class EverestModel: ObservableObject {
             Task { @MainActor [weak self] in self?.tickPreview() }
         }
         refreshDevice()
-        if !config.keepFlashActions {
+        // The daemon neutralises the keys itself when it connects.
+        if !config.keepFlashActions && !config.daemonEnabled {
             device.async { [weak self] in
                 guard self != nil, let kb = try? Keyboard() else { return }
                 defer { kb.close() }

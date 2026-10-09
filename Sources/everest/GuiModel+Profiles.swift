@@ -11,6 +11,10 @@ extension EverestModel {
 
 
     func frontAppChanged(_ bundleID: String?) {
+        // The daemon follows the front app itself (the app then follows the
+        // keyboard); doing both sent every switch twice. Never in the middle
+        // of a picture upload either.
+        guard !daemonRunning, keyUpload == nil else { return }
         if let target = switcher.update(frontApp: bundleID, current: config.selectedProfile, config: config) {
             switchProfile(to: target, byFrontApp: true)
         }
@@ -37,12 +41,14 @@ extension EverestModel {
         load(profile: id)
         let p = config.profiles[i]
         if let raw = p.dialMode { config.mainDisplayMode = raw }
+        // The daemon neutralises the key actions when it sees the new profile.
+        let neutralise = !config.keepFlashActions && !daemonRunning
         device.async { [weak self] in
             guard let kb = try? Keyboard() else { return }
             defer { kb.close() }
             kb.wake()
             ProfileSwitch.activate(p, keyboard: kb)
-            if self?.config.keepFlashActions == false { kb.neutraliseKeyActions() }
+            if neutralise { kb.neutraliseKeyActions() }
             DispatchQueue.main.async {
                 self?.report(tr(byFrontApp ? "status.profileActivatedFrontApp" : "status.profileActivated", p.title))
                 self?.refreshDevice()

@@ -31,8 +31,41 @@ enum Daemon {
         stderr("\(f.string(from: Date())) \(s)")
     }
 
+    /// Exit status when another listener already runs (the app waits and
+    /// tries again rather than restarting at once).
+    static let alreadyRunning: Int32 = 75
+
+    /// Held for the life of the process: two listeners would run every
+    /// action twice.
+    private static var lockFD: Int32 = -1
+
+    private static func takeLock() -> Bool {
+        try? FileManager.default.createDirectory(at: Config.directory, withIntermediateDirectories: true)
+        lockFD = open(Config.directory.appendingPathComponent("listen.lock").path, O_CREAT | O_RDWR, 0o600)
+        return lockFD >= 0 && flock(lockFD, LOCK_EX | LOCK_NB) == 0
+    }
+
+    /// Started by the app: stop with it, so a crashed or force-quit app does
+    /// not leave an orphan listener behind.
+    private static var parentWatch: DispatchSourceProcess?
+
+    private static func exitWithParent(_ args: [String]) {
+        guard let i = args.firstIndex(of: "--parent-pid"), i + 1 < args.count,
+              let pid = pid_t(args[i + 1]) else { return }
+        if kill(pid, 0) != 0 { exit(0) }
+        let source = DispatchSource.makeProcessSource(identifier: pid, eventMask: .exit, queue: .global())
+        source.setEventHandler { log("the app quit — stopping"); exit(0) }
+        source.resume()
+        parentWatch = source
+    }
+
     static func run(_ args: [String]) {
         let verbose = args.contains("--verbose")
+        exitWithParent(args)
+        guard takeLock() else {
+            log("another `everest listen` is already running — not starting a second one")
+            exit(alreadyRunning)
+        }
 
         // From the app the permission is shown in its own banner, so don't
         // pop the system dialog again on every start.
@@ -83,7 +116,14 @@ enum Daemon {
         kb.wake()
 
         // The keyboard's own D1–D4 shortcuts would fire next to our actions.
-        if !cfg.keepFlashActions { kb.neutraliseKeyActions() }
+        // Each neutralisation writes the key-action flash, so once per
+        // profile and connection is enough.
+        var neutralised = Set<Int>()
+        func neutralise(_ profile: Int) {
+            guard !cfg.keepFlashActions, !neutralised.contains(profile) else { return }
+            kb.neutraliseKeyActions()
+            neutralised.insert(profile)
+        }
 
         if cfg.applyClockOnStart {
             kb.setTime(style: cfg.clockStyle == "digital" ? 0x01 : 0x00,
@@ -100,6 +140,7 @@ enum Daemon {
         var lastProfileQuery = Date()
         var lastFrontCheck = Date.distantPast
         let switcher = AutoSwitcher()
+        neutralise(profile)
         log("profile \(profile) active")
 
         var lastButton: Int? = nil
@@ -147,6 +188,7 @@ enum Daemon {
                    let i = cfg.profileIndex(target) {
                     ProfileSwitch.activate(cfg.profiles[i], keyboard: kb)
                     profile = target
+                    neutralise(target)
                     log("profile \(target) « \(cfg.profiles[i].name) » (front app)")
                 }
             }
@@ -173,7 +215,7 @@ enum Daemon {
                     if p != profile {
                         profile = p
                         log("profile \(p) active (from the keyboard)")
-                        if !cfg.keepFlashActions { kb.neutraliseKeyActions() }
+                        neutralise(p)
                         if let i = cfg.profileIndex(p), let raw = cfg.profiles[i].dialMode,
                            let mode = Proto.MainMode(rawValue: raw) {
                             kb.setMainMode(mode)

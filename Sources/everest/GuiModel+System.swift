@@ -19,7 +19,7 @@ extension EverestModel {
         let exe = Bundle.main.executablePath ?? CommandLine.arguments[0]
         let p = Process()
         p.executableURL = URL(fileURLWithPath: exe)
-        p.arguments = ["listen", "--no-prompt"]
+        p.arguments = ["listen", "--no-prompt", "--parent-pid", "\(getpid())"]
         // Keep the daemon's output: it says which key fired what, and warns
         // when macOS refuses to post key events.
         let logURL = Config.directory.appendingPathComponent("daemon.log")
@@ -34,14 +34,21 @@ extension EverestModel {
         _ = try? log?.seekToEnd()
         p.standardOutput = log ?? FileHandle.nullDevice
         p.standardError = log ?? FileHandle.nullDevice
+        let launched = Date()
         p.terminationHandler = { [weak self] proc in
+            let status = proc.terminationStatus
             DispatchQueue.main.async {
                 guard let self, self.daemonProcess === proc else { return }
                 self.daemonProcess = nil
                 self.daemonRunning = false
-                // Unexpected end: bring it back unless the user switched it off.
+                // Unexpected end: bring it back unless the user switched it
+                // off, waiting longer each time it dies young (or finds
+                // another listener running).
+                if Date().timeIntervalSince(launched) > 60 && status != Daemon.alreadyRunning { self.daemonRestarts = 0 }
+                self.daemonRestarts += 1
+                let delay = min(60, 2 * pow(2, Double(min(self.daemonRestarts, 6) - 1)))
                 if self.config.daemonEnabled && !self.quitting {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+                    DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
                         guard let self, self.config.daemonEnabled, !self.quitting else { return }
                         self.startDaemon()
                     }
