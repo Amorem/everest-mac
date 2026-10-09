@@ -295,6 +295,9 @@ struct ButtonEditorCard: View {
             Segmented(items: ActionKind.allCases.map { .init(value: $0, title: "", icon: $0.icon, help: $0.title) },
                       selection: Binding(get: { action.type }, set: { model.setButton(target, type: $0) }),
                       tint: tint, fill: true)
+            if model.button(target).live?.needsCodexBar == true, model.codexBarAccess != .noCodexBar {
+                CodexBarAccessRow(model: model)
+            }
             if action.type == .profile {
                 profileRow(value: action.value)
             } else if action.type == .app {

@@ -36,6 +36,20 @@ enum CodexBarUsage {
 
     static var isAvailable: Bool { FileManager.default.fileExists(atPath: file.path) }
 
+    /// macOS protects other apps' data: without "Full Disk Access" (or the
+    /// one-time "access data from other apps" approval, which macOS does not
+    /// always offer) the snapshot exists but cannot be read, and the keys
+    /// show "—". The app checks this to say so and link to the setting.
+    enum Access { case noCodexBar, denied, ok }
+
+    static var access: Access {
+        guard isAvailable else { return .noCodexBar }
+        return FileManager.default.isReadableFile(atPath: file.path) ? .ok : .denied
+    }
+
+    /// Privacy & Security › Full Disk Access.
+    static let fullDiskAccessSettings = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles")!
+
     enum Span { case session, week }
 
     /// The 5-hour session (the shortest window under a day) or the week (the

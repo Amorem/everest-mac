@@ -22,10 +22,15 @@ enum LiveMetric: String, Codable, CaseIterable {
         }
     }
 
+    var needsCodexBar: Bool { codexBar != nil }
+
     /// CodexBar metrics are offered only when its snapshot has that window
     /// (Codex plans without a 5-hour limit have none).
     var isAvailable: Bool {
         guard let c = codexBar else { return true }
+        // Unreadable (no permission yet): offer them anyway, the sheet says
+        // what to allow.
+        if CodexBarUsage.access == .denied { return true }
         return CodexBarUsage.window(c.span, of: c.provider) != nil
     }
 

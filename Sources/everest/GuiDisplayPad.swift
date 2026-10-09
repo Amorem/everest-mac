@@ -278,7 +278,52 @@ struct DisplayPadHero: View {
             model.swapPadKeys(from, i)
             onSelect?(i)
         })
+        .overlay(alignment: .topTrailing) {
+            // Claude / Codex key that cannot read CodexBar: one click to the setting.
+            if model.config.padButtons[i].live?.needsCodexBar == true && model.codexBarAccess == .denied {
+                Button { NSWorkspace.shared.open(CodexBarUsage.fullDiskAccessSettings) } label: {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .font(.system(size: max(10, keySize * 0.16), weight: .bold))
+                        .foregroundStyle(.white)
+                        .padding(keySize * 0.05)
+                        .background(Circle().fill(Theme.amber))
+                }
+                .buttonStyle(.plain)
+                .offset(x: keySize * 0.08, y: -keySize * 0.08)
+                .help(tr("codexbar.denied"))
+            }
+        }
         .help(model.config.padButtons[i].title.flatMap { $0.isEmpty ? nil : $0 } ?? "P\(i + 1)")
+    }
+}
+
+/// Whether Everest can read CodexBar's data, with a link to the macOS
+/// setting when it cannot (Claude / Codex keys).
+struct CodexBarAccessRow: View {
+    @ObservedObject var model: EverestModel
+
+    var body: some View {
+        let ok = model.codexBarAccess == .ok
+        HStack(spacing: 10) {
+            Image(systemName: ok ? "checkmark.seal.fill" : "exclamationmark.triangle.fill")
+                .foregroundStyle(ok ? Theme.success : Theme.amber)
+            VStack(alignment: .leading, spacing: 1) {
+                Text(tr(ok ? "codexbar.ok" : "codexbar.denied")).font(.ui(12, .semibold)).foregroundStyle(Theme.text)
+                if !ok {
+                    Text(tr("codexbar.deniedNote")).font(.ui(10.5)).foregroundStyle(Theme.textSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            Spacer(minLength: 8)
+            if !ok {
+                Button(tr("codexbar.openSettings")) { NSWorkspace.shared.open(CodexBarUsage.fullDiskAccessSettings) }
+                    .buttonStyle(.compact(.primary))
+            }
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 8)
+        .background(RoundedRectangle(cornerRadius: 8, style: .continuous)
+            .fill((ok ? Theme.success : Theme.amber).opacity(0.08)))
     }
 }
 
