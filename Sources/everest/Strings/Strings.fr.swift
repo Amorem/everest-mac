@@ -474,6 +474,11 @@ extension L10n {
         "upload.phase.send": "Envoi de l'image",
 
         // MARK: pad
+        "section.displaypad.title": "DisplayPad",
+        "pad.unsupported": "Le firmware %1$@ du DisplayPad n'est pas pris en charge",
+        "pad.unsupportedNote": "Everest n'écrit que sur le firmware 8, la version testée, et laisse ce pad tranquille.",
+        "pad.noAnswer": "Le DisplayPad ne répond pas",
+        "pad.noAnswerNote": "Il est branché mais ne répond pas : attendez quelques secondes, ou branchez-le directement sur le Mac.",
         "section.displaypad.subtitle": "Douze touches-écrans, chacune avec une image et une action macOS",
         "pad.connected": "DisplayPad connecté",
         "pad.connectedNote": "Les images sont envoyées moins d'une seconde après chaque changement ; le pad les garde jusqu'à ce qu'on le débranche.",

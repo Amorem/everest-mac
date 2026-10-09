@@ -12,8 +12,17 @@ extension EverestModel {
         config.save()
     }
 
+    /// The pad forgets its pictures when unplugged and they are sent again
+    /// from the file, so a picked image is copied next to the app's own icons
+    /// (moving or deleting the original must not blank the key).
     func setPadIcon(_ i: Int, url: URL) {
-        updatePadKey(i) { $0.iconPath = url.path }
+        var path = url.path
+        if !path.hasPrefix(IconFactory.directory.path) {
+            let copy = IconFactory.directory.appendingPathComponent("pad-\(UUID().uuidString).\(url.pathExtension.isEmpty ? "png" : url.pathExtension)")
+            try? FileManager.default.createDirectory(at: IconFactory.directory, withIntermediateDirectories: true)
+            if (try? FileManager.default.copyItem(at: url, to: copy)) != nil { path = copy.path }
+        }
+        updatePadKey(i) { $0.iconPath = path }
         drawPadKeys([i])
     }
 
@@ -44,7 +53,7 @@ extension EverestModel {
         config.padBrightness = PadProto.brightnessLevel(percent)
         guard commit else { return }
         config.save()
-        guard !daemonRunning else { return }   // the daemon applies it
+        guard !daemonRunning, padConnected else { return }   // the daemon applies it
         let level = config.padBrightness
         let buttons = config.padButtons
         padSession { pad in
@@ -56,7 +65,7 @@ extension EverestModel {
     /// The daemon redraws keys whose picture changed in the config within a
     /// second. Without it the app sends them itself.
     func drawPadKeys(_ keys: [Int]) {
-        let label = keys.count == 1 ? "P\(keys[0] + 1)" : "DisplayPad"
+        let label = keys.count == 1 ? "P\(keys[0] + 1)" : tr("section.displaypad.title")
         guard padConnected else {
             report(tr("pad.status.savedOffline", label))
             return
@@ -73,11 +82,11 @@ extension EverestModel {
     }
 
     private func padSession(_ body: @escaping (DisplayPad) throws -> Void, done: (() -> Void)? = nil) {
-        device.async { [weak self] in
+        padQueue.async { [weak self] in
             PadBusy.set()
             defer { PadBusy.clear() }
             do {
-                let pad = try DisplayPad()
+                let pad = try DisplayPad(startup: 3)
                 defer { pad.close() }
                 try body(pad)
                 DispatchQueue.main.async { done?() }
@@ -112,14 +121,31 @@ struct DisplayPadPage: View {
         .sheet(item: $appearance) { t in KeyAppearanceSheet(model: model, target: t.target, tab: t.tab) }
     }
 
+    /// Icon, colour, title and note for the status line: USB presence, then
+    /// what the daemon found when it talked to the pad.
+    private var state: (String, Color, String, String) {
+        guard model.padConnected else {
+            return ("cable.connector.slash", Theme.amber, tr("pad.notConnected"), tr("pad.notConnectedNote"))
+        }
+        switch model.padState?.status {
+        case .unsupported:
+            return ("exclamationmark.triangle.fill", Theme.danger,
+                    tr("pad.unsupported", model.padState?.firmware ?? "?"), tr("pad.unsupportedNote"))
+        case .noAnswer:
+            return ("hourglass", Theme.amber, tr("pad.noAnswer"), tr("pad.noAnswerNote"))
+        default:
+            return ("checkmark.circle.fill", Theme.success, tr("pad.connected"), tr("pad.connectedNote"))
+        }
+    }
+
     private var status: some View {
-        HStack(spacing: 14) {
-            IconBadge(icon: model.padConnected ? "checkmark.circle.fill" : "cable.connector.slash",
-                      tint: model.padConnected ? Theme.success : Theme.amber, size: 30)
+        let (icon, color, title, note) = state
+        return HStack(spacing: 14) {
+            IconBadge(icon: icon, tint: color, size: 30)
             VStack(alignment: .leading, spacing: 2) {
-                Text(tr(model.padConnected ? "pad.connected" : "pad.notConnected"))
+                Text(title)
                     .font(.ui(13, .semibold)).foregroundStyle(Theme.text)
-                Text(tr(model.padConnected ? "pad.connectedNote" : "pad.notConnectedNote"))
+                Text(note)
                     .font(.ui(11.5)).foregroundStyle(Theme.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
@@ -157,7 +183,8 @@ struct DisplayPadPage: View {
                         .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
-                    .help(b.action.type == "none" ? tr("buttons.noAction") : "\(b.action.type): \(b.action.value)")
+                    .help(b.action.type == "none" ? tr("buttons.noAction")
+                          : "\(ButtonsPage.types.first { $0.0 == b.action.type }?.2 ?? b.action.type): \(b.action.value)")
                 }
             }
         }

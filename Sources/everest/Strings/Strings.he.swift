@@ -474,6 +474,11 @@ extension L10n {
         "upload.phase.send": "שולח את התמונה",
 
         // MARK: pad
+        "section.displaypad.title": "DisplayPad",
+        "pad.unsupported": "קושחת DisplayPad %1$@ אינה נתמכת",
+        "pad.unsupportedNote": "Everest כותב רק לקושחה 8, הגרסה שנבדקה, ומשאיר את המשטח הזה בשקט.",
+        "pad.noAnswer": "ה־DisplayPad לא מגיב",
+        "pad.noAnswerNote": "הוא מחובר אך לא עונה: המתינו כמה שניות, או חברו אותו ישירות ל־Mac.",
         "section.displaypad.subtitle": "שנים־עשר מקשי מסך, לכל אחד תמונה ופעולת macOS",
         "pad.connected": "DisplayPad מחובר",
         "pad.connectedNote": "התמונות נשלחות תוך שנייה מכל שינוי; המשטח שומר אותן עד שמנתקים אותו.",

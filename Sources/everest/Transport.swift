@@ -86,6 +86,11 @@ final class Transport {
         IOHIDDeviceScheduleWithRunLoop(dev, CFRunLoopGetCurrent(), CFRunLoopMode.defaultMode.rawValue)
     }
 
+    /// USB location of the opened device, to reach its other interfaces.
+    var locationID: Int? {
+        device.flatMap { IOHIDDeviceGetProperty($0, kIOHIDLocationIDKey as CFString) as? Int }
+    }
+
     static func maxInputReportSize(_ device: IOHIDDevice) -> Int {
         (IOHIDDeviceGetProperty(device, "MaxInputReportSize" as CFString) as? Int) ?? 0
     }

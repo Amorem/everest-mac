@@ -474,6 +474,11 @@ extension L10n {
         "upload.phase.send": "Sender bildet",
 
         // MARK: pad
+        "section.displaypad.title": "DisplayPad",
+        "pad.unsupported": "DisplayPad-fastvare %1$@ støttes ikke",
+        "pad.unsupportedNote": "Everest skriver bare til fastvare 8, den testede versjonen, og lar denne paden være.",
+        "pad.noAnswer": "DisplayPad svarer ikke",
+        "pad.noAnswerNote": "Den er koblet til, men svarer ikke: vent noen sekunder, eller koble den direkte til Macen.",
         "section.displaypad.subtitle": "Tolv skjermtaster, hver med et bilde og en macOS-handling",
         "pad.connected": "DisplayPad tilkoblet",
         "pad.connectedNote": "Bilder sendes innen et sekund etter hver endring; paden beholder dem til den kobles fra.",

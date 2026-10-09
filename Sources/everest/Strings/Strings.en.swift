@@ -474,6 +474,11 @@ extension L10n {
         "upload.phase.send": "Sending the image",
 
         // MARK: pad
+        "section.displaypad.title": "DisplayPad",
+        "pad.unsupported": "DisplayPad firmware %1$@ is not supported",
+        "pad.unsupportedNote": "Everest only writes to firmware 8, the version it was tested with, and leaves this pad alone.",
+        "pad.noAnswer": "DisplayPad not responding",
+        "pad.noAnswerNote": "It is plugged in but does not answer: wait a few seconds, or plug it straight into the Mac.",
         "section.displaypad.subtitle": "Twelve screen keys, each with a picture and a macOS action",
         "pad.connected": "DisplayPad connected",
         "pad.connectedNote": "Pictures are sent within a second of any change; the pad keeps them until it is unplugged.",

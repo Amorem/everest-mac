@@ -33,6 +33,25 @@ because no kernel driver claims it.
 - Pictures are kept in RAM until power is lost, so the daemon sends all twelve
   again on every connection and after the Mac wakes.
 
+## Firmware gate
+
+The pad answers `11 00` whether or not it is in host mode, so the firmware is
+read first and nothing else is sent unless it is the tested version (8). The
+daemon then leaves an unsupported pad alone until it is plugged in again.
+
+## Sharing the pad
+
+The app, the daemon (`everest listen`), the CLI and the self-test may all have
+the command interface open. Replies are matched by their echo, the pixel
+interface is opened only while sending, and a process talking to the pad
+directly leaves a marker (`.pad-busy.<pid>` in the config directory) that keeps
+the daemon quiet. The daemon publishes what it found in `.pad-state` for the
+app's status line.
+
+Host mode off (`11 80 00 00 00`) clears the pictures without any USB event, so
+the daemon cannot notice it; Everest never sends it, but another tool could.
+Restarting the daemon redraws the keys.
+
 ## Commands (interface 3)
 
 64-byte packets, unnumbered output reports. One request at a time: the reply

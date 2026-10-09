@@ -12,7 +12,7 @@ enum Section: String, CaseIterable, Identifiable {
         case .lighting: return tr("lighting.title")
         case .displays: return tr("section.displays.title")
         case .buttons: return tr("section.buttons.title")
-        case .displaypad: return "DisplayPad"
+        case .displaypad: return tr("section.displaypad.title")
         case .keyboard: return tr("section.keyboard.title")
         case .system: return tr("section.system.title")
         }
@@ -101,6 +101,11 @@ final class EverestModel: ObservableObject {
     @Published var daemonRunning = false
     /// The DisplayPad is plugged in (USB presence only; the daemon talks to it).
     @Published var padConnected = DisplayPad.isPresent
+    /// What the daemon reports about the pad (nil while it is not running).
+    @Published var padState: PadState?
+    /// The DisplayPad gets its own queue: a pad that does not answer must not
+    /// hold up the keyboard.
+    let padQueue = DispatchQueue(label: "everest.pad", qos: .userInitiated)
     /// Layout the keyboard reports (nil until it has been read).
     @Published var detectedLayout: KeyboardLayout?
     /// What the app draws and animates: the manual choice, else the detected
@@ -189,6 +194,7 @@ final class EverestModel: ObservableObject {
     private func pollProfile() {
         accessibilityOK = ActionRunner.accessibilityGranted()
         padConnected = DisplayPad.isPresent
+        padState = daemonRunning && padConnected ? PadState.read() : nil
         // Stay off the channel during a picture upload — ours, or one started
         // from the command line (it leaves the FlashBusy marker).
         guard keyUpload == nil, !FlashBusy.active else { return }

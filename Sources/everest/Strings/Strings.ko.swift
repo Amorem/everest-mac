@@ -474,6 +474,11 @@ extension L10n {
         "upload.phase.send": "이미지 전송 중",
 
         // MARK: pad
+        "section.displaypad.title": "DisplayPad",
+        "pad.unsupported": "DisplayPad 펌웨어 %1$@은(는) 지원되지 않습니다",
+        "pad.unsupportedNote": "Everest는 테스트된 버전인 펌웨어 8에만 쓰기를 하며, 이 패드는 건드리지 않습니다.",
+        "pad.noAnswer": "DisplayPad가 응답하지 않음",
+        "pad.noAnswerNote": "연결되어 있지만 응답하지 않습니다. 몇 초 기다리거나 Mac에 직접 연결하세요.",
         "section.displaypad.subtitle": "이미지와 macOS 동작을 지정할 수 있는 12개의 화면 키",
         "pad.connected": "DisplayPad 연결됨",
         "pad.connectedNote": "변경 후 1초 이내에 이미지가 전송되며, 패드는 분리될 때까지 이미지를 유지합니다.",

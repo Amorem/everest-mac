@@ -235,7 +235,7 @@ enum SelfTest {
 
         // The picture interface opens (exclusive) and is released.
         do {
-            let pipe = try PadPixelPipe()
+            let pipe = try PadPixelPipe(locationID: pad.transport.locationID)
             pipe.close()
             check("picture interface opened and released (IOUSBHost, interface 1)", true)
         } catch {

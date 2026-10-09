@@ -21,17 +21,21 @@ final class PadPixelPipe {
     enum PipeError: Error, CustomStringConvertible, LocalizedError {
         case notFound
         case open(Error)
+        case stalled
         var description: String {
             switch self {
             case .notFound: return "DisplayPad picture interface not found"
+            case .stalled: return "the DisplayPad stopped taking picture data"
             case .open(let e): return "DisplayPad picture interface busy or unavailable (\(e.localizedDescription))"
             }
         }
         var errorDescription: String? { description }
     }
 
-    init() throws {
-        guard let service = PadPixelPipe.service() else { throw PipeError.notFound }
+    /// `locationID`: the pad whose command interface is open, so pixels never
+    /// go to another DisplayPad.
+    init(locationID: Int?) throws {
+        guard let service = PadPixelPipe.service(locationID: locationID) else { throw PipeError.notFound }
         defer { IOObjectRelease(service) }
         do {
             interface = try IOUSBHostInterface(__ioService: service, options: [], queue: nil, interestHandler: nil)
@@ -43,7 +47,7 @@ final class PadPixelPipe {
         }
     }
 
-    private static func service() -> io_service_t? {
+    private static func service(locationID: Int?) -> io_service_t? {
         var it: io_iterator_t = 0
         guard IOServiceGetMatchingServices(kIOMainPortDefault, IOServiceMatching("IOUSBHostInterface"), &it) == KERN_SUCCESS else { return nil }
         defer { IOObjectRelease(it) }
@@ -52,7 +56,8 @@ final class PadPixelPipe {
                 IORegistryEntryCreateCFProperty(s, k as CFString, kCFAllocatorDefault, 0)?.takeRetainedValue() as? Int
             }
             if prop("idVendor") == Transport.vendorID, prop("idProduct") == PadProto.productID,
-               prop("bInterfaceNumber") == interfaceNumber { return s }
+               prop("bInterfaceNumber") == interfaceNumber,
+               locationID == nil || prop("locationID") == locationID { return s }
             IOObjectRelease(s)
         }
         return nil
@@ -67,9 +72,20 @@ final class PadPixelPipe {
                 buffer.replaceBytes(in: NSRange(location: 0, length: n), withBytes: raw.baseAddress! + off)
             }
             if n < chunk { buffer.resetBytes(in: NSRange(location: n, length: chunk - n)) }
-            var sent = 0
-            // Interrupt pipes take no timeout (0 = wait for completion).
-            try pipe.__sendIORequest(with: buffer, bytesTransferred: &sent, completionTimeout: 0)
+            // Interrupt pipes take no completion timeout, so watch the
+            // transfer ourselves: a pad that stops draining the endpoint must
+            // not hang the caller.
+            let done = DispatchSemaphore(value: 0)
+            var status = kIOReturnSuccess
+            try pipe.enqueueIORequest(with: buffer, completionTimeout: 0) { s, _ in
+                status = s
+                done.signal()
+            }
+            if done.wait(timeout: .now() + 2) == .timedOut {
+                try? pipe.__abort(with: .synchronous)
+                throw PipeError.stalled
+            }
+            if status != kIOReturnSuccess { throw PipeError.open(NSError(domain: NSOSStatusErrorDomain, code: Int(status))) }
         }
     }
 
@@ -119,20 +135,25 @@ final class DisplayPad {
         return false
     }
 
-    /// Opens the pad, switches it to host mode and checks its firmware.
-    /// `startup` is how long to keep asking: a pad just plugged in needs a
-    /// few seconds before it answers.
+    /// Opens the pad, checks its firmware and only then switches it to host
+    /// mode. `startup` is how long to keep asking: a pad just plugged in
+    /// needs a few seconds before it answers. It answers `11 00` before host
+    /// mode (checked on firmware 8), so nothing is written to a pad whose
+    /// firmware is not the tested one: `allowUnsupported` callers (read-only)
+    /// get the version and no host mode.
     init(allowUnsupported: Bool = false, startup: TimeInterval = 8) throws {
         do { transport = try Transport(productID: PadProto.productID) } catch { throw PadError.notFound }
         do {
-            try enable(timeout: startup)
-            for _ in 0..<3 where firmware == nil {
-                firmware = try request(PadProto.firmwareInfo, echo: 2, timeout: 0.8).flatMap(PadProto.firmwareVersion)
+            let deadline = Date().addingTimeInterval(startup)
+            repeat {
+                firmware = try request(PadProto.firmwareInfo, echo: 2, timeout: 0.5).flatMap(PadProto.firmwareVersion)
+            } while firmware == nil && Date() < deadline
+            guard let v = firmware else { throw PadError.noAnswer }
+            guard v == PadProto.supportedFirmware else {
+                if allowUnsupported { return }
+                throw PadError.unsupportedFirmware(v)
             }
-            if !allowUnsupported {
-                guard let v = firmware else { throw PadError.noAnswer }
-                guard v == PadProto.supportedFirmware else { throw PadError.unsupportedFirmware(v) }
-            }
+            try enable(timeout: max(2, deadline.timeIntervalSinceNow))
         } catch {
             transport.close()
             throw error
@@ -193,8 +214,10 @@ final class DisplayPad {
 
     /// Pictures for several keys (BGR, 102 × 102), in RAM. Opens the pixel
     /// interface once for the batch.
-    func setKeyImages(_ images: [(key: Int, bgr: [UInt8])]) throws {
+    /// `drawn` is told each key as soon as the pad has taken it.
+    func setKeyImages(_ images: [(key: Int, bgr: [UInt8])], drawn: ((Int) -> Void)? = nil) throws {
         guard !images.isEmpty else { return }
+        guard firmware == PadProto.supportedFirmware else { throw PadError.unsupportedFirmware(firmware ?? 0) }
         let pipe = try openPipe()
         defer { pipe.close() }
         for (key, bgr) in images {
@@ -205,6 +228,7 @@ final class DisplayPad {
             guard wait(prefix: [0x21, 0x00, 0xFF], timeout: 1.5).map(PadProto.isImageDone) == true else {
                 throw PadError.imageRejected(key)
             }
+            drawn?(key)
         }
     }
 
@@ -214,7 +238,7 @@ final class DisplayPad {
     private func openPipe() throws -> PadPixelPipe {
         var last: Error = PadPixelPipe.PipeError.notFound
         for _ in 0..<20 {
-            do { return try PadPixelPipe() } catch { last = error }
+            do { return try PadPixelPipe(locationID: transport.locationID) } catch { last = error }
             Thread.sleep(forTimeInterval: 0.15)
         }
         throw last

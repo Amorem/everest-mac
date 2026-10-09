@@ -288,7 +288,7 @@ struct ButtonEditorCard: View {
                           systemImage: target.isPad ? "eraser" : "arrow.uturn.backward")
                 }
                 .buttonStyle(.compact(.ghost))
-                .disabled(model.keysBusy)
+                .disabled(!target.isPad && model.keysBusy)
                 .help(tr(target.isPad ? "pad.clearKeyHelp" : "buttons.factoryValuesHelp", target.label))
                 Spacer()
                 Button {

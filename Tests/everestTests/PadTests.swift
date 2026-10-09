@@ -131,4 +131,29 @@ final class PadTests: XCTestCase {
         XCTAssertEqual(KeyTarget.pad(11).label, "P12")
         XCTAssertEqual(KeyTarget.dkey(0).label, "D1")
     }
+
+    func testBusyMarkersArePerProcess() throws {
+        let dir = FileManager.default.temporaryDirectory.appendingPathComponent("everest-pad-\(UUID().uuidString)")
+        setenv("EVEREST_CONFIG_DIR", dir.path, 1)
+        defer { unsetenv("EVEREST_CONFIG_DIR"); try? FileManager.default.removeItem(at: dir) }
+        PadBusy.set()
+        XCTAssertFalse(PadBusy.active, "our own marker does not silence us")
+        try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        // Another live process (launchd, pid 1, always exists).
+        try Data().write(to: dir.appendingPathComponent(".pad-busy.1"))
+        XCTAssertTrue(PadBusy.active)
+        // A process that no longer exists does not count.
+        try FileManager.default.removeItem(at: dir.appendingPathComponent(".pad-busy.1"))
+        try Data().write(to: dir.appendingPathComponent(".pad-busy.999999"))
+        XCTAssertFalse(PadBusy.active)
+        PadBusy.clear()
+    }
+
+    func testPadStateRoundTrip() throws {
+        let dir = FileManager.default.temporaryDirectory.appendingPathComponent("everest-pad-\(UUID().uuidString)")
+        setenv("EVEREST_CONFIG_DIR", dir.path, 1)
+        defer { unsetenv("EVEREST_CONFIG_DIR"); try? FileManager.default.removeItem(at: dir) }
+        PadState(status: .unsupported, firmware: "9").publish()
+        XCTAssertEqual(PadState.read(), PadState(status: .unsupported, firmware: "9"))
+    }
 }

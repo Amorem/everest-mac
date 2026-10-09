@@ -474,6 +474,11 @@ extension L10n {
         "upload.phase.send": "Lähetetään kuvaa",
 
         // MARK: pad
+        "section.displaypad.title": "DisplayPad",
+        "pad.unsupported": "DisplayPadin laiteohjelmistoa %1$@ ei tueta",
+        "pad.unsupportedNote": "Everest kirjoittaa vain laiteohjelmistoon 8, testattuun versioon, eikä koske tähän padiin.",
+        "pad.noAnswer": "DisplayPad ei vastaa",
+        "pad.noAnswerNote": "Se on kytketty, mutta ei vastaa: odota muutama sekunti tai kytke se suoraan Maciin.",
         "section.displaypad.subtitle": "Kaksitoista näyttönäppäintä, jokaisessa kuva ja macOS-toiminto",
         "pad.connected": "DisplayPad yhdistetty",
         "pad.connectedNote": "Kuvat lähetetään sekunnin kuluessa jokaisesta muutoksesta; pad säilyttää ne, kunnes se irrotetaan.",
