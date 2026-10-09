@@ -197,6 +197,7 @@ struct KeyAppearanceSheet: View {
             Caption(tr("keyappearance.liveNote"), icon: "info.circle")
             if CodexBarUsage.isAvailable {
                 Caption(tr("keyappearance.liveCodexBar"), icon: "sparkle")
+                CodexBarAccessRow(model: model)
             }
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 6), spacing: 12) {
                 ForEach(LiveMetric.allCases.filter(\.isAvailable), id: \.self) { m in

@@ -110,6 +110,8 @@ final class EverestModel: ObservableObject {
     @Published var nightMode = NightMode.active
     /// Mac-rendered lighting paused for the night, to resume in the morning.
     var playerPausedForNight = false
+    /// Whether the app may read CodexBar's data (checked with the live values).
+    @Published var codexBarAccess = CodexBarUsage.access
     /// The DisplayPad gets its own queue: a pad that does not answer must not
     /// hold up the keyboard.
     let padQueue = DispatchQueue(label: "everest.pad", qos: .userInitiated)
@@ -234,6 +236,10 @@ final class EverestModel: ObservableObject {
         padConnected = DisplayPad.isPresent
         padState = daemonRunning && padConnected ? PadState.read() : nil
         if config.padButtons.contains(where: { $0.live != nil }) { liveSample = Metrics.latest(maxAge: 1.5) }
+        if config.padButtons.contains(where: { $0.live?.needsCodexBar == true }) {
+            let access = CodexBarUsage.access
+            if access != codexBarAccess { codexBarAccess = access }
+        }
         reloadConfigIfChanged()
         followNightMode()
         // Stay off the channel during a picture upload — ours, or one started
