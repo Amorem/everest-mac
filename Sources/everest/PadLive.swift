@@ -24,6 +24,16 @@ enum LiveMetric: String, Codable, CaseIterable {
 
     var needsCodexBar: Bool { codexBar != nil }
 
+    /// The label under the value on the key. Claude and Codex keys say only
+    /// which window they show: the glyph and colour already say whose.
+    var tileLabel: String {
+        switch codexBar?.span {
+        case .session: return tr("live.fiveHours")
+        case .week: return tr("live.week")
+        case nil: return title
+        }
+    }
+
     /// CodexBar metrics are offered only when its snapshot has that window
     /// (Codex plans without a 5-hour limit have none).
     var isAvailable: Bool {
@@ -175,7 +185,7 @@ enum LiveTiles {
         }
         let valueSize = text.count > 5 ? s * 0.15 : s * 0.21
         draw(text, size: valueSize, weight: .bold, color: .white, centerY: s * 0.47, side: s, rounded: true)
-        draw(metric.title.uppercased(), size: s * 0.085, weight: .bold, color: NSColor.white.withAlphaComponent(0.55),
+        draw(metric.tileLabel.uppercased(), size: s * 0.085, weight: .bold, color: NSColor.white.withAlphaComponent(0.55),
              centerY: s * 0.29, side: s, rounded: false)
         return ctx.makeImage()
     }

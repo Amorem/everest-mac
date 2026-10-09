@@ -485,6 +485,7 @@ extension L10n {
         "profileAction.next": "다음 프로필",
         "profileAction.previous": "이전 프로필",
         "profiles.newCopyPad": "«%1$@»의 DisplayPad 키로 새로 만들기",
+        "live.fiveHours": "5시간",
         "codexbar.ok": "CodexBar 데이터: 정상",
         "codexbar.denied": "Everest가 CodexBar 데이터를 읽을 수 없습니다",
         "codexbar.deniedNote": "macOS는 다른 앱의 데이터를 보호하며, 앱은 스스로 ‘전체 디스크 접근 권한’에 추가될 수 없습니다. Finder 창에서 Everest를 목록으로 끌어 놓고(또는 + 사용) 켠 다음, Everest를 종료했다가 다시 여세요.",

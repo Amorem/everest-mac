@@ -485,6 +485,7 @@ extension L10n {
         "profileAction.next": "Seuraava profiili",
         "profileAction.previous": "Edellinen profiili",
         "profiles.newCopyPad": "Uusi, profiilin ”%1$@” DisplayPad-näppäimillä",
+        "live.fiveHours": "5 tuntia",
         "codexbar.ok": "CodexBar-tiedot: OK",
         "codexbar.denied": "Everest ei voi lukea CodexBarin tietoja",
         "codexbar.deniedNote": "macOS suojaa muiden apien tietoja, eikä app voi lisätä itseään kohtaan ”Täysi levyn käyttöoikeus”. Vedä Everest Finder-ikkunasta luetteloon (tai käytä +), ota se käyttöön ja käynnistä Everest uudelleen.",

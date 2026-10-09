@@ -485,6 +485,7 @@ extension L10n {
         "profileAction.next": "Profilo successivo",
         "profileAction.previous": "Profilo precedente",
         "profiles.newCopyPad": "Nuovo, con i tasti DisplayPad di «%1$@»",
+        "live.fiveHours": "5 ore",
         "codexbar.ok": "Dati di CodexBar: OK",
         "codexbar.denied": "Everest non può leggere i dati di CodexBar",
         "codexbar.deniedNote": "macOS protegge i dati delle altre app e un'app non può aggiungersi da sola ad «Accesso completo al disco». Trascina Everest dalla finestra del Finder nell'elenco (o usa +), attivalo, poi chiudi e riapri Everest.",

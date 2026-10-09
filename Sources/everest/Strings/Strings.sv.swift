@@ -485,6 +485,7 @@ extension L10n {
         "profileAction.next": "Nästa profil",
         "profileAction.previous": "Föregående profil",
         "profiles.newCopyPad": "Ny, med DisplayPad-tangenterna från ”%1$@”",
+        "live.fiveHours": "5 timmar",
         "codexbar.ok": "CodexBar-data: OK",
         "codexbar.denied": "Everest kan inte läsa CodexBars data",
         "codexbar.deniedNote": "macOS skyddar andra appars data och appar kan inte lägga till sig själva i ”Full skivåtkomst”. Dra Everest från Finder-fönstret till listan (eller använd +), slå på det och avsluta och öppna Everest igen.",
