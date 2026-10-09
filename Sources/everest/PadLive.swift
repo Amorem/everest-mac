@@ -41,7 +41,9 @@ enum LiveMetric: String, Codable, CaseIterable {
         // Unreadable (no permission yet): offer them anyway, the sheet says
         // what to allow.
         if CodexBarUsage.access == .denied { return true }
-        return CodexBarUsage.window(c.span, of: c.provider) != nil
+        // Offered when CodexBar reports this window at all, however old the
+        // value (a stale one shows "—" on the key, it does not hide it).
+        return CodexBarUsage.window(c.span, of: c.provider, now: .distantPast) != nil
     }
 
     var title: String {
