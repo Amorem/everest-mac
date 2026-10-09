@@ -540,6 +540,8 @@ struct SystemPage: View {
                 }
             }
 
+            MRRCalendarCard(model: model)
+
             Card(tr("action.app"), subtitle: tr("system.background"),
                  icon: "menubar.rectangle", tint: Theme.violet) {
                 VStack(alignment: .leading, spacing: 14) {
@@ -664,5 +666,78 @@ struct AccessibilityBanner: View {
         }
         .padding(14)
         .background(SurfaceBackground(fill: Theme.rose.opacity(0.07)))
+    }
+}
+
+/// MRRCalendar connection: personal access token (kept in the keychain),
+/// server address, and a test that fetches the numbers once.
+struct MRRCalendarCard: View {
+    @ObservedObject var model: EverestModel
+    @State private var token = ""
+    @State private var configured = MRRCalendar.isConfigured
+    @State private var status: (ok: Bool, text: String)?
+    @State private var testing = false
+
+    var body: some View {
+        Card("MRRCalendar", subtitle: tr("mrr.subtitle"), icon: "chart.line.uptrend.xyaxis", tint: Theme.emerald) {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack(spacing: 10) {
+                    SecureField(configured ? tr("mrr.tokenSaved") : "mrrc_…", text: $token)
+                        .textFieldStyle(.roundedBorder)
+                        .frame(maxWidth: 360)
+                    Button(tr("mrr.saveTest")) { save() }
+                        .buttonStyle(.compact(.primary))
+                        .disabled(testing || (token.isEmpty && !configured))
+                    if configured {
+                        Button(tr("mrr.disconnect")) {
+                            MRRCalendar.setToken(nil)
+                            configured = false
+                            status = nil
+                        }
+                        .buttonStyle(.compact(.ghost))
+                    }
+                }
+                HStack(spacing: 8) {
+                    FieldLabel(tr("mrr.server"))
+                    TextField(MRRCalendar.defaultBaseURL, text: Binding(
+                        get: { model.config.mrrCalendarURL },
+                        set: { model.config.mrrCalendarURL = $0; model.persistSoon() }))
+                        .textFieldStyle(.roundedBorder)
+                        .frame(maxWidth: 300)
+                }
+                if testing {
+                    Caption(tr("mrr.testing"), icon: "hourglass")
+                } else if let status {
+                    Caption(status.text, icon: status.ok ? "checkmark.seal.fill" : "exclamationmark.triangle.fill")
+                        .foregroundStyle(status.ok ? Theme.success : Theme.amber)
+                }
+                Caption(tr("mrr.note"), icon: "key")
+            }
+        }
+    }
+
+    private func save() {
+        if !token.isEmpty {
+            MRRCalendar.setToken(token)
+            token = ""
+            configured = MRRCalendar.isConfigured
+        }
+        testing = true
+        Task {
+            let result = await MRRCalendar.refresh()
+            await MainActor.run {
+                testing = false
+                switch result {
+                case .success(let m):
+                    status = (true, tr("mrr.ok", MRRCalendar.compactMoney(m.mrr, currency: m.currency), "\(m.commits.today)"))
+                case .failure(.unauthorized):
+                    status = (false, tr("mrr.unauthorized"))
+                case .failure(.notConfigured):
+                    status = (false, tr("mrr.unauthorized"))
+                case .failure(let error):
+                    status = (false, tr("mrr.failed", "\(error)"))
+                }
+            }
+        }
     }
 }

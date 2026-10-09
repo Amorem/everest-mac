@@ -33,6 +33,10 @@ hardware a job.
   the key opens the setting with Everest selected in Finder, ready to drag in.
 - **Dial screen** — clock, CPU / GPU / RAM / disk / network / volume gauges,
   or a custom image.
+- **MRRCalendar on the pad** — with a personal access token from
+  [MRRCalendar](https://mrrcalendar.com) (System › MRRCalendar, kept in the
+  keychain), keys can show your MRR, today's and 30-day revenue and today's
+  commits, refreshed every five minutes.
 - **Night mode** — one key (or `everest night`) turns the key lighting, the
   dial and D1–D4 screens and the DisplayPad off and mutes the sound; the
   same key brings everything back as it was. Nothing is written to flash.
