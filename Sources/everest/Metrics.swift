@@ -8,6 +8,9 @@ struct MetricsSample {
     var gpu: UInt8 = 0
     var disk: UInt8 = 0
     var networkMBs: UInt8 = 0
+    /// The same rate unrounded, in bytes per second (the dial takes whole
+    /// MB/s, which reads 0 for ordinary browsing; the pad shows kB/s).
+    var networkBytesPerSecond: Double = 0
     var ram: UInt8 = 0
     var volumeLevel: UInt8?
 }
@@ -16,7 +19,7 @@ struct MetricsSample {
 /// knows (cpu, gpu, hdd, network MB/s, ram) plus the volume command.
 enum Metrics {
     private static var prevCPU: (user: UInt32, system: UInt32, idle: UInt32, nice: UInt32)?
-    private static var prevNet: (bytes: UInt64, time: Date)?
+    private static var prevNet: (counters: [String: UInt32], time: Date)?
     private static var smoothed: [Double] = [0, 0, 0, 0, 0]
 
     private static let lock = NSLock()
@@ -51,6 +54,7 @@ enum Metrics {
         s.gpu = clamp(smoothed[1])
         s.disk = clamp(smoothed[2])
         s.networkMBs = clamp(smoothed[3])
+        s.networkBytesPerSecond = smoothed[3] * 1_000_000
         s.ram = clamp(smoothed[4])
         s.volumeLevel = defaultOutputVolume()
         return s
@@ -116,30 +120,48 @@ enum Metrics {
 
     // MARK: - Network
 
-    static func networkMBs() -> Double {
-        var bytes: UInt64 = 0
+    static func networkMBs() -> Double { networkBytesPerSecond() / 1_000_000 }
+
+    /// Bytes in + out per second on the physical interfaces (en0, en1…:
+    /// Wi-Fi, Ethernet, Thunderbolt and USB adapters). VPN tunnels (utun)
+    /// carry the same traffic again and AirDrop links (awdl, llw) are not
+    /// the network, so they are left out. `if_data` counters are 32-bit and
+    /// wrap every 4 GB, so the difference is taken per interface with
+    /// wrapping arithmetic rather than on a sum.
+    static func networkBytesPerSecond() -> Double {
+        var counters: [String: UInt32] = [:]
         var ifaddrPtr: UnsafeMutablePointer<ifaddrs>?
         guard getifaddrs(&ifaddrPtr) == 0, let first = ifaddrPtr else { return 0 }
         defer { freeifaddrs(ifaddrPtr) }
         var ptr: UnsafeMutablePointer<ifaddrs>? = first
         while let cur = ptr {
             let ifa = cur.pointee
-            if let addr = ifa.ifa_addr, addr.pointee.sa_family == UInt8(AF_LINK) {
+            if let addr = ifa.ifa_addr, addr.pointee.sa_family == UInt8(AF_LINK), let data = ifa.ifa_data {
                 let name = String(cString: ifa.ifa_name)
-                if name != "lo0", let data = ifa.ifa_data {
+                if name.hasPrefix("en") {
                     let d = data.assumingMemoryBound(to: if_data.self).pointee
-                    bytes += UInt64(d.ifi_ibytes) + UInt64(d.ifi_obytes)
+                    counters[name + ".in"] = d.ifi_ibytes
+                    counters[name + ".out"] = d.ifi_obytes
                 }
             }
             ptr = ifa.ifa_next
         }
         let now = Date()
-        defer { prevNet = (bytes, now) }
+        defer { prevNet = (counters, now) }
         guard let prev = prevNet else { return 0 }
         let dt = now.timeIntervalSince(prev.time)
-        guard dt > 0.2 else { return smoothed[3] }
-        let delta = bytes >= prev.bytes ? bytes - prev.bytes : 0
-        return Double(delta) / dt / 1_000_000.0
+        guard dt > 0.2 else { return smoothed[3] * 1_000_000 }
+        return Double(bytesMoved(from: prev.counters, to: counters)) / dt
+    }
+
+    /// Sum of per-counter differences, each modulo 2³² (a counter that
+    /// wrapped since the last sample still gives the right difference; one
+    /// that appeared or vanished counts as zero).
+    static func bytesMoved(from old: [String: UInt32], to new: [String: UInt32]) -> UInt64 {
+        new.reduce(0) { total, entry in
+            guard let before = old[entry.key] else { return total }
+            return total + UInt64(entry.value &- before)
+        }
     }
 
     // MARK: - Volume

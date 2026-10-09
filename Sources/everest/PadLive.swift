@@ -59,6 +59,14 @@ enum LiveMetric: String, Codable, CaseIterable {
         }
     }
 
+    /// "0 kB/s", "47 kB/s", "1.2 MB/s", "35 MB/s".
+    static func rateText(_ bytesPerSecond: Double) -> String {
+        let kB = bytesPerSecond / 1000
+        if kB < 1000 { return "\(Int(kB.rounded())) kB/s" }
+        let MB = kB / 1000
+        return MB < 10 ? String(format: "%.1f MB/s", MB) : "\(Int(MB.rounded())) MB/s"
+    }
+
     /// 0…1 for the gauge, and the text in its middle.
     func reading(_ s: MetricsSample, at date: Date) -> (fraction: Double, text: String) {
         func pct(_ v: UInt8) -> (Double, String) { (Double(min(v, 100)) / 100, "\(min(v, 100))%") }
@@ -69,9 +77,9 @@ enum LiveMetric: String, Codable, CaseIterable {
         case .disk: return pct(s.disk)
         case .volume: return s.volumeLevel.map(pct) ?? (0, "—")
         case .network:
-            // MB/s, the gauge on a log scale up to ~100 MB/s.
-            let v = Double(s.networkMBs)
-            return (min(1, log10(1 + v) / 2), v < 10 ? String(format: "%.0f MB/s", v) : "\(Int(v)) MB/s")
+            // The gauge on a log scale from 1 kB/s to 100 MB/s.
+            let kB = s.networkBytesPerSecond / 1000
+            return (min(1, log10(1 + kB) / 5), LiveMetric.rateText(s.networkBytesPerSecond))
         case .clock:
             let f = DateFormatter()
             f.dateFormat = "HH:mm"

@@ -204,4 +204,20 @@ final class PadTests: XCTestCase {
         cfg.swapPadKeys(1, 12)   // out of range: ignored
         XCTAssertEqual(cfg.padButtons[1].iconPath, "/tmp/x.png")
     }
+
+    /// Ordinary browsing is tens of kB/s: whole MB/s read 0 for ever.
+    func testNetworkRate() {
+        XCTAssertEqual(LiveMetric.rateText(0), "0 kB/s")
+        XCTAssertEqual(LiveMetric.rateText(47_300), "47 kB/s")
+        XCTAssertEqual(LiveMetric.rateText(1_240_000), "1.2 MB/s")
+        XCTAssertEqual(LiveMetric.rateText(35_000_000), "35 MB/s")
+        var s = MetricsSample()
+        s.networkBytesPerSecond = 47_000
+        XCTAssertEqual(LiveMetric.network.reading(s, at: Date()).text, "47 kB/s")
+        XCTAssertGreaterThan(LiveMetric.network.reading(s, at: Date()).fraction, 0.3)
+        // 32-bit counters wrap every 4 GB: the difference stays right.
+        XCTAssertEqual(Metrics.bytesMoved(from: ["en1.in": 4_294_967_000], to: ["en1.in": 704]), 1000)
+        XCTAssertEqual(Metrics.bytesMoved(from: ["en0.in": 10, "en0.out": 5], to: ["en0.in": 110, "en0.out": 55, "en5.in": 9]), 150,
+                       "an interface that just appeared counts from the next sample")
+    }
 }
