@@ -157,6 +157,8 @@ struct OverviewPage: View {
             }
             .background(SurfaceBackground(radius: 18))
 
+            if model.padConnected { DisplayPadCard(model: model) }
+
             HStack(alignment: .top, spacing: 18) {
                 lightingTile
                 dialTile

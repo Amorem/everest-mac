@@ -474,6 +474,8 @@ extension L10n {
         "upload.phase.send": "שולח את התמונה",
 
         // MARK: pad
+        "pad.overview.keys": "%1$@ מתוך 12 מקשים הוגדרו",
+        "pad.overview.firmware": "קושחה %1$@",
         "section.displaypad.title": "DisplayPad",
         "pad.unsupported": "קושחת DisplayPad %1$@ אינה נתמכת",
         "pad.unsupportedNote": "Everest כותב רק לקושחה 8, הגרסה שנבדקה, ומשאיר את המשטח הזה בשקט.",

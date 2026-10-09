@@ -474,6 +474,8 @@ extension L10n {
         "upload.phase.send": "Lähetetään kuvaa",
 
         // MARK: pad
+        "pad.overview.keys": "%1$@/12 näppäintä määritetty",
+        "pad.overview.firmware": "Laiteohjelmisto %1$@",
         "section.displaypad.title": "DisplayPad",
         "pad.unsupported": "DisplayPadin laiteohjelmistoa %1$@ ei tueta",
         "pad.unsupportedNote": "Everest kirjoittaa vain laiteohjelmistoon 8, testattuun versioon, eikä koske tähän padiin.",

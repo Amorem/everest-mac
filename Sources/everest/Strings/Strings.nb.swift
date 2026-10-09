@@ -474,6 +474,8 @@ extension L10n {
         "upload.phase.send": "Sender bildet",
 
         // MARK: pad
+        "pad.overview.keys": "%1$@ av 12 taster satt opp",
+        "pad.overview.firmware": "Fastvare %1$@",
         "section.displaypad.title": "DisplayPad",
         "pad.unsupported": "DisplayPad-fastvare %1$@ støttes ikke",
         "pad.unsupportedNote": "Everest skriver bare til fastvare 8, den testede versjonen, og lar denne paden være.",

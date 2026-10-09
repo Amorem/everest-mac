@@ -166,27 +166,129 @@ struct DisplayPadPage: View {
     private var grid: some View {
         Card(tr("pad.keys"), subtitle: tr("pad.keysNote", model.activeProfile?.title ?? ""),
              icon: "rectangle.split.3x1.fill", tint: tint) {
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: PadProto.columns), spacing: 12) {
-                ForEach(0..<PadProto.keyCount, id: \.self) { i in
-                    let b = model.config.padButtons[i]
-                    Button { selected = i } label: {
-                        VStack(spacing: 6) {
-                            KeyScreen(image: model.image(for: .pad(i)), label: "P\(i + 1)", size: 84, factory: false)
-                                .overlay(RoundedRectangle(cornerRadius: 84 * 0.16, style: .continuous)
-                                    .strokeBorder(selected == i ? tint : .clear, lineWidth: 2.5))
-                            Text(b.title.flatMap { $0.isEmpty ? nil : $0 } ?? "P\(i + 1)")
-                                .font(.ui(11, selected == i ? .semibold : .regular))
-                                .foregroundStyle(selected == i ? Theme.text : Theme.textSecondary)
-                                .lineLimit(1)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .contentShape(Rectangle())
+            DisplayPadHero(model: model, keySize: 86, selected: selected) { selected = $0 }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 6)
+        }
+    }
+}
+
+// MARK: - Device drawing
+
+/// The DisplayPad as it sits on the desk: a dark body, one screen behind
+/// twelve keys, each showing its picture. Clickable on the DisplayPad page.
+struct DisplayPadHero: View {
+    @ObservedObject var model: EverestModel
+    var keySize: CGFloat = 72
+    var selected: Int? = nil
+    var onSelect: ((Int) -> Void)? = nil
+    private var gap: CGFloat { keySize * 0.16 }
+
+    var body: some View {
+        let tint = Section.displaypad.tint
+        ZStack {
+            VStack(spacing: gap) {
+                ForEach(0..<2, id: \.self) { row in
+                    HStack(spacing: gap) {
+                        ForEach(0..<PadProto.columns, id: \.self) { col in key(row * PadProto.columns + col) }
                     }
-                    .buttonStyle(.plain)
-                    .help(b.action.type == "none" ? tr("buttons.noAction")
-                          : "\(ButtonsPage.types.first { $0.0 == b.action.type }?.2 ?? b.action.type): \(b.action.value)")
                 }
             }
+            .padding(keySize * 0.22)
+            .background(
+                // The one screen the keys sit over.
+                RoundedRectangle(cornerRadius: keySize * 0.16, style: .continuous)
+                    .fill(Color(hex: 0x050608))
+                    .overlay(RoundedRectangle(cornerRadius: keySize * 0.16, style: .continuous)
+                        .strokeBorder(.white.opacity(0.06)))
+            )
+            .padding(keySize * 0.24)
+            .background(
+                RoundedRectangle(cornerRadius: keySize * 0.3, style: .continuous)
+                    .fill(LinearGradient(colors: [Color(hex: 0x2B2E35), Color(hex: 0x16171B)],
+                                         startPoint: .top, endPoint: .bottom))
+                    .overlay(RoundedRectangle(cornerRadius: keySize * 0.3, style: .continuous)
+                        .strokeBorder(LinearGradient(colors: [.white.opacity(0.18), .white.opacity(0.03)],
+                                                     startPoint: .top, endPoint: .bottom)))
+                    .shadow(color: .black.opacity(0.55), radius: keySize * 0.25, y: keySize * 0.1)
+                    .shadow(color: tint.opacity(0.25), radius: keySize * 0.6)
+            )
+        }
+    }
+
+    private func key(_ i: Int) -> some View {
+        let r = keySize * 0.14
+        let image = model.image(for: .pad(i))
+        let isSelected = selected == i
+        return ZStack {
+            RoundedRectangle(cornerRadius: r, style: .continuous).fill(Color.black)
+            if let image {
+                Image(nsImage: image).resizable().interpolation(.high).aspectRatio(contentMode: .fill)
+                    .opacity(0.25 + 0.75 * Double(model.config.padBrightness) / 100)
+            } else if onSelect != nil {
+                Text("P\(i + 1)").font(.system(size: keySize * 0.2, weight: .heavy))
+                    .foregroundStyle(.white.opacity(0.18))
+            }
+            // Keycap: a clear plastic edge with a highlight on top.
+            RoundedRectangle(cornerRadius: r, style: .continuous)
+                .strokeBorder(LinearGradient(colors: [.white.opacity(0.22), .white.opacity(0.04)],
+                                             startPoint: .top, endPoint: .bottom), lineWidth: 1)
+            if isSelected {
+                RoundedRectangle(cornerRadius: r + 3, style: .continuous)
+                    .strokeBorder(Section.displaypad.tint, lineWidth: 2.5)
+                    .padding(-4)
+            }
+        }
+        .frame(width: keySize, height: keySize)
+        .clipShape(RoundedRectangle(cornerRadius: r, style: .continuous).inset(by: -5))
+        .contentShape(Rectangle())
+        .onTapGesture { onSelect?(i) }
+        .help(model.config.padButtons[i].title.flatMap { $0.isEmpty ? nil : $0 } ?? "P\(i + 1)")
+    }
+}
+
+/// Overview card, shown while the DisplayPad is plugged in.
+struct DisplayPadCard: View {
+    @ObservedObject var model: EverestModel
+
+    var body: some View {
+        let tint = Section.displaypad.tint
+        let assigned = model.config.padButtons.filter { $0.action.type != "none" }.count
+        HStack(alignment: .center, spacing: 28) {
+            DisplayPadHero(model: model, keySize: 62)
+                .onTapGesture { model.section = .displaypad }
+            VStack(alignment: .leading, spacing: 14) {
+                HStack(spacing: 11) {
+                    IconBadge(icon: Section.displaypad.icon, tint: tint, size: 28)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(tr("section.displaypad.title")).font(.ui(13.5, .semibold)).foregroundStyle(Theme.text)
+                        Text(subtitle).font(.ui(11.5)).foregroundStyle(Theme.textSecondary)
+                    }
+                }
+                HStack(spacing: 10) {
+                    Pill(text: tr("pad.overview.keys", "\(assigned)"), icon: "rectangle.split.3x1", tint: Theme.textSecondary)
+                    Pill(text: "\(model.config.padBrightness) %", icon: "sun.max", tint: Theme.textSecondary)
+                    if let fw = model.padState?.firmware {
+                        Pill(text: tr("pad.overview.firmware", fw), icon: "cpu", tint: Theme.textSecondary)
+                    }
+                }
+                Button { model.section = .displaypad } label: {
+                    Label(tr("common.configure"), systemImage: "slider.horizontal.3")
+                }
+                .buttonStyle(.secondary)
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(18)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(SurfaceBackground(radius: 18))
+    }
+
+    private var subtitle: String {
+        switch model.padState?.status {
+        case .unsupported: return tr("pad.unsupported", model.padState?.firmware ?? "?")
+        case .noAnswer: return tr("pad.noAnswer")
+        default: return model.daemonActive ? tr("overview.actionsActive") : tr("daemon.stopped")
         }
     }
 }

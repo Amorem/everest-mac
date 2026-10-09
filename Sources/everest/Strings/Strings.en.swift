@@ -474,6 +474,8 @@ extension L10n {
         "upload.phase.send": "Sending the image",
 
         // MARK: pad
+        "pad.overview.keys": "%1$@ of 12 keys set",
+        "pad.overview.firmware": "Firmware %1$@",
         "section.displaypad.title": "DisplayPad",
         "pad.unsupported": "DisplayPad firmware %1$@ is not supported",
         "pad.unsupportedNote": "Everest only writes to firmware 8, the version it was tested with, and leaves this pad alone.",

@@ -474,6 +474,8 @@ extension L10n {
         "upload.phase.send": "이미지 전송 중",
 
         // MARK: pad
+        "pad.overview.keys": "12개 중 %1$@개 키 설정됨",
+        "pad.overview.firmware": "펌웨어 %1$@",
         "section.displaypad.title": "DisplayPad",
         "pad.unsupported": "DisplayPad 펌웨어 %1$@은(는) 지원되지 않습니다",
         "pad.unsupportedNote": "Everest는 테스트된 버전인 펌웨어 8에만 쓰기를 하며, 이 패드는 건드리지 않습니다.",
