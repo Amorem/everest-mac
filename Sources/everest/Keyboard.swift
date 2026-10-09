@@ -138,8 +138,27 @@ final class Keyboard {
               let p = Proto.displayBrightness(from: raw, byte: off ? Proto.displaysOff : Proto.displaysFollowLighting)
         else { return false }
         try? transport.write(p)
-        _ = transport.read(timeout: 0.5)
+        // Base Camp gives SetExtendInfo up to 2.8 s; a command sent while
+        // the keyboard is still applying it is dropped.
+        _ = waitReply(0x14, timeout: 3)
         return true
+    }
+
+    /// Lighting slot of the active profile, then check the keyboard is on
+    /// it (`11 00` byte 11) and send it again if not. Returns the slot the
+    /// keyboard reports.
+    @discardableResult
+    func switchLighting(profile: UInt8, slot: UInt8) -> UInt8? {
+        var reported: UInt8?
+        for _ in 0..<3 {
+            send(FirmwareLighting.switchProfile(profile, slot: slot), wait: 0.3)
+            transport.flush()
+            try? transport.write(Proto.packet([0x11, 0x00]))
+            reported = waitReply(0x00, timeout: 1).flatMap { $0.count > 11 ? $0[11] : nil }
+            if reported == slot { break }
+            Thread.sleep(forTimeInterval: 0.5)
+        }
+        return reported
     }
 
     func resetDial() {

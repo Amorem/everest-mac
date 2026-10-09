@@ -224,7 +224,8 @@ enum Daemon {
                     // first, then the screens back to following the lighting.
                     let slot = night ? FirmwareLighting.Effect.off.slot : own
                     if night { kb.setDisplays(off: true) }
-                    kb.send(FirmwareLighting.switchProfile(UInt8(profile), slot: slot), wait: 0.3)
+                    let reported = kb.switchLighting(profile: UInt8(profile), slot: slot)
+                    if reported != slot { log("night mode: the keyboard reports lighting slot \(reported.map(String.init) ?? "?"), not \(slot)") }
                     if !night && nightApplied != nil { kb.setDisplays(off: false) }
                     if nightApplied != nil || night { log(night ? "night mode: lights off" : "night mode: lights back on") }
                     nightApplied = night
