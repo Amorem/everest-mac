@@ -144,9 +144,17 @@ final class DisplayPad {
     init(allowUnsupported: Bool = false, startup: TimeInterval = 8) throws {
         do { transport = try Transport(productID: PadProto.productID) } catch { throw PadError.notFound }
         do {
+            DisplayPad.enableReports()
             let deadline = Date().addingTimeInterval(startup)
             repeat {
-                firmware = try request(PadProto.firmwareInfo, echo: 2, timeout: 0.5).flatMap(PadProto.firmwareVersion)
+                // A pad still starting up times out writes: keep asking.
+                do {
+                    firmware = try request(PadProto.firmwareInfo, echo: 2, timeout: 0.5).flatMap(PadProto.firmwareVersion)
+                } catch PadError.refused(let p) {
+                    throw PadError.refused(p)
+                } catch {
+                    Thread.sleep(forTimeInterval: 0.3)
+                }
             } while firmware == nil && Date() < deadline
             guard let v = firmware else { throw PadError.noAnswer }
             guard v == PadProto.supportedFirmware else {
@@ -162,11 +170,34 @@ final class DisplayPad {
 
     func close() { transport.close() }
 
+    /// After it is plugged in, the pad times out every command until its
+    /// keyboard interface (0) gets output report 3 = `03 01`, which Windows
+    /// sends at enumeration (seen in a USB capture; verified on hardware:
+    /// the commands time out before it and work right after). It is the
+    /// keyboard LED report, outside the command channel, so it is not on the
+    /// allow-list; best effort, sent before every session.
+    static func enableReports() {
+        let manager = IOHIDManagerCreate(kCFAllocatorDefault, IOOptionBits(kIOHIDOptionsTypeNone))
+        IOHIDManagerSetDeviceMatching(manager, [kIOHIDVendorIDKey: Transport.vendorID, kIOHIDProductIDKey: PadProto.productID,
+                                                kIOHIDPrimaryUsagePageKey: 0x01, kIOHIDPrimaryUsageKey: 0x06] as CFDictionary)
+        guard let keyboard = (IOHIDManagerCopyDevices(manager) as? Set<IOHIDDevice>)?.first,
+              IOHIDDeviceOpen(keyboard, IOOptionBits(kIOHIDOptionsTypeNone)) == kIOReturnSuccess else { return }
+        defer { IOHIDDeviceClose(keyboard, IOOptionBits(kIOHIDOptionsTypeNone)) }
+        var report: [UInt8] = [0x03, 0x01]
+        _ = IOHIDDeviceSetReport(keyboard, kIOHIDReportTypeOutput, 3, &report, report.count)
+    }
+
     /// Host mode, retried until the pad echoes it.
     func enable(timeout: TimeInterval) throws {
         let deadline = Date().addingTimeInterval(timeout)
         repeat {
-            if try request(PadProto.enable, echo: 5, timeout: 0.5) != nil { return }
+            do {
+                if try request(PadProto.enable, echo: 5, timeout: 0.5) != nil { return }
+            } catch PadError.refused(let p) {
+                throw PadError.refused(p)
+            } catch {
+                Thread.sleep(forTimeInterval: 0.3)
+            }
         } while Date() < deadline
         throw PadError.noAnswer
     }

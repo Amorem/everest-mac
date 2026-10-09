@@ -374,12 +374,14 @@ struct DeviceCard: View {
                 Self.miniStat(tr("device.firmware"), model.padState?.firmware ?? "—")
                 Self.miniStat(tr("pad.brightness"), "\(model.config.padBrightness) %")
             }
-            let live = model.daemonActive && (status == nil || status == .connected)
-            HStack(spacing: 6) {
-                StatusDot(on: live, color: Theme.indigo)
-                Text(live ? tr("pad.keysActive") : tr("daemon.stopped"))
-                    .font(.ui(11))
-                    .foregroundStyle(Theme.textTertiary)
+            // The orange line above already says when the pad is not answering.
+            if !model.daemonActive || status == nil || status == .connected {
+                HStack(spacing: 6) {
+                    StatusDot(on: model.daemonActive, color: Theme.indigo)
+                    Text(model.daemonActive ? tr("pad.keysActive") : tr("daemon.stopped"))
+                        .font(.ui(11))
+                        .foregroundStyle(Theme.textTertiary)
+                }
             }
         }
         .contentShape(Rectangle())
