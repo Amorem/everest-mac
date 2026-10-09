@@ -487,7 +487,7 @@ extension L10n {
         "profiles.newCopyPad": "New, with the DisplayPad keys of « %1$@ »",
         "codexbar.ok": "CodexBar data: OK",
         "codexbar.denied": "Everest can't read CodexBar's data",
-        "codexbar.deniedNote": "macOS protects other apps' data. Add Everest to Full Disk Access, then quit and reopen Everest.",
+        "codexbar.deniedNote": "macOS protects other apps' data, and apps cannot add themselves to Full Disk Access. Drag Everest from the Finder window into the list (or use +), switch it on, then quit and reopen Everest.",
         "codexbar.openSettings": "Open settings",
         "live.week": "week",
         "keyappearance.liveCodexBar": "Claude and Codex show your usage limits as CodexBar last read them (it refreshes them every few minutes): one key for the 5-hour window, one for the week.",

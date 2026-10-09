@@ -1,3 +1,4 @@
+import AppKit
 import Foundation
 
 /// Claude and Codex usage limits, read from CodexBar (github.com/steipete/CodexBar,
@@ -49,6 +50,15 @@ enum CodexBarUsage {
 
     /// Privacy & Security › Full Disk Access.
     static let fullDiskAccessSettings = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles")!
+
+    /// An app cannot add itself to Full Disk Access: open the setting, and a
+    /// Finder window with Everest selected, ready to drag into the list.
+    static func showFullDiskAccess() {
+        NSWorkspace.shared.open(fullDiskAccessSettings)
+        if Bundle.main.bundlePath.hasSuffix(".app") {
+            NSWorkspace.shared.activateFileViewerSelecting([Bundle.main.bundleURL])
+        }
+    }
 
     enum Span { case session, week }
 

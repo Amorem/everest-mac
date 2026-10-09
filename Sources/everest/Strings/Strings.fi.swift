@@ -487,7 +487,7 @@ extension L10n {
         "profiles.newCopyPad": "Uusi, profiilin ”%1$@” DisplayPad-näppäimillä",
         "codexbar.ok": "CodexBar-tiedot: OK",
         "codexbar.denied": "Everest ei voi lukea CodexBarin tietoja",
-        "codexbar.deniedNote": "macOS suojaa muiden apien tietoja. Lisää Everest kohtaan ”Täysi levyn käyttöoikeus” ja käynnistä Everest uudelleen.",
+        "codexbar.deniedNote": "macOS suojaa muiden apien tietoja, eikä app voi lisätä itseään kohtaan ”Täysi levyn käyttöoikeus”. Vedä Everest Finder-ikkunasta luetteloon (tai käytä +), ota se käyttöön ja käynnistä Everest uudelleen.",
         "codexbar.openSettings": "Avaa asetukset",
         "live.week": "viikko",
         "keyappearance.liveCodexBar": "Claude ja Codex näyttävät käyttörajasi sellaisina kuin CodexBar ne viimeksi luki (päivittyy muutaman minuutin välein): yksi näppäin 5 tunnin jaksolle, toinen viikolle.",
