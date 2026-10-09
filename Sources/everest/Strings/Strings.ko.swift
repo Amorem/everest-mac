@@ -476,6 +476,7 @@ extension L10n {
         "status.configReloaded": "앱 밖에서 설정이 변경되어 다시 불러왔습니다.",
 
         // MARK: pad
+        "pad.status.swapped": "%1$@과(와) %2$@을(를) 바꿨습니다.",
         "keyappearance.live": "실시간",
         "keyappearance.liveAction": "해당 앱도 열기",
         "keyappearance.liveNote": "패드가 연결되어 있는 동안 값이 바뀔 때마다(최대 초당 1회) 다시 그립니다. 키의 동작은 유지됩니다.",
@@ -494,7 +495,7 @@ extension L10n {
         "pad.notConnectedNote": "Mac에 직접 연결하세요. 일부 USB 허브에서는 화면이 검게 유지됩니다.",
         "pad.brightness": "밝기",
         "pad.keys": "키",
-        "pad.keysNote": "키를 클릭해 편집하세요. 이미지와 동작은 «%1$@» 프로필에 저장됩니다.",
+        "pad.keysNote": "키를 클릭해 편집하거나, 다른 키 위로 끌어 서로 바꾸세요. 이미지와 동작은 «%1$@» 프로필에 저장됩니다.",
         "pad.clearKey": "지우기",
         "pad.clearKeyHelp": "%1$@의 이미지와 동작을 제거합니다",
         "pad.noImage": "이미지 없음",

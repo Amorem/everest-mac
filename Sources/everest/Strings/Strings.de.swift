@@ -476,6 +476,7 @@ extension L10n {
         "status.configReloaded": "Die Einstellungen wurden außerhalb der App geändert und neu geladen.",
 
         // MARK: pad
+        "pad.status.swapped": "%1$@ und %2$@ getauscht.",
         "keyappearance.live": "Live",
         "keyappearance.liveAction": "Auch die passende App öffnen",
         "keyappearance.liveNote": "Wird neu gezeichnet, sobald sich der Wert ändert (höchstens einmal pro Sekunde), solange das Pad angeschlossen ist. Die Taste behält ihre Aktion.",
@@ -494,7 +495,7 @@ extension L10n {
         "pad.notConnectedNote": "Direkt am Mac anschließen: an manchen USB-Hubs bleibt sein Bildschirm schwarz.",
         "pad.brightness": "Helligkeit",
         "pad.keys": "Tasten",
-        "pad.keysNote": "Klicken Sie auf eine Taste, um sie zu bearbeiten. Bilder und Aktionen werden im Profil „%1$@“ gespeichert.",
+        "pad.keysNote": "Klicken Sie auf eine Taste, um sie zu bearbeiten, oder ziehen Sie sie auf eine andere, um beide zu tauschen. Bilder und Aktionen werden im Profil „%1$@“ gespeichert.",
         "pad.clearKey": "Leeren",
         "pad.clearKeyHelp": "Entfernt Bild und Aktion von %1$@",
         "pad.noImage": "Kein Bild",

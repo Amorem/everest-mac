@@ -476,6 +476,7 @@ extension L10n {
         "status.configReloaded": "Settings were changed outside the app and have been reloaded.",
 
         // MARK: pad
+        "pad.status.swapped": "%1$@ and %2$@ swapped.",
         "keyappearance.live": "Live",
         "keyappearance.liveAction": "Also open the matching app",
         "keyappearance.liveNote": "Redrawn whenever the value changes (at most once a second) while the pad is plugged in. The key keeps its action.",
@@ -494,7 +495,7 @@ extension L10n {
         "pad.notConnectedNote": "Plug it straight into the Mac: on some USB hubs its screen stays black.",
         "pad.brightness": "Brightness",
         "pad.keys": "Keys",
-        "pad.keysNote": "Click a key to edit it. Pictures and actions are saved in the profile « %1$@ ».",
+        "pad.keysNote": "Click a key to edit it, or drag it onto another to swap them. Pictures and actions are saved in the profile « %1$@ ».",
         "pad.clearKey": "Clear",
         "pad.clearKeyHelp": "Removes the picture and the action of %1$@",
         "pad.noImage": "No picture",

@@ -177,6 +177,15 @@ struct Config: Codable {
         }
     }
 
+    /// Swap two DisplayPad keys of the selected profile (everything moves:
+    /// picture or live value, action, name).
+    mutating func swapPadKeys(_ a: Int, _ b: Int) {
+        guard a != b, (0..<PadProto.keyCount).contains(a), (0..<PadProto.keyCount).contains(b) else { return }
+        var keys = padButtons
+        keys.swapAt(a, b)
+        padButtons = keys
+    }
+
     func padButtons(for profile: Int) -> [ButtonConfig] {
         profileIndex(profile).map { profiles[$0].padButtons } ?? padButtons
     }

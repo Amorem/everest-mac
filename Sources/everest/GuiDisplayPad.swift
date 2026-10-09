@@ -27,6 +27,15 @@ extension EverestModel {
         drawPadKeys([i])
     }
 
+    /// Swap two pad keys of the selected profile; the daemon redraws both.
+    func swapPadKeys(_ a: Int, _ b: Int) {
+        guard a != b, (0..<PadProto.keyCount).contains(a), (0..<PadProto.keyCount).contains(b) else { return }
+        config.swapPadKeys(a, b)
+        persist()
+        drawPadKeys([a, b])
+        report(tr("pad.status.swapped", "P\(a + 1)", "P\(b + 1)"))
+    }
+
     /// A live value on a pad key, optionally with the matching action.
     func setLive(_ metric: LiveMetric, to i: Int, withAction: Bool) {
         updatePadKey(i) { b in
@@ -195,6 +204,8 @@ struct DisplayPadHero: View {
     var keySize: CGFloat = 72
     var selected: Int? = nil
     var onSelect: ((Int) -> Void)? = nil
+    /// The key a dragged key is hovering over (DisplayPad page only).
+    @State private var dropTarget: Int?
     private var gap: CGFloat { keySize * 0.16 }
 
     var body: some View {
@@ -255,8 +266,53 @@ struct DisplayPadHero: View {
         .frame(width: keySize, height: keySize)
         .clipShape(RoundedRectangle(cornerRadius: r, style: .continuous).inset(by: -5))
         .contentShape(Rectangle())
+        .overlay {
+            if dropTarget == i {
+                RoundedRectangle(cornerRadius: r + 3, style: .continuous)
+                    .strokeBorder(Section.displaypad.tint, style: StrokeStyle(lineWidth: 2.5, dash: [6, 4]))
+                    .padding(-4)
+            }
+        }
         .onTapGesture { onSelect?(i) }
+        .modifier(PadKeyDragDrop(index: i, enabled: onSelect != nil, dropTarget: $dropTarget) { from in
+            model.swapPadKeys(from, i)
+            onSelect?(i)
+        })
         .help(model.config.padButtons[i].title.flatMap { $0.isEmpty ? nil : $0 } ?? "P\(i + 1)")
+    }
+}
+
+/// Drag a pad key onto another to swap them (picture or live value, action
+/// and name move together). The payload is tagged so other text dropped on
+/// the window is ignored.
+struct PadKeyDragDrop: ViewModifier {
+    static let prefix = "everest-pad-key:"
+    let index: Int
+    let enabled: Bool
+    @Binding var dropTarget: Int?
+    let onDrop: (Int) -> Void
+
+    func body(content: Content) -> some View {
+        if enabled {
+            content
+                .onDrag { NSItemProvider(object: "\(Self.prefix)\(index)" as NSString) }
+                .onDrop(of: [.plainText], isTargeted: Binding(
+                    get: { dropTarget == index },
+                    set: { dropTarget = $0 ? index : (dropTarget == index ? nil : dropTarget) })) { providers in
+                    guard let provider = providers.first else { return false }
+                    _ = provider.loadObject(ofClass: NSString.self) { object, _ in
+                        guard let text = object as? String, text.hasPrefix(Self.prefix),
+                              let from = Int(text.dropFirst(Self.prefix.count)) else { return }
+                        DispatchQueue.main.async {
+                            dropTarget = nil
+                            if from != index { onDrop(from) }
+                        }
+                    }
+                    return true
+                }
+        } else {
+            content
+        }
     }
 }
 

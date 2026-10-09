@@ -476,6 +476,7 @@ extension L10n {
         "status.configReloaded": "Inställningarna ändrades utanför appen och har lästs in igen.",
 
         // MARK: pad
+        "pad.status.swapped": "%1$@ och %2$@ har bytt plats.",
         "keyappearance.live": "Live",
         "keyappearance.liveAction": "Öppna även motsvarande app",
         "keyappearance.liveNote": "Ritas om när värdet ändras (högst en gång per sekund) medan plattan är ansluten. Tangenten behåller sin åtgärd.",
@@ -494,7 +495,7 @@ extension L10n {
         "pad.notConnectedNote": "Anslut den direkt till Macen: på vissa USB-hubbar förblir skärmen svart.",
         "pad.brightness": "Ljusstyrka",
         "pad.keys": "Tangenter",
-        "pad.keysNote": "Klicka på en tangent för att redigera den. Bilder och åtgärder sparas i profilen ”%1$@”.",
+        "pad.keysNote": "Klicka på en tangent för att redigera den, eller dra den till en annan för att byta plats på dem. Bilder och åtgärder sparas i profilen ”%1$@”.",
         "pad.clearKey": "Rensa",
         "pad.clearKeyHelp": "Tar bort bilden och åtgärden för %1$@",
         "pad.noImage": "Ingen bild",

@@ -476,6 +476,7 @@ extension L10n {
         "status.configReloaded": "Asetuksia muutettiin sovelluksen ulkopuolella, ja ne ladattiin uudelleen.",
 
         // MARK: pad
+        "pad.status.swapped": "%1$@ ja %2$@ vaihdettu.",
         "keyappearance.live": "Reaaliaikainen",
         "keyappearance.liveAction": "Avaa myös vastaava sovellus",
         "keyappearance.liveNote": "Piirretään uudelleen, kun arvo muuttuu (enintään kerran sekunnissa), kun pad on kytkettynä. Näppäin säilyttää toimintonsa.",
@@ -494,7 +495,7 @@ extension L10n {
         "pad.notConnectedNote": "Kytke se suoraan Maciin: joissakin USB-hubeissa sen näyttö jää mustaksi.",
         "pad.brightness": "Kirkkaus",
         "pad.keys": "Näppäimet",
-        "pad.keysNote": "Muokkaa näppäintä napsauttamalla sitä. Kuvat ja toiminnot tallennetaan profiiliin ”%1$@”.",
+        "pad.keysNote": "Muokkaa näppäintä napsauttamalla sitä tai vedä se toisen päälle vaihtaaksesi niiden paikat. Kuvat ja toiminnot tallennetaan profiiliin ”%1$@”.",
         "pad.clearKey": "Tyhjennä",
         "pad.clearKeyHelp": "Poistaa näppäimen %1$@ kuvan ja toiminnon",
         "pad.noImage": "Ei kuvaa",

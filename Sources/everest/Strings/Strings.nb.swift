@@ -476,6 +476,7 @@ extension L10n {
         "status.configReloaded": "Innstillingene ble endret utenfor appen og er lastet inn på nytt.",
 
         // MARK: pad
+        "pad.status.swapped": "%1$@ og %2$@ byttet.",
         "keyappearance.live": "Direkte",
         "keyappearance.liveAction": "Åpne også tilhørende app",
         "keyappearance.liveNote": "Tegnes på nytt når verdien endres (høyst én gang i sekundet) mens paden er tilkoblet. Tasten beholder handlingen sin.",
@@ -494,7 +495,7 @@ extension L10n {
         "pad.notConnectedNote": "Koble den direkte til Macen: på noen USB-huber forblir skjermen svart.",
         "pad.brightness": "Lysstyrke",
         "pad.keys": "Taster",
-        "pad.keysNote": "Klikk på en tast for å redigere den. Bilder og handlinger lagres i profilen «%1$@».",
+        "pad.keysNote": "Klikk på en tast for å redigere den, eller dra den til en annen for å bytte dem. Bilder og handlinger lagres i profilen «%1$@».",
         "pad.clearKey": "Tøm",
         "pad.clearKeyHelp": "Fjerner bildet og handlingen til %1$@",
         "pad.noImage": "Ikke noe bilde",

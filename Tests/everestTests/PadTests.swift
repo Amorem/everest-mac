@@ -186,4 +186,22 @@ final class PadTests: XCTestCase {
         XCTAssertEqual(back.live, .ram)
         XCTAssertNil(try JSONDecoder().decode(ButtonConfig.self, from: JSONEncoder().encode(PadKeys.button(1))).live)
     }
+
+    func testSwappingPadKeysMovesEverything() {
+        var cfg = Config()
+        var keys = cfg.padButtons
+        keys[1].live = .cpu
+        keys[1].name = "CPU"
+        keys[1].action = ButtonAction(type: .app, value: "/System/Applications/Utilities/Activity Monitor.app")
+        keys[6].iconPath = "/tmp/x.png"
+        cfg.padButtons = keys
+        cfg.swapPadKeys(1, 6)
+        XCTAssertEqual(cfg.padButtons[6].live, .cpu)
+        XCTAssertEqual(cfg.padButtons[6].name, "CPU")
+        XCTAssertEqual(cfg.padButtons[6].action.type, .app)
+        XCTAssertEqual(cfg.padButtons[1].iconPath, "/tmp/x.png")
+        XCTAssertNil(cfg.padButtons[1].live)
+        cfg.swapPadKeys(1, 12)   // out of range: ignored
+        XCTAssertEqual(cfg.padButtons[1].iconPath, "/tmp/x.png")
+    }
 }
