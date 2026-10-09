@@ -36,7 +36,11 @@ final class Transport {
     private let lock = NSLock()
     private var reportBuffer: UnsafeMutablePointer<UInt8>
 
-    init(usagePage: Int = Transport.vendorUsagePage, usage: Int = Transport.vendorUsage) throws {
+    /// `productID` selects the device: the keyboard (0x0001) or the
+    /// DisplayPad (`PadProto.productID`), which uses the same 64-byte vendor
+    /// collection for its commands.
+    init(productID: Int = Transport.productID, usagePage: Int = Transport.vendorUsagePage,
+         usage: Int = Transport.vendorUsage) throws {
         reportBuffer = .allocate(capacity: 1024)
         reportBuffer.initialize(repeating: 0, count: 1024)
 
@@ -45,7 +49,7 @@ final class Transport {
 
         let matches: [[String: Any]] = [[
             kIOHIDVendorIDKey as String: Transport.vendorID,
-            kIOHIDProductIDKey as String: Transport.productID,
+            kIOHIDProductIDKey as String: productID,
             kIOHIDPrimaryUsagePageKey as String: usagePage,
             kIOHIDPrimaryUsageKey as String: usage,
         ]]

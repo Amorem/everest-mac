@@ -47,6 +47,15 @@ enum FactoryKeys {
     static var buttons: [ButtonConfig] { (0..<4).map(button) }
 }
 
+/// The DisplayPad's twelve keys start blank: black picture, no action.
+enum PadKeys {
+    static func button(_ i: Int) -> ButtonConfig {
+        ButtonConfig(name: nil, icon: nil, iconPath: nil, action: ButtonAction(type: "none", value: ""))
+    }
+
+    static var buttons: [ButtonConfig] { (0..<PadProto.keyCount).map(button) }
+}
+
 /// An app that switches the keyboard to a profile when it comes to the front.
 struct LinkedApp: Codable, Hashable {
     var bundleID: String
@@ -67,7 +76,18 @@ struct ProfileConfig: Codable, Identifiable {
     var lighting: LightingConfig?
     var dialMode: String?                        // applied when switching to it
     var apps: [LinkedApp] = []
+    /// The DisplayPad's keys for this profile (nil in files written before
+    /// the pad was supported).
+    var pad: [ButtonConfig]?
     var title: String { L10n.displayName(name) }
+    var padButtons: [ButtonConfig] {
+        get {
+            var b = pad ?? []
+            if b.count < PadProto.keyCount { b += (b.count..<PadProto.keyCount).map(PadKeys.button) }
+            return Array(b.prefix(PadProto.keyCount))
+        }
+        set { pad = newValue }
+    }
 
     static let palette = ["8b5cf6", "ec4899", "06b6d4", "10b981", "f59e0b"]
 }
@@ -100,6 +120,8 @@ struct Config: Codable {
     var defaultProfile: Int = 1
     /// Interface language (`Language.rawValue`); nil follows the system.
     var language: String?
+    /// DisplayPad backlight, 0–100 %.
+    var padBrightness: Int = 75
 
     init() {}
 
@@ -122,6 +144,18 @@ struct Config: Codable {
         }
     }
 
+    /// The DisplayPad keys of the selected profile.
+    var padButtons: [ButtonConfig] {
+        get { profileIndex(selectedProfile).map { profiles[$0].padButtons } ?? PadKeys.buttons }
+        set {
+            if let i = profileIndex(selectedProfile) { profiles[i].padButtons = newValue }
+        }
+    }
+
+    func padButtons(for profile: Int) -> [ButtonConfig] {
+        profileIndex(profile).map { profiles[$0].padButtons } ?? padButtons
+    }
+
     /// D1–D4 for a hardware profile (the daemon follows the keyboard).
     func buttons(for profile: Int) -> [ButtonConfig] {
         profileIndex(profile).map { profiles[$0].buttons } ?? buttons
@@ -131,7 +165,7 @@ struct Config: Codable {
 
     enum CodingKeys: String, CodingKey {
         case clockStyle, clockFormat, dialImagePath, monitorMode, mainDisplayMode, applyClockOnStart
-        case language, layoutOverride, lastLayout, keepFlashActions, daemonEnabled, keepRunning, profiles, selectedProfile, autoSwitch, defaultProfile
+        case language, padBrightness, layoutOverride, lastLayout, keepFlashActions, daemonEnabled, keepRunning, profiles, selectedProfile, autoSwitch, defaultProfile
         case buttons, lighting   // legacy
     }
 
@@ -152,6 +186,7 @@ struct Config: Codable {
         autoSwitch = try c.decodeIfPresent(Bool.self, forKey: .autoSwitch) ?? true
         defaultProfile = try c.decodeIfPresent(Int.self, forKey: .defaultProfile) ?? 1
         language = try c.decodeIfPresent(String.self, forKey: .language)
+        padBrightness = try c.decodeIfPresent(Int.self, forKey: .padBrightness) ?? 75
         if let list = try c.decodeIfPresent([ProfileConfig].self, forKey: .profiles), !list.isEmpty {
             profiles = list
         } else {
@@ -182,6 +217,7 @@ struct Config: Codable {
         try c.encode(autoSwitch, forKey: .autoSwitch)
         try c.encode(defaultProfile, forKey: .defaultProfile)
         try c.encodeIfPresent(language, forKey: .language)
+        try c.encode(padBrightness, forKey: .padBrightness)
     }
 
     /// `~/.config/everest-mac`, or `$EVEREST_CONFIG_DIR` (the tests use it so

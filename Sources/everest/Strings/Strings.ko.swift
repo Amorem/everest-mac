@@ -472,5 +472,23 @@ extension L10n {
         "upload.phase.finish": "마무리 중",
         "upload.phase.prepare": "키보드가 슬롯을 준비하는 중",
         "upload.phase.send": "이미지 전송 중",
+
+        // MARK: pad
+        "section.displaypad.subtitle": "이미지와 macOS 동작을 지정할 수 있는 12개의 화면 키",
+        "pad.connected": "DisplayPad 연결됨",
+        "pad.connectedNote": "변경 후 1초 이내에 이미지가 전송되며, 패드는 분리될 때까지 이미지를 유지합니다.",
+        "pad.notConnected": "DisplayPad 연결 안 됨",
+        "pad.notConnectedNote": "Mac에 직접 연결하세요. 일부 USB 허브에서는 화면이 검게 유지됩니다.",
+        "pad.brightness": "밝기",
+        "pad.keys": "키",
+        "pad.keysNote": "키를 클릭해 편집하세요. 이미지와 동작은 «%1$@» 프로필에 저장됩니다.",
+        "pad.clearKey": "지우기",
+        "pad.clearKeyHelp": "%1$@의 이미지와 동작을 제거합니다",
+        "pad.noImage": "이미지 없음",
+        "pad.ownImageNote": "가운데를 기준으로 잘라 102 × 102로 크기를 조정합니다. 키의 동작은 바뀌지 않습니다.",
+        "pad.daemonStoppedNote": "DisplayPad 키는 실행 중일 때만 작동합니다.",
+        "pad.status.sent": "%1$@: DisplayPad로 전송했습니다.",
+        "pad.status.savedOffline": "%1$@: 저장됨 — DisplayPad를 연결하면 표시됩니다.",
+        "pad.status.failed": "DisplayPad: %1$@",
     ]
 }

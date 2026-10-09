@@ -472,5 +472,23 @@ extension L10n {
         "upload.phase.finish": "Finishing",
         "upload.phase.prepare": "The keyboard is preparing the slot",
         "upload.phase.send": "Sending the image",
+
+        // MARK: pad
+        "section.displaypad.subtitle": "Twelve screen keys, each with a picture and a macOS action",
+        "pad.connected": "DisplayPad connected",
+        "pad.connectedNote": "Pictures are sent within a second of any change; the pad keeps them until it is unplugged.",
+        "pad.notConnected": "DisplayPad not connected",
+        "pad.notConnectedNote": "Plug it straight into the Mac: on some USB hubs its screen stays black.",
+        "pad.brightness": "Brightness",
+        "pad.keys": "Keys",
+        "pad.keysNote": "Click a key to edit it. Pictures and actions are saved in the profile « %1$@ ».",
+        "pad.clearKey": "Clear",
+        "pad.clearKeyHelp": "Removes the picture and the action of %1$@",
+        "pad.noImage": "No picture",
+        "pad.ownImageNote": "It is cropped to the centre and resized to 102 × 102. The key's action does not change.",
+        "pad.daemonStoppedNote": "The DisplayPad keys only work while it is running.",
+        "pad.status.sent": "%1$@: sent to the DisplayPad.",
+        "pad.status.savedOffline": "%1$@: saved — shown when the DisplayPad is plugged in.",
+        "pad.status.failed": "DisplayPad: %1$@",
     ]
 }

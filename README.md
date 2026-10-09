@@ -20,6 +20,9 @@ hardware a job.
 - **Display keys D1–D4** — ready-made icons, any installed app's icon, or your
   own image, each with an action: shell command, URL, open/bring forward an
   app, key combo, typed text. Factory pictures and actions can be restored.
+- **DisplayPad** — the separate twelve-key Mountain DisplayPad, with the same
+  pictures (presets, app icons, your images) and actions as D1–D4, per
+  profile, plus its brightness. No driver, no root.
 - **Dial screen** — clock, CPU / GPU / RAM / disk / network / volume gauges,
   or a custom image.
 - **Profiles** — the keyboard's five hardware profiles, each with its own
@@ -50,7 +53,8 @@ hardware a job.
 | Mountain Everest Max (keyboard + numpad + media dock) | `3282:0001` | Developed and tested on a **UK-ISO** board, **firmware 57 — the only firmware Everest will talk to** (see [Firmware](#firmware)) |
 | Other Everest Max layouts (US, FR, DE, IT, Nordic, ES, PT, Hebrew, Korean) | `3282:0001` | Detected and drawn from Base Camp's own tables, **not tested on hardware** |
 | Everest Core | `3282:0001` | The same keyboard without the modules; **untested** |
-| Everest 60, Makalu mice, MacroPad, DisplayPad | other ids | **Not supported** — different protocols |
+| Mountain DisplayPad | `3282:0009` | Tested on **firmware 8** (the only one Everest writes to); see [docs/DISPLAYPAD.md](docs/DISPLAYPAD.md) |
+| Everest 60, Makalu mice, MacroPad | other ids | **Not supported** — different protocols |
 
 If you own a layout or a model that is not verified, a report (even just the
 output of `everest info`) helps a lot.
@@ -157,7 +161,9 @@ everest rgb wave-rainbow --speed 75 --direction left
 everest effect aurora --colors 00ffaa,008cff,aa3cff
 everest icon 1 picture.png     # send a picture to D1 (converted to 72×72)
 everest mode cpu               # dial shows the CPU load
-everest listen                 # run the D1–D4 actions (the app does this for you)
+everest pad image 3 logo.png   # picture on DisplayPad key 3 (until it is unplugged)
+everest pad brightness 50      # DisplayPad backlight
+everest listen                 # run the D1–D4 and DisplayPad actions (the app does this for you)
 everest recover                # clear a stuck picture transfer
 everest help                   # everything else
 ```
@@ -189,6 +195,7 @@ flags — that lighting and picture uploads still work. Please run
 | "Firmware not supported" covers the window | The keyboard is not on firmware 57 — see [Firmware](#firmware) |
 | The `\|` key left of Z prints nothing | macOS treats the board as ANSI: *Layout → Remap the ISO key* |
 | The keyboard stops answering after an interrupted upload | `everest recover`, or replug |
+| The DisplayPad stays black | Plug it straight into the Mac (some hubs do not power its screen), and let the app or `everest listen` run: the pad shows nothing until a host switches it on |
 
 ## Limitations
 
@@ -243,4 +250,6 @@ upload safer. Please say which keyboard layout and firmware you have.
   and `Sources/everest/MountainMark.swift` to use another). The same mark is
   used in the sidebar, the menu-bar icon and on the Esc key. These remain Mountain's property and will be removed on
   request.
+- Mountain's DisplayPad SDK (MIT) — the DisplayPad protocol was read from it;
+  see [docs/DISPLAYPAD.md](docs/DISPLAYPAD.md).
 - Code: [MIT](LICENSE).

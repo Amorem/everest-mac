@@ -472,5 +472,23 @@ extension L10n {
         "upload.phase.finish": "מסיים",
         "upload.phase.prepare": "המקלדת מכינה את החריץ",
         "upload.phase.send": "שולח את התמונה",
+
+        // MARK: pad
+        "section.displaypad.subtitle": "שנים־עשר מקשי מסך, לכל אחד תמונה ופעולת macOS",
+        "pad.connected": "DisplayPad מחובר",
+        "pad.connectedNote": "התמונות נשלחות תוך שנייה מכל שינוי; המשטח שומר אותן עד שמנתקים אותו.",
+        "pad.notConnected": "DisplayPad לא מחובר",
+        "pad.notConnectedNote": "חברו אותו ישירות ל־Mac: בחלק ממפצלי ה־USB המסך נשאר שחור.",
+        "pad.brightness": "בהירות",
+        "pad.keys": "מקשים",
+        "pad.keysNote": "לחצו על מקש כדי לערוך אותו. התמונות והפעולות נשמרות בפרופיל „%1$@”.",
+        "pad.clearKey": "ניקוי",
+        "pad.clearKeyHelp": "מסיר את התמונה והפעולה של %1$@",
+        "pad.noImage": "ללא תמונה",
+        "pad.ownImageNote": "התמונה נחתכת במרכז ומוקטנת ל־102 × 102. הפעולה של המקש לא משתנה.",
+        "pad.daemonStoppedNote": "מקשי ה־DisplayPad פועלים רק כשהוא פועל.",
+        "pad.status.sent": "%1$@: נשלח ל־DisplayPad.",
+        "pad.status.savedOffline": "%1$@: נשמר — יוצג כשה־DisplayPad יחובר.",
+        "pad.status.failed": "DisplayPad: %1$@",
     ]
 }

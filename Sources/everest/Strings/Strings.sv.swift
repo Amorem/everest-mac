@@ -472,5 +472,23 @@ extension L10n {
         "upload.phase.finish": "Slutför",
         "upload.phase.prepare": "Tangentbordet förbereder platsen",
         "upload.phase.send": "Skickar bilden",
+
+        // MARK: pad
+        "section.displaypad.subtitle": "Tolv skärmtangenter, var och en med en bild och en macOS-åtgärd",
+        "pad.connected": "DisplayPad ansluten",
+        "pad.connectedNote": "Bilder skickas inom en sekund efter varje ändring; plattan behåller dem tills den kopplas ur.",
+        "pad.notConnected": "DisplayPad inte ansluten",
+        "pad.notConnectedNote": "Anslut den direkt till Macen: på vissa USB-hubbar förblir skärmen svart.",
+        "pad.brightness": "Ljusstyrka",
+        "pad.keys": "Tangenter",
+        "pad.keysNote": "Klicka på en tangent för att redigera den. Bilder och åtgärder sparas i profilen ”%1$@”.",
+        "pad.clearKey": "Rensa",
+        "pad.clearKeyHelp": "Tar bort bilden och åtgärden för %1$@",
+        "pad.noImage": "Ingen bild",
+        "pad.ownImageNote": "Den beskärs i mitten och skalas till 102 × 102. Tangentens åtgärd ändras inte.",
+        "pad.daemonStoppedNote": "DisplayPad-tangenterna fungerar bara medan den körs.",
+        "pad.status.sent": "%1$@: skickad till DisplayPad.",
+        "pad.status.savedOffline": "%1$@: sparad — visas när DisplayPad ansluts.",
+        "pad.status.failed": "DisplayPad: %1$@",
     ]
 }

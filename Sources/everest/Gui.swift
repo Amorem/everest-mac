@@ -216,6 +216,7 @@ struct RootView: View {
         case .lighting: LightingPage(model: model)
         case .displays: DisplaysPage(model: model)
         case .buttons: ButtonsPage(model: model)
+        case .displaypad: DisplayPadPage(model: model)
         case .keyboard: KeyboardLayoutPage(model: model)
         case .system: SystemPage(model: model)
         }

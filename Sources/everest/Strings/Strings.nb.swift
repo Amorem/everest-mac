@@ -472,5 +472,23 @@ extension L10n {
         "upload.phase.finish": "Avslutter",
         "upload.phase.prepare": "Tastaturet forbereder plassen",
         "upload.phase.send": "Sender bildet",
+
+        // MARK: pad
+        "section.displaypad.subtitle": "Tolv skjermtaster, hver med et bilde og en macOS-handling",
+        "pad.connected": "DisplayPad tilkoblet",
+        "pad.connectedNote": "Bilder sendes innen et sekund etter hver endring; paden beholder dem til den kobles fra.",
+        "pad.notConnected": "DisplayPad ikke tilkoblet",
+        "pad.notConnectedNote": "Koble den direkte til Macen: på noen USB-huber forblir skjermen svart.",
+        "pad.brightness": "Lysstyrke",
+        "pad.keys": "Taster",
+        "pad.keysNote": "Klikk på en tast for å redigere den. Bilder og handlinger lagres i profilen «%1$@».",
+        "pad.clearKey": "Tøm",
+        "pad.clearKeyHelp": "Fjerner bildet og handlingen til %1$@",
+        "pad.noImage": "Ikke noe bilde",
+        "pad.ownImageNote": "Det beskjæres i midten og skaleres til 102 × 102. Tastens handling endres ikke.",
+        "pad.daemonStoppedNote": "DisplayPad-tastene virker bare mens den kjører.",
+        "pad.status.sent": "%1$@: sendt til DisplayPad.",
+        "pad.status.savedOffline": "%1$@: lagret — vises når DisplayPad kobles til.",
+        "pad.status.failed": "DisplayPad: %1$@",
     ]
 }

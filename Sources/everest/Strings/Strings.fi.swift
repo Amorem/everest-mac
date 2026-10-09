@@ -472,5 +472,23 @@ extension L10n {
         "upload.phase.finish": "Viimeistellään",
         "upload.phase.prepare": "Näppäimistö valmistelee paikkaa",
         "upload.phase.send": "Lähetetään kuvaa",
+
+        // MARK: pad
+        "section.displaypad.subtitle": "Kaksitoista näyttönäppäintä, jokaisessa kuva ja macOS-toiminto",
+        "pad.connected": "DisplayPad yhdistetty",
+        "pad.connectedNote": "Kuvat lähetetään sekunnin kuluessa jokaisesta muutoksesta; pad säilyttää ne, kunnes se irrotetaan.",
+        "pad.notConnected": "DisplayPad ei ole yhdistetty",
+        "pad.notConnectedNote": "Kytke se suoraan Maciin: joissakin USB-hubeissa sen näyttö jää mustaksi.",
+        "pad.brightness": "Kirkkaus",
+        "pad.keys": "Näppäimet",
+        "pad.keysNote": "Muokkaa näppäintä napsauttamalla sitä. Kuvat ja toiminnot tallennetaan profiiliin ”%1$@”.",
+        "pad.clearKey": "Tyhjennä",
+        "pad.clearKeyHelp": "Poistaa näppäimen %1$@ kuvan ja toiminnon",
+        "pad.noImage": "Ei kuvaa",
+        "pad.ownImageNote": "Se rajataan keskeltä ja skaalataan kokoon 102 × 102. Näppäimen toiminto ei muutu.",
+        "pad.daemonStoppedNote": "DisplayPadin näppäimet toimivat vain, kun se on käynnissä.",
+        "pad.status.sent": "%1$@: lähetetty DisplayPadiin.",
+        "pad.status.savedOffline": "%1$@: tallennettu — näytetään, kun DisplayPad kytketään.",
+        "pad.status.failed": "DisplayPad: %1$@",
     ]
 }

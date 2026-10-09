@@ -228,7 +228,8 @@ struct DaemonStoppedBanner: View {
     }
 }
 
-/// Name, picture and action of one screen key.
+/// Name, picture and action of one screen key: D1–D4 on the keyboard or one
+/// of the DisplayPad's twelve.
 struct ButtonEditorCard: View {
     @ObservedObject var model: EverestModel
     let target: KeyTarget
@@ -244,7 +245,7 @@ struct ButtonEditorCard: View {
             HStack(spacing: 14) {
                 Button { appearance = AppearanceTarget(target: target) } label: {
                     KeyScreen(image: model.image(for: target), label: target.label, size: 64,
-                              uploading: model.uploading(target))
+                              uploading: model.uploading(target), factory: !target.isPad)
                         .overlay(alignment: .bottomTrailing) {
                             Image(systemName: "photo.badge.plus")
                                 .font(.ui(10, .bold)).foregroundStyle(.white)
@@ -283,11 +284,12 @@ struct ButtonEditorCard: View {
                 }
                 .buttonStyle(.compact())
                 Button { model.restoreFactory(target) } label: {
-                    Label(tr("buttons.factoryValues"), systemImage: "arrow.uturn.backward")
+                    Label(tr(target.isPad ? "pad.clearKey" : "buttons.factoryValues"),
+                          systemImage: target.isPad ? "eraser" : "arrow.uturn.backward")
                 }
                 .buttonStyle(.compact(.ghost))
                 .disabled(model.keysBusy)
-                .help(tr("buttons.factoryValuesHelp", target.label))
+                .help(tr(target.isPad ? "pad.clearKeyHelp" : "buttons.factoryValuesHelp", target.label))
                 Spacer()
                 Button {
                     ActionRunner.run(model.button(target).action)

@@ -50,6 +50,9 @@ enum Daemon {
             exit(0)
         }
 
+        // The DisplayPad is a device of its own, served on its own thread.
+        if !args.contains("--no-pad") { PadDaemon.start() }
+
         var waiting: String?
         while true {
             let kb: Keyboard
@@ -67,6 +70,7 @@ enum Daemon {
             waiting = nil
             log("keyboard connected")
             session(kb, verbose: verbose)
+            ActiveProfile.current = nil
             kb.close()
             log("keyboard connection lost — reconnecting")
             Thread.sleep(forTimeInterval: 1)
@@ -87,7 +91,10 @@ enum Daemon {
         }
 
         // The keyboard's active profile — changed from the dial or by us.
-        var profile = Int(kb.currentProfile())
+        var profile = Int(kb.currentProfile()) {
+            didSet { ActiveProfile.current = profile }
+        }
+        ActiveProfile.current = profile
         let startMode = cfg.profileIndex(profile).flatMap { cfg.profiles[$0].dialMode } ?? cfg.mainDisplayMode
         if let mode = Proto.MainMode(rawValue: startMode) { kb.setMainMode(mode) }
         var lastProfileQuery = Date()

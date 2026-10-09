@@ -472,5 +472,23 @@ extension L10n {
         "upload.phase.finish": "Finalisation",
         "upload.phase.prepare": "Le clavier prépare l'emplacement",
         "upload.phase.send": "Envoi de l'image",
+
+        // MARK: pad
+        "section.displaypad.subtitle": "Douze touches-écrans, chacune avec une image et une action macOS",
+        "pad.connected": "DisplayPad connecté",
+        "pad.connectedNote": "Les images sont envoyées moins d'une seconde après chaque changement ; le pad les garde jusqu'à ce qu'on le débranche.",
+        "pad.notConnected": "DisplayPad non connecté",
+        "pad.notConnectedNote": "Branchez-le directement sur le Mac : sur certains hubs USB, son écran reste noir.",
+        "pad.brightness": "Luminosité",
+        "pad.keys": "Touches",
+        "pad.keysNote": "Cliquez sur une touche pour la modifier. Images et actions sont enregistrées dans le profil « %1$@ ».",
+        "pad.clearKey": "Effacer",
+        "pad.clearKeyHelp": "Retire l'image et l'action de %1$@",
+        "pad.noImage": "Aucune image",
+        "pad.ownImageNote": "Elle est recadrée au centre et redimensionnée en 102 × 102. L'action de la touche ne change pas.",
+        "pad.daemonStoppedNote": "Les touches du DisplayPad ne fonctionnent que lorsqu'il tourne.",
+        "pad.status.sent": "%1$@ : envoyé au DisplayPad.",
+        "pad.status.savedOffline": "%1$@ : enregistré — affiché quand le DisplayPad sera branché.",
+        "pad.status.failed": "DisplayPad : %1$@",
     ]
 }

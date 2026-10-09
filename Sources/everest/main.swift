@@ -83,8 +83,12 @@ func usage() {
       metrics                       send one round of CPU/RAM/network/volume values
       monitor                       run the live monitor loop (Ctrl-C to stop)
 
+    DisplayPad
+      pad info|image|color|clear|brightness|keys
+                                    talk to the DisplayPad (`everest pad` for details)
+
     Buttons daemon
-      listen                        watch D1-D4 and run the configured actions
+      listen [--no-pad]             watch D1-D4 and the DisplayPad, run the configured actions
       config                        show the config file location and contents
       init-config                   write a starter config file
 
@@ -507,6 +511,7 @@ case "monitor": Command.monitor()
 case "reset-dial": Command.resetDial()
 case "reset-numpad": Command.resetNumpad(rest)
 case "listen": Daemon.run(rest)
+case "pad": PadCommand.run(rest)
 case "sniff": Daemon.sniff(rest)
 case "keys": Keys.dump(rest)
 case "feature-test": Command.featureProbe()

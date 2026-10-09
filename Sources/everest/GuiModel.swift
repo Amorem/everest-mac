@@ -2,7 +2,7 @@ import AppKit
 import SwiftUI
 
 enum Section: String, CaseIterable, Identifiable {
-    case overview, profiles, lighting, displays, buttons, keyboard, system
+    case overview, profiles, lighting, displays, buttons, displaypad, keyboard, system
     var id: String { rawValue }
 
     var title: String {
@@ -12,6 +12,7 @@ enum Section: String, CaseIterable, Identifiable {
         case .lighting: return tr("lighting.title")
         case .displays: return tr("section.displays.title")
         case .buttons: return tr("section.buttons.title")
+        case .displaypad: return "DisplayPad"
         case .keyboard: return tr("section.keyboard.title")
         case .system: return tr("section.system.title")
         }
@@ -24,6 +25,7 @@ enum Section: String, CaseIterable, Identifiable {
         case .lighting: return tr("section.lighting.subtitle")
         case .displays: return tr("section.displays.subtitle")
         case .buttons: return tr("section.buttons.subtitle")
+        case .displaypad: return tr("section.displaypad.subtitle")
         case .keyboard: return tr("section.keyboard.subtitle")
         case .system: return tr("section.system.subtitle")
         }
@@ -36,6 +38,7 @@ enum Section: String, CaseIterable, Identifiable {
         case .lighting: return "light.max"
         case .displays: return "circle.circle"
         case .buttons: return "square.grid.2x2.fill"
+        case .displaypad: return "rectangle.split.3x1.fill"
         case .keyboard: return "keyboard"
         case .system: return "gearshape.fill"
         }
@@ -48,6 +51,7 @@ enum Section: String, CaseIterable, Identifiable {
         case .lighting: return Theme.pink
         case .displays: return Theme.cyan
         case .buttons: return Theme.indigo
+        case .displaypad: return Theme.sky
         case .keyboard: return Theme.emerald
         case .system: return Theme.amber
         }
@@ -95,6 +99,8 @@ final class EverestModel: ObservableObject {
     @Published var firmwareBlock: FirmwareBlock?
     @Published var progress: Double? = nil
     @Published var daemonRunning = false
+    /// The DisplayPad is plugged in (USB presence only; the daemon talks to it).
+    @Published var padConnected = DisplayPad.isPresent
     /// Layout the keyboard reports (nil until it has been read).
     @Published var detectedLayout: KeyboardLayout?
     /// What the app draws and animates: the manual choice, else the detected
@@ -121,7 +127,7 @@ final class EverestModel: ObservableObject {
     private var daemonProcess: Process?
     private var pendingApply: DispatchWorkItem?
     private var pendingSave: DispatchWorkItem?
-    private let device = DispatchQueue(label: "everest.device", qos: .userInitiated)
+    let device = DispatchQueue(label: "everest.device", qos: .userInitiated)
 
     init() {
         let cfg = Config.load()
@@ -182,6 +188,7 @@ final class EverestModel: ObservableObject {
     /// Follow the keyboard: the dial's Profile menu changes it too.
     private func pollProfile() {
         accessibilityOK = ActionRunner.accessibilityGranted()
+        padConnected = DisplayPad.isPresent
         // Stay off the channel during a picture upload — ours, or one started
         // from the command line (it leaves the FlashBusy marker).
         guard keyUpload == nil, !FlashBusy.active else { return }

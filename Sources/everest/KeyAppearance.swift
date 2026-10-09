@@ -19,21 +19,23 @@ struct KeyAppearanceSheet: View {
     @State private var pickingApp = false
     @State private var started = false
     private var myUpload: EverestModel.KeyUpload? {
-        model.keyUpload?.button == target.index ? model.keyUpload : nil
+        !target.isPad && model.keyUpload?.button == target.index ? model.keyUpload : nil
     }
-    private var busy: Bool { model.keyUpload != nil }
+    /// The DisplayPad takes a picture in a fraction of a second: no upload
+    /// panel, the sheet closes at once.
+    private var busy: Bool { !target.isPad && model.keyUpload != nil }
     private var tint: Color { target.tint }
 
     private func begin(_ run: () -> Void) {
         run()
-        started = true
+        if target.isPad { dismiss() } else { started = true }
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(spacing: 14) {
                 KeyScreen(image: model.image(for: target), label: target.label, size: 52,
-                          uploading: myUpload?.progress)
+                          uploading: myUpload?.progress, factory: !target.isPad)
                 VStack(alignment: .leading, spacing: 2) {
                     Text(tr("keyappearance.title", target.label)).font(.ui(17, .bold)).foregroundStyle(Theme.text)
                     Text(tr("keyappearance.subtitle"))
@@ -198,7 +200,7 @@ struct KeyAppearanceSheet: View {
                 .frame(width: 150, height: 150)
                 VStack(alignment: .leading, spacing: 10) {
                     Text(tr("keyappearance.ownImage")).font(.ui(14, .semibold)).foregroundStyle(Theme.text)
-                    Text(tr("keyappearance.ownImageNote"))
+                    Text(tr(target.isPad ? "pad.ownImageNote" : "keyappearance.ownImageNote"))
                         .font(.ui(12)).foregroundStyle(Theme.textSecondary)
                         .fixedSize(horizontal: false, vertical: true)
                     HStack(spacing: 8) {
@@ -207,7 +209,10 @@ struct KeyAppearanceSheet: View {
                         Button {
                             model.resetButtonIcon(target)
                             dismiss()
-                        } label: { Label(tr("displays.factoryIcon"), systemImage: "arrow.uturn.backward") }
+                        } label: {
+                            Label(tr(target.isPad ? "pad.noImage" : "displays.factoryIcon"),
+                                  systemImage: target.isPad ? "eraser" : "arrow.uturn.backward")
+                        }
                             .buttonStyle(.secondary)
                     }
                 }

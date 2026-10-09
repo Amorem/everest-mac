@@ -472,5 +472,23 @@ extension L10n {
         "upload.phase.finish": "Abschluss",
         "upload.phase.prepare": "Die Tastatur bereitet den Slot vor",
         "upload.phase.send": "Bild wird gesendet",
+
+        // MARK: pad
+        "section.displaypad.subtitle": "Zwölf Display-Tasten, jede mit einem Bild und einer macOS-Aktion",
+        "pad.connected": "DisplayPad verbunden",
+        "pad.connectedNote": "Bilder werden innerhalb einer Sekunde nach jeder Änderung gesendet; das Pad behält sie, bis es ausgesteckt wird.",
+        "pad.notConnected": "DisplayPad nicht verbunden",
+        "pad.notConnectedNote": "Direkt am Mac anschließen: an manchen USB-Hubs bleibt sein Bildschirm schwarz.",
+        "pad.brightness": "Helligkeit",
+        "pad.keys": "Tasten",
+        "pad.keysNote": "Klicken Sie auf eine Taste, um sie zu bearbeiten. Bilder und Aktionen werden im Profil „%1$@“ gespeichert.",
+        "pad.clearKey": "Leeren",
+        "pad.clearKeyHelp": "Entfernt Bild und Aktion von %1$@",
+        "pad.noImage": "Kein Bild",
+        "pad.ownImageNote": "Es wird mittig zugeschnitten und auf 102 × 102 verkleinert. Die Aktion der Taste bleibt unverändert.",
+        "pad.daemonStoppedNote": "Die DisplayPad-Tasten funktionieren nur, solange er läuft.",
+        "pad.status.sent": "%1$@: an das DisplayPad gesendet.",
+        "pad.status.savedOffline": "%1$@: gespeichert — wird angezeigt, sobald das DisplayPad angeschlossen ist.",
+        "pad.status.failed": "DisplayPad: %1$@",
     ]
 }

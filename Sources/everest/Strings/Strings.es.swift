@@ -472,5 +472,23 @@ extension L10n {
         "upload.phase.finish": "Finalizando",
         "upload.phase.prepare": "El teclado prepara la ranura",
         "upload.phase.send": "Enviando la imagen",
+
+        // MARK: pad
+        "section.displaypad.subtitle": "Doce teclas con pantalla, cada una con una imagen y una acción de macOS",
+        "pad.connected": "DisplayPad conectado",
+        "pad.connectedNote": "Las imágenes se envían en menos de un segundo tras cada cambio; el pad las conserva hasta que se desconecta.",
+        "pad.notConnected": "DisplayPad no conectado",
+        "pad.notConnectedNote": "Conéctalo directamente al Mac: con algunos hubs USB su pantalla se queda negra.",
+        "pad.brightness": "Brillo",
+        "pad.keys": "Teclas",
+        "pad.keysNote": "Haz clic en una tecla para editarla. Imágenes y acciones se guardan en el perfil «%1$@».",
+        "pad.clearKey": "Borrar",
+        "pad.clearKeyHelp": "Quita la imagen y la acción de %1$@",
+        "pad.noImage": "Sin imagen",
+        "pad.ownImageNote": "Se recorta al centro y se redimensiona a 102 × 102. La acción de la tecla no cambia.",
+        "pad.daemonStoppedNote": "Las teclas del DisplayPad solo funcionan mientras está en marcha.",
+        "pad.status.sent": "%1$@: enviado al DisplayPad.",
+        "pad.status.savedOffline": "%1$@: guardado — se mostrará cuando el DisplayPad esté conectado.",
+        "pad.status.failed": "DisplayPad: %1$@",
     ]
 }

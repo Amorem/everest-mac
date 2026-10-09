@@ -265,10 +265,12 @@ struct KeyScreen: View {
     var size: CGFloat
     /// 0…1 while an image is being sent to this key.
     var uploading: Double? = nil
+    /// D1–D4 have a factory picture; a blank DisplayPad key is just black.
+    var factory = true
 
     /// Without a custom image the key shows its factory picture (label "D1"…"D4").
     private var shown: NSImage? {
-        image ?? Int(label.dropFirst()).flatMap { FactoryIcons.image($0 - 1) }
+        image ?? (factory ? Int(label.dropFirst()).flatMap { FactoryIcons.image($0 - 1) } : nil)
     }
 
     var body: some View {
@@ -280,8 +282,9 @@ struct KeyScreen: View {
                 if let shown {
                     Image(nsImage: shown).resizable().interpolation(.high).aspectRatio(contentMode: .fill)
                 } else {
-                    Color(hex: FactoryIcons.blue)
-                        .overlay(Text(label).font(.system(size: size * 0.24, weight: .heavy)).foregroundStyle(.white))
+                    Color(hex: factory ? FactoryIcons.blue : 0x000000)
+                        .overlay(Text(label).font(.system(size: size * 0.24, weight: .heavy))
+                            .foregroundStyle(factory ? .white : .white.opacity(0.25)))
                 }
             }
             .frame(width: size * 0.8, height: size * 0.8)
