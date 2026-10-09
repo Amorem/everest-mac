@@ -178,7 +178,7 @@ enum PadDaemon {
                     for k in pressed.subtracting(held).sorted() where Date().timeIntervalSince(lastFired[k]) >= 0.25 {
                         lastFired[k] = Date()
                         let b = keys[k]
-                        log("P\(k + 1) pressed — \(b.name ?? b.action.type): \(b.action.value)")
+                        log("P\(k + 1) pressed — \(b.name ?? b.action.type.rawValue): \(b.action.value)")
                         ActionRunner.run(b.action)
                     }
                     held = pressed

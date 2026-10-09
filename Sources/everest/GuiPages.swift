@@ -166,15 +166,6 @@ struct ButtonsPage: View {
     @State private var appearance: AppearanceTarget?
     private var tint: Color { Section.buttons.tint }
 
-    static var types: [(String, String, String, String)] { [
-        ("shell", "terminal.fill", tr("action.shell"), "open -a Terminal"),
-        ("url", "link", tr("action.url"), "https://…"),
-        ("app", "app.dashed", tr("action.app"), ""),
-        ("open", "folder.fill", tr("action.open"), "~/Documents"),
-        ("keypress", "command", tr("action.keypress"), "cmd+shift+4 · mute · playpause"),
-        ("text", "text.cursor", tr("action.text"), tr("action.textToType")),
-        ("none", "nosign", tr("action.none"), ""),
-    ] }
 
     var body: some View {
         VStack(spacing: 18) {
@@ -203,6 +194,43 @@ struct ButtonsPage: View {
             }
         }
         .sheet(item: $appearance) { t in KeyAppearanceSheet(model: model, target: t.target, tab: t.tab) }
+    }
+}
+
+extension ActionKind {
+    var icon: String {
+        switch self {
+        case .shell: return "terminal.fill"
+        case .url: return "link"
+        case .app: return "app.dashed"
+        case .open: return "folder.fill"
+        case .keypress: return "command"
+        case .text: return "text.cursor"
+        case .noAction: return "nosign"
+        }
+    }
+
+    var title: String {
+        switch self {
+        case .shell: return tr("action.shell")
+        case .url: return tr("action.url")
+        case .app: return tr("action.app")
+        case .open: return tr("action.open")
+        case .keypress: return tr("action.keypress")
+        case .text: return tr("action.text")
+        case .noAction: return tr("action.none")
+        }
+    }
+
+    var placeholder: String {
+        switch self {
+        case .shell: return "open -a Terminal"
+        case .url: return "https://…"
+        case .open: return "~/Documents"
+        case .keypress: return "cmd+shift+4 · mute · playpause"
+        case .text: return tr("action.textToType")
+        case .app, .noAction: return ""
+        }
     }
 }
 
@@ -239,8 +267,6 @@ struct ButtonEditorCard: View {
     var body: some View {
         let button = model.button(target)
         let action = button.action
-        let types = ButtonsPage.types
-        let type = types.first { $0.0 == action.type } ?? types.last!
         return VStack(alignment: .leading, spacing: 14) {
             HStack(spacing: 14) {
                 Button { appearance = AppearanceTarget(target: target) } label: {
@@ -262,17 +288,17 @@ struct ButtonEditorCard: View {
                         set: { model.setButton(target, name: $0) }))
                 }
             }
-            Segmented(items: types.map { .init(value: $0.0, title: "", icon: $0.1, help: $0.2) },
+            Segmented(items: ActionKind.allCases.map { .init(value: $0, title: "", icon: $0.icon, help: $0.title) },
                       selection: Binding(get: { action.type }, set: { model.setButton(target, type: $0) }),
                       tint: tint, fill: true)
-            if action.type == "app" {
+            if action.type == .app {
                 appRow(path: action.value)
-            } else if action.type != "none" {
+            } else if action.type != .noAction {
                 VStack(alignment: .leading, spacing: 6) {
-                    FieldLabel(type.2)
-                    StyledField(placeholder: type.3, text: Binding(
+                    FieldLabel(action.type.title)
+                    StyledField(placeholder: action.type.placeholder, text: Binding(
                         get: { model.button(target).action.value },
-                        set: { model.setButton(target, value: $0) }), icon: type.1, monospaced: action.type != "text")
+                        set: { model.setButton(target, value: $0) }), icon: action.type.icon, monospaced: action.type != .text)
                 }
             } else {
                 Caption(tr("buttons.noAction"))
@@ -296,7 +322,7 @@ struct ButtonEditorCard: View {
                     model.report(tr("buttons.actionRan", target.label))
                 } label: { Label(tr("common.test"), systemImage: "play.fill") }
                     .buttonStyle(.compact(.primary))
-                    .disabled(action.type == "none")
+                    .disabled(action.type == .noAction)
             }
         }
         .padding(18)

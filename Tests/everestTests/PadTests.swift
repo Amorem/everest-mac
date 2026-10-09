@@ -115,7 +115,7 @@ final class PadTests: XCTestCase {
         let json = #"{"profiles":[{"id":1,"name":"Main","symbol":"keyboard","color":"8b5cf6","buttons":[],"apps":[]}]}"#
         let cfg = try JSONDecoder().decode(Config.self, from: Data(json.utf8))
         XCTAssertEqual(cfg.padButtons.count, 12)
-        XCTAssertTrue(cfg.padButtons.allSatisfy { $0.action.type == "none" && $0.iconPath == nil })
+        XCTAssertTrue(cfg.padButtons.allSatisfy { $0.action.type == .noAction && $0.iconPath == nil })
         XCTAssertEqual(cfg.padBrightness, 75)
     }
 
@@ -123,11 +123,11 @@ final class PadTests: XCTestCase {
         var cfg = Config()
         cfg.profiles.append(ProfileConfig(id: 2, name: "Two"))
         var keys = cfg.padButtons
-        keys[3].action = ButtonAction(type: "url", value: "https://example.com")
+        keys[3].action = ButtonAction(type: .url, value: "https://example.com")
         cfg.padButtons = keys
         let round = try JSONDecoder().decode(Config.self, from: JSONEncoder().encode(cfg))
         XCTAssertEqual(round.padButtons(for: 1)[3].action.value, "https://example.com")
-        XCTAssertEqual(round.padButtons(for: 2)[3].action.type, "none")
+        XCTAssertEqual(round.padButtons(for: 2)[3].action.type, .noAction)
         XCTAssertEqual(KeyTarget.pad(11).label, "P12")
         XCTAssertEqual(KeyTarget.dkey(0).label, "D1")
     }

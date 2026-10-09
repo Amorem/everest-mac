@@ -33,7 +33,7 @@ struct ButtonPreset: Identifiable {
 
     /// For app presets: the installed app, whose real icon is used.
     var appURL: URL? {
-        guard let a = action, a.type == "app", FileManager.default.fileExists(atPath: a.value) else { return nil }
+        guard let a = action, a.type == .app, FileManager.default.fileExists(atPath: a.value) else { return nil }
         return URL(fileURLWithPath: a.value)
     }
 
@@ -42,49 +42,49 @@ struct ButtonPreset: Identifiable {
     static var all: [ButtonPreset] { [
         // Media keys (consumer-control events, no permission needed)
         .init(id: "playpause", name: tr("preset.playpause"), symbol: "playpause.fill", color: 0xFF1F5A,
-              category: .media, action: .init(type: "keypress", value: "playpause")),
+              category: .media, action: .init(type: .keypress, value: "playpause")),
         .init(id: "next", name: tr("preset.next"), symbol: "forward.fill", color: 0xFF1F5A,
-              category: .media, action: .init(type: "keypress", value: "next")),
+              category: .media, action: .init(type: .keypress, value: "next")),
         .init(id: "prev", name: tr("preset.previous"), symbol: "backward.fill", color: 0xFF1F5A,
-              category: .media, action: .init(type: "keypress", value: "prev")),
+              category: .media, action: .init(type: .keypress, value: "prev")),
         .init(id: "mute", name: tr("preset.mute"), symbol: "speaker.slash.fill", color: 0xFF7A00,
-              category: .media, action: .init(type: "keypress", value: "mute")),
+              category: .media, action: .init(type: .keypress, value: "mute")),
         .init(id: "volup", name: tr("preset.volumeUp"), symbol: "speaker.wave.3.fill", color: 0xFF7A00,
-              category: .media, action: .init(type: "keypress", value: "volup")),
+              category: .media, action: .init(type: .keypress, value: "volup")),
         .init(id: "voldown", name: tr("preset.volumeDown"), symbol: "speaker.wave.1.fill", color: 0xFF7A00,
-              category: .media, action: .init(type: "keypress", value: "voldown")),
+              category: .media, action: .init(type: .keypress, value: "voldown")),
 
         // System
         .init(id: "capture-zone", name: tr("preset.captureZone"), symbol: "camera.viewfinder", color: blue,
-              category: .system, action: .init(type: "keypress", value: "cmd+shift+4")),
+              category: .system, action: .init(type: .keypress, value: "cmd+shift+4")),
         .init(id: "capture-screen", name: tr("preset.captureScreen"), symbol: "camera.fill", color: blue,
-              category: .system, action: .init(type: "keypress", value: "cmd+shift+3")),
+              category: .system, action: .init(type: .keypress, value: "cmd+shift+3")),
         .init(id: "spotlight", name: "Spotlight", symbol: "magnifyingglass", color: blue,
-              category: .system, action: .init(type: "keypress", value: "cmd+space")),
+              category: .system, action: .init(type: .keypress, value: "cmd+space")),
         .init(id: "mission", name: "Mission Control", symbol: "rectangle.3.group.fill", color: blue,
-              category: .system, action: .init(type: "keypress", value: "ctrl+up")),
+              category: .system, action: .init(type: .keypress, value: "ctrl+up")),
         .init(id: "lock", name: tr("preset.lock"), symbol: "lock.fill", color: 0x5B21FF,
-              category: .system, action: .init(type: "keypress", value: "ctrl+cmd+q")),
+              category: .system, action: .init(type: .keypress, value: "ctrl+cmd+q")),
         .init(id: "sleep", name: tr("preset.sleepDisplay"), symbol: "display", color: 0x5B21FF,
-              category: .system, action: .init(type: "shell", value: "pmset displaysleepnow")),
+              category: .system, action: .init(type: .shell, value: "pmset displaysleepnow")),
 
         // Apps (open, or bring to the front if already open) — real app icons
         .init(id: "app-finder", name: "Finder", symbol: "folder.fill", color: blue,
-              category: .apps, action: .init(type: "app", value: "/System/Library/CoreServices/Finder.app")),
+              category: .apps, action: .init(type: .app, value: "/System/Library/CoreServices/Finder.app")),
         .init(id: "app-terminal", name: "Terminal", symbol: "terminal.fill", color: 0x111111,
-              category: .apps, action: .init(type: "app", value: "/System/Applications/Utilities/Terminal.app")),
+              category: .apps, action: .init(type: .app, value: "/System/Applications/Utilities/Terminal.app")),
         .init(id: "app-safari", name: "Safari", symbol: "safari.fill", color: blue,
-              category: .apps, action: .init(type: "app", value: "/Applications/Safari.app")),
+              category: .apps, action: .init(type: .app, value: "/Applications/Safari.app")),
         .init(id: "app-mail", name: "Mail", symbol: "envelope.fill", color: blue,
-              category: .apps, action: .init(type: "app", value: "/System/Applications/Mail.app")),
+              category: .apps, action: .init(type: .app, value: "/System/Applications/Mail.app")),
         .init(id: "app-messages", name: "Messages", symbol: "message.fill", color: 0x00C44F,
-              category: .apps, action: .init(type: "app", value: "/System/Applications/Messages.app")),
+              category: .apps, action: .init(type: .app, value: "/System/Applications/Messages.app")),
         .init(id: "app-music", name: tr("preset.music"), symbol: "music.note", color: 0xFF1F5A,
-              category: .apps, action: .init(type: "app", value: "/System/Applications/Music.app")),
+              category: .apps, action: .init(type: .app, value: "/System/Applications/Music.app")),
         .init(id: "app-calendar", name: tr("preset.calendar"), symbol: "calendar", color: 0xFF3B30,
-              category: .apps, action: .init(type: "app", value: "/System/Applications/Calendar.app")),
+              category: .apps, action: .init(type: .app, value: "/System/Applications/Calendar.app")),
         .init(id: "app-notes", name: "Notes", symbol: "note.text", color: 0xFFB800,
-              category: .apps, action: .init(type: "app", value: "/System/Applications/Notes.app")),
+              category: .apps, action: .init(type: .app, value: "/System/Applications/Notes.app")),
 
         // Decorative
         .init(id: "star", name: tr("preset.star"), symbol: "star.fill", color: 0xFFB800, category: .decor, action: nil),

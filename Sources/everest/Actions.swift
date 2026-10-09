@@ -7,22 +7,13 @@ import Foundation
 enum ActionRunner {
     static func run(_ spec: ButtonAction) {
         switch spec.type {
-        case "shell":
-            runShell(spec.value)
-        case "url":
-            openURL(spec.value)
-        case "open":
-            openPath(spec.value)
-        case "app":
-            openApp(spec.value)
-        case "keypress":
-            sendKeys(spec.value)
-        case "text":
-            typeText(spec.value)
-        case "none", "":
-            break
-        default:
-            stderr("unknown action type '\(spec.type)'")
+        case .shell: runShell(spec.value)
+        case .url: openURL(spec.value)
+        case .open: openPath(spec.value)
+        case .app: openApp(spec.value)
+        case .keypress: sendKeys(spec.value)
+        case .text: typeText(spec.value)
+        case .noAction: break
         }
     }
 

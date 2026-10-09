@@ -567,7 +567,7 @@ final class EverestModel: ObservableObject {
         report(tr("status.configReloaded"))
     }
 
-    func setButton(_ index: Int, name: String? = nil, type: String? = nil, value: String? = nil, iconPath: String? = nil) {
+    func setButton(_ index: Int, name: String? = nil, type: ActionKind? = nil, value: String? = nil, iconPath: String? = nil) {
         guard index < config.buttons.count else { return }
         if let name { config.buttons[index].name = name }
         if let type { config.buttons[index].action.type = type }
@@ -677,7 +677,7 @@ final class EverestModel: ObservableObject {
             report(tr("status.appIconUnreadable"), error: true)
             return
         }
-        config.buttons[button].action = ButtonAction(type: "app", value: app.path)
+        config.buttons[button].action = ButtonAction(type: .app, value: app.path)
         config.buttons[button].name = FileManager.default.displayName(atPath: app.path)
             .replacingOccurrences(of: ".app", with: "")
         persist()

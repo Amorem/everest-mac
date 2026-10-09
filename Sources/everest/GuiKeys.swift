@@ -39,7 +39,7 @@ extension EverestModel {
         t.isPad ? config.padButtons[t.index] : config.buttons[t.index]
     }
 
-    func setButton(_ t: KeyTarget, name: String? = nil, type: String? = nil, value: String? = nil) {
+    func setButton(_ t: KeyTarget, name: String? = nil, type: ActionKind? = nil, value: String? = nil) {
         guard t.isPad else { return setButton(t.index, name: name, type: type, value: value) }
         updatePadKey(t.index, typing: type == nil) { b in
             if let name { b.name = name }

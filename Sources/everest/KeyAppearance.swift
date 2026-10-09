@@ -135,9 +135,9 @@ struct KeyAppearanceSheet: View {
     private func actionLabel(_ a: ButtonAction?) -> String? {
         guard let a else { return nil }
         switch a.type {
-        case "app": return tr("keyappearance.opensApp")
-        case "keypress": return a.value
-        case "shell": return tr("action.shell")
+        case .app: return tr("keyappearance.opensApp")
+        case .keypress: return a.value
+        case .shell: return tr("action.shell")
         default: return nil
         }
     }

@@ -108,7 +108,7 @@ enum Daemon {
         var lastMetrics = Date.distantPast
         var lastReply = Date()
 
-        log("listening — \(cfg.buttons(for: profile).enumerated().map { "D\($0.offset + 1): \($0.element.name ?? $0.element.action.type)" }.joined(separator: ", "))")
+        log("listening — \(cfg.buttons(for: profile).enumerated().map { "D\($0.offset + 1): \($0.element.name ?? $0.element.action.type.rawValue)" }.joined(separator: ", "))")
 
         func configDate() -> Date? {
             (try? FileManager.default.attributesOfItem(atPath: Config.file.path))?[.modificationDate] as? Date
@@ -185,7 +185,7 @@ enum Daemon {
                 if let p = pressed, p != lastButton, now.timeIntervalSince(lastAction) >= 0.8 {
                     lastAction = now
                     let btn = cfg.buttons(for: profile)[p]
-                    log("D\(p + 1) pressed — \(btn.name ?? btn.action.type): \(btn.action.value)")
+                    log("D\(p + 1) pressed — \(btn.name ?? btn.action.type.rawValue): \(btn.action.value)")
                     ActionRunner.run(btn.action)
                 }
                 lastButton = pressed

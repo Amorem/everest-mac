@@ -44,7 +44,7 @@ extension EverestModel {
             return
         }
         updatePadKey(i) { b in
-            b.action = ButtonAction(type: "app", value: app.path)
+            b.action = ButtonAction(type: .app, value: app.path)
             b.name = FileManager.default.displayName(atPath: app.path).replacingOccurrences(of: ".app", with: "")
         }
         setPadIcon(i, url: icon)
@@ -254,7 +254,7 @@ struct DisplayPadCard: View {
 
     var body: some View {
         let tint = Section.displaypad.tint
-        let assigned = model.config.padButtons.filter { $0.action.type != "none" }.count
+        let assigned = model.config.padButtons.filter { $0.action.type != .noAction }.count
         HStack(alignment: .center, spacing: 28) {
             DisplayPadHero(model: model, keySize: 62)
                 .onTapGesture { model.section = .displaypad }

@@ -1,8 +1,31 @@
 import Foundation
 
+/// What a screen key does. Stored in config.json by its raw value.
+enum ActionKind: String, Codable, CaseIterable {
+    case shell, url, app, open, keypress, text
+    case noAction = "none"
+}
+
 struct ButtonAction: Codable {
-    var type: String     // shell | url | open | app | keypress | text | none
+    var type: ActionKind
     var value: String
+
+    init(type: ActionKind, value: String) {
+        self.type = type
+        self.value = value
+    }
+
+    enum CodingKeys: String, CodingKey { case type, value }
+
+    /// An unknown type (a typo in a hand-edited file, or a newer version's)
+    /// becomes "no action" instead of making the whole file unreadable.
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        let raw = try c.decodeIfPresent(String.self, forKey: .type) ?? ""
+        type = ActionKind(rawValue: raw) ?? .noAction
+        if ActionKind(rawValue: raw) == nil && !raw.isEmpty { stderr("warning: unknown action type '\(raw)' — ignored") }
+        value = try c.decodeIfPresent(String.self, forKey: .value) ?? ""
+    }
 }
 
 struct ButtonConfig: Codable {
@@ -34,10 +57,10 @@ enum FactoryKeys {
     static var names: [String] { ["Everest", "Finder", tr("factory.sleep"), tr("factory.activityMonitor")] }
 
     static let actions: [ButtonAction] = [
-        ButtonAction(type: "shell", value: "open -b local.everest-mac"),                       // Base Camp → this app
-        ButtonAction(type: "app", value: "/System/Library/CoreServices/Finder.app"),           // File Explorer
-        ButtonAction(type: "shell", value: "pmset sleepnow"),                                  // Sleep
-        ButtonAction(type: "app", value: "/System/Applications/Utilities/Activity Monitor.app"), // Task Manager
+        ButtonAction(type: .shell, value: "open -b local.everest-mac"),                       // Base Camp → this app
+        ButtonAction(type: .app, value: "/System/Library/CoreServices/Finder.app"),           // File Explorer
+        ButtonAction(type: .shell, value: "pmset sleepnow"),                                  // Sleep
+        ButtonAction(type: .app, value: "/System/Applications/Utilities/Activity Monitor.app"), // Task Manager
     ]
 
     static func button(_ i: Int) -> ButtonConfig {
@@ -50,7 +73,7 @@ enum FactoryKeys {
 /// The DisplayPad's twelve keys start blank: black picture, no action.
 enum PadKeys {
     static func button(_ i: Int) -> ButtonConfig {
-        ButtonConfig(name: nil, icon: nil, iconPath: nil, action: ButtonAction(type: "none", value: ""))
+        ButtonConfig(name: nil, icon: nil, iconPath: nil, action: ButtonAction(type: .noAction, value: ""))
     }
 
     static var buttons: [ButtonConfig] { (0..<PadProto.keyCount).map(button) }

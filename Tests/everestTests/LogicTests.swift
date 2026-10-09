@@ -39,12 +39,23 @@ final class LogicTests: XCTestCase {
         XCTAssertFalse(FileManager.default.fileExists(atPath: Config.file.path))
     }
 
+    /// The JSON keeps the plain strings; an unknown type does not make the
+    /// file unreadable.
+    func testActionKindsInJSON() throws {
+        let data = try JSONEncoder().encode(ButtonAction(type: .noAction, value: ""))
+        XCTAssertTrue(String(decoding: data, as: UTF8.self).contains(#""type":"none""#))
+        let odd = try JSONDecoder().decode(ButtonAction.self, from: Data(#"{"type":"teleport","value":"x"}"#.utf8))
+        XCTAssertEqual(odd.type, .noAction)
+        let app = try JSONDecoder().decode(ButtonAction.self, from: Data(#"{"type":"app","value":"/A.app"}"#.utf8))
+        XCTAssertEqual(app.type, .app)
+    }
+
     // MARK: Factory defaults
 
     func testFactoryKeys() {
         let keys = FactoryKeys.buttons
         XCTAssertEqual(keys.count, 4)
-        XCTAssertEqual(keys[0].action.type, "shell")
+        XCTAssertEqual(keys[0].action.type, .shell)
         XCTAssertEqual(keys[0].action.value, "open -b local.everest-mac")
         XCTAssertEqual(keys[1].action.value, "/System/Library/CoreServices/Finder.app")
         XCTAssertEqual(keys[2].action.value, "pmset sleepnow")
@@ -250,7 +261,7 @@ final class LogicTests: XCTestCase {
         for p in ButtonPreset.all {
             guard let action = p.action else { continue }
             XCTAssertFalse(action.value.isEmpty, "\(p.id) has an action value")
-            XCTAssertTrue(["keypress", "shell", "app"].contains(action.type), "\(p.id): \(action.type)")
+            XCTAssertTrue([ActionKind.keypress, .shell, .app].contains(action.type), "\(p.id): \(action.type)")
         }
     }
 }
