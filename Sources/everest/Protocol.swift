@@ -83,6 +83,28 @@ enum Proto {
         return p
     }
 
+    /// The `11 14` settings block written back with new display brightness
+    /// bytes (SDKDLL `SetExtendInfo`): the reply to `11 14 00 00` echoed with
+    /// the write flag, bytes 23–32 replaced. They are five (dial, numpad)
+    /// pairs, one per lighting slot: `00` = follow the lighting brightness,
+    /// `80 | v` = fixed v % (rounded to 0/25/50/75/100 by the firmware).
+    /// Base Camp writes `80 80` when a profile's lighting is Off. A settings
+    /// write, not a picture or sector write; no SaveFlash follows it.
+    static func displayBrightness(from settings: [UInt8], byte: UInt8) -> [UInt8]? {
+        guard settings.count >= 33, settings[0] == 0x11, settings[1] == 0x14 else { return nil }
+        var p = Array(settings.prefix(packetSize))
+        while p.count < packetSize { p.append(0) }
+        p[2] = 0x00
+        p[3] = 0x01
+        for i in 23...32 { p[i] = byte }
+        return p
+    }
+
+    /// Display brightness bytes: dark (fixed 0 %), or following the lighting
+    /// as the mode switch above leaves them.
+    static let displaysOff: UInt8 = 0x80
+    static let displaysFollowLighting: UInt8 = 0x00
+
     /// 13 41 00 00 01 — reset the dial picture to the factory logo.
     static var resetDial: [UInt8] { packet([0x13, 0x41, 0x00, 0x00, 0x01]) }
 

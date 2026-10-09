@@ -219,6 +219,9 @@ enum Daemon {
                 if night != nightApplied {
                     let own = cfg.profileIndex(profile).map { ProfileSwitch.slot(for: cfg.profiles[$0]) } ?? 0
                     kb.send(FirmwareLighting.switchProfile(UInt8(profile), slot: night ? FirmwareLighting.Effect.off.slot : own), wait: 0.3)
+                    // The dial and D1–D4 screens: display brightness 0, then
+                    // back to following the lighting.
+                    if night || nightApplied != nil { kb.setDisplays(off: night) }
                     if nightApplied != nil || night { log(night ? "night mode: lights off" : "night mode: lights back on") }
                     nightApplied = night
                 }

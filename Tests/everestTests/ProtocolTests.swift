@@ -186,4 +186,19 @@ final class ProtocolTests: XCTestCase {
         XCTAssertEqual(s.deviceBytes, [0xF3, 0xCC, 0x23])
         XCTAssertEqual(s.modeByte, 0x11)
     }
+
+    /// Night mode: the settings block echoed with the write flag, only the
+    /// ten display brightness bytes changed.
+    func testDisplayBrightness() throws {
+        var reply = Proto.packet([0x11, 0x14, 0x00, 0x00, 0x02, 0xFF, 0x00, 0xF3, 0xCC, 0x23, 0x11, 0x1E])
+        for i in 23...32 { reply[i] = 0xE4 }
+        let off = try XCTUnwrap(Proto.displayBrightness(from: reply, byte: Proto.displaysOff))
+        XCTAssertEqual(Array(off[0...3]), [0x11, 0x14, 0x00, 0x01], "write flag")
+        XCTAssertEqual(Array(off[4...22]), Array(reply[4...22]), "the keyboard's own bytes are kept")
+        XCTAssertTrue(off[23...32].allSatisfy { $0 == 0x80 })
+        XCTAssertTrue(off[33...].allSatisfy { $0 == 0 })
+        let back = try XCTUnwrap(Proto.displayBrightness(from: reply, byte: Proto.displaysFollowLighting))
+        XCTAssertTrue(back[23...32].allSatisfy { $0 == 0x00 })
+        XCTAssertNil(Proto.displayBrightness(from: Proto.packet([0x11, 0x00]), byte: 0x80), "not a settings reply")
+    }
 }

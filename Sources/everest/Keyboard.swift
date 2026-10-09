@@ -129,6 +129,19 @@ final class Keyboard {
         _ = transport.read(timeout: 0.5)
     }
 
+    /// Dial and D1–D4 screens dark (`off`) or back to following the
+    /// lighting. Read-modify-write of the `11 14` settings block, so the
+    /// keyboard's own bytes are kept. Returns whether it was sent.
+    @discardableResult
+    func setDisplays(off: Bool) -> Bool {
+        guard let raw = state()?.raw,
+              let p = Proto.displayBrightness(from: raw, byte: off ? Proto.displaysOff : Proto.displaysFollowLighting)
+        else { return false }
+        try? transport.write(p)
+        _ = transport.read(timeout: 0.5)
+        return true
+    }
+
     func resetDial() {
         try? transport.write(Proto.resetDial)
         _ = transport.read(timeout: 0.5)
