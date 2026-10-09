@@ -19,9 +19,9 @@ enum KeyTarget: Hashable {
     var tint: Color { isPad ? Section.displaypad.tint : Section.buttons.tint }
 }
 
-/// Pad key previews, decoded once per file version rather than on every
-/// redraw of the page.
-enum PadImageCache {
+/// Key pictures, decoded once per file version rather than on every redraw
+/// (the keyboard preview redraws up to 30 times a second).
+enum ImageFileCache {
     private static let cache = NSCache<NSString, NSImage>()
 
     static func image(_ path: String) -> NSImage? {
@@ -50,7 +50,7 @@ extension EverestModel {
 
     func image(for t: KeyTarget) -> NSImage? {
         guard t.isPad else { return displayImages[t.index] }
-        return config.padButtons[t.index].iconPath.flatMap(PadImageCache.image)
+        return config.padButtons[t.index].iconPath.flatMap(ImageFileCache.image)
     }
 
     /// 0…1 while a picture is being sent to this key (the pad takes a

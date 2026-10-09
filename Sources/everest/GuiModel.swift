@@ -336,6 +336,9 @@ final class EverestModel: ObservableObject {
     }
 
     private func tickPreview() {
+        // Nothing to draw into: the window is closed (menu-bar only) or
+        // hidden behind others.
+        guard NSApp.windows.contains(where: { $0.isVisible && $0.occlusionState.contains(.visible) && $0.contentView is NSHostingView<RootView> }) else { return }
         let frame: LedRenderer.Frame
         let t = Date().timeIntervalSinceReferenceDate
         if let player {
@@ -345,8 +348,10 @@ final class EverestModel: ObservableObject {
         } else {
             frame = LedRenderer.render(effect, time: t)
         }
-        previewMain = frame.main
-        previewSide = frame.side
+        // A still effect gives the same frame every time: publishing it would
+        // still re-evaluate every view that watches the model.
+        if frame.main != previewMain { previewMain = frame.main }
+        if frame.side != previewSide { previewSide = frame.side }
     }
 
     func stopEverything() {
@@ -577,7 +582,7 @@ final class EverestModel: ObservableObject {
         (0..<4).map { i in
             if let u = keyUpload, u.button == i { return u.preview }
             // No custom image: the key shows its factory picture.
-            return config.buttons[i].iconPath.flatMap { NSImage(contentsOfFile: $0) } ?? FactoryIcons.image(i)
+            return config.buttons[i].iconPath.flatMap(ImageFileCache.image) ?? FactoryIcons.image(i)
         }
     }
 
