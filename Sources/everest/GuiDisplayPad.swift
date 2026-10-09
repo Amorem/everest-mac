@@ -104,6 +104,7 @@ extension EverestModel {
     }
 
     private func padSession(_ body: @escaping (DisplayPad) throws -> Void, done: (() -> Void)? = nil) {
+        guard !Self.snapshotMode else { return }
         padQueue.async { [weak self] in
             PadBusy.set()
             defer { PadBusy.clear() }

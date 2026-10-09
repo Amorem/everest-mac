@@ -86,6 +86,10 @@ enum FirmwareBlock: Equatable {
 
 @MainActor
 final class EverestModel: ObservableObject {
+    /// `EVEREST_SNAPSHOT` renders the pages and quits: no daemon, nothing
+    /// written to the devices, whatever config it is given.
+    static let snapshotMode = ProcessInfo.processInfo.environment["EVEREST_SNAPSHOT"] != nil
+
     @Published var config: Config
     @Published var section: Section = .overview
     @Published var status = tr("status.ready")
@@ -195,7 +199,7 @@ final class EverestModel: ObservableObject {
         }
         refreshDevice()
         // The daemon neutralises the keys itself when it connects.
-        if !config.keepFlashActions && !config.daemonEnabled {
+        if !config.keepFlashActions && !config.daemonEnabled && !Self.snapshotMode {
             device.async { [weak self] in
                 guard self != nil, let kb = try? Keyboard() else { return }
                 defer { kb.close() }
