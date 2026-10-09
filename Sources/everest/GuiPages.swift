@@ -207,6 +207,7 @@ extension ActionKind {
         case .keypress: return "command"
         case .text: return "text.cursor"
         case .profile: return "square.stack.3d.up.fill"
+        case .night: return "moon.fill"
         case .noAction: return "nosign"
         }
     }
@@ -220,6 +221,7 @@ extension ActionKind {
         case .keypress: return tr("action.keypress")
         case .text: return tr("action.text")
         case .profile: return tr("action.profile")
+        case .night: return tr("action.night")
         case .noAction: return tr("action.none")
         }
     }
@@ -231,7 +233,7 @@ extension ActionKind {
         case .open: return "~/Documents"
         case .keypress: return "cmd+shift+4 · mute · playpause"
         case .text: return tr("action.textToType")
-        case .app, .profile, .noAction: return ""
+        case .app, .profile, .night, .noAction: return ""
         }
     }
 }
@@ -297,6 +299,9 @@ struct ButtonEditorCard: View {
                 profileRow(value: action.value)
             } else if action.type == .app {
                 appRow(path: action.value)
+            } else if action.type == .night {
+                Caption(tr("night.note"), icon: "moon.fill")
+                    .frame(height: 48, alignment: .center)
             } else if action.type != .noAction {
                 VStack(alignment: .leading, spacing: 6) {
                     FieldLabel(action.type.title)

@@ -476,6 +476,9 @@ extension L10n {
         "status.configReloaded": "앱 밖에서 설정이 변경되어 다시 불러왔습니다.",
 
         // MARK: pad
+        "action.night": "야간 모드",
+        "night.note": "키보드 조명과 DisplayPad를 끄고 소리를 음소거합니다. 다시 누르면 모든 것이 원래대로 돌아옵니다.",
+        "night.active": "야간 모드 켜짐",
         "action.profile": "프로필",
         "profileAction.next": "다음 프로필",
         "profileAction.previous": "이전 프로필",

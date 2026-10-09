@@ -5,6 +5,8 @@ enum ActionKind: String, Codable, CaseIterable {
     case shell, url, app, open, keypress, text
     /// Switch profile: value "next", "previous" or a profile id ("3").
     case profile
+    /// Toggle night mode (`NightMode`): everything dark and muted, then back.
+    case night
     case noAction = "none"
 }
 

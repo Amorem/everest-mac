@@ -83,6 +83,9 @@ func usage() {
       metrics                       send one round of CPU/RAM/network/volume values
       monitor                       run the live monitor loop (Ctrl-C to stop)
 
+    Night mode
+      night                         toggle night mode (keyboard lights, DisplayPad and sound off / back on)
+
     DisplayPad
       pad info|image|color|clear|brightness|keys
                                     talk to the DisplayPad (`everest pad` for details)
@@ -514,6 +517,10 @@ case "reset-dial": Command.resetDial()
 case "reset-numpad": Command.resetNumpad(rest)
 case "listen": Daemon.run(rest)
 case "pad": PadCommand.run(rest)
+case "night":
+    NightMode.toggle()
+    print(NightMode.active ? "Night mode on: lights off, sound muted (run `everest night` again, or press the night key, to undo)"
+                           : "Night mode off: lights and sound back as they were")
 case "sniff": Daemon.sniff(rest)
 case "keys": Keys.dump(rest)
 case "feature-test": Command.featureProbe()

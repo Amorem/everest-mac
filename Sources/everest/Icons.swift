@@ -67,6 +67,8 @@ struct ButtonPreset: Identifiable {
               category: .system, action: .init(type: .keypress, value: "ctrl+cmd+q")),
         .init(id: "sleep", name: tr("preset.sleepDisplay"), symbol: "display", color: 0x5B21FF,
               category: .system, action: .init(type: .shell, value: "pmset displaysleepnow")),
+        .init(id: "night", name: tr("action.night"), symbol: "moon.stars.fill", color: 0x1E1B4B,
+              category: .system, action: .init(type: .night, value: "")),
 
         // Apps (open, or bring to the front if already open) — real app icons
         .init(id: "app-finder", name: "Finder", symbol: "folder.fill", color: blue,

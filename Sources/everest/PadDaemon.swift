@@ -124,6 +124,10 @@ enum PadDaemon {
         var lastError: String?
         var held = Set<Int>()
         var lastFired = [Date](repeating: .distantPast, count: PadProto.keyCount)
+        // Night mode: backlight 0 (the screen switches off) and black keys
+        // that are not redrawn until morning.
+        var night = NightMode.active
+        var level: Int { night ? 0 : cfg.padBrightness }
 
         while true {
             let stop: Bool = autoreleasepool {
@@ -157,7 +161,8 @@ enum PadDaemon {
                     if p != shownProfile { shown = shown.map { _ in "-" }; shownProfile = p }
                     let keys = cfg.padButtons(for: p)
                     var sample: MetricsSample?
-                    wanted = keys.map { b in PadDaemon.wanted(b) {
+                    night = NightMode.active
+                    wanted = night ? keys.map { _ in "night" } : keys.map { b in PadDaemon.wanted(b) {
                         if sample == nil { sample = Metrics.latest(maxAge: 0.9) }
                         return sample!
                     } }
@@ -166,15 +171,15 @@ enum PadDaemon {
                 if !PadBusy.active {
                     if now >= retryAt {
                         do {
-                            if brightness != cfg.padBrightness {
-                                try pad.setBrightness(PadProto.backlight(for: cfg.padBrightness))
-                                brightness = cfg.padBrightness
+                            if brightness != level {
+                                try pad.setBrightness(PadProto.backlight(for: level))
+                                brightness = level
                                 shown = shown.map { _ in "-" }   // redraw at the new level
                             }
                             let keys = cfg.padButtons(for: shownProfile)
                             let changed = (0..<PadProto.keyCount).filter { wanted[$0] != shown[$0] }
                             if !changed.isEmpty {
-                                try pad.setKeyImages(changed.map { ($0, bgr(for: keys[$0], brightness: cfg.padBrightness)) }) { k in
+                                try pad.setKeyImages(changed.map { ($0, bgr(for: keys[$0], brightness: level)) }) { k in
                                     shown[k] = wanted[k]
                                 }
                                 if changed.count > 1 { log("profile \(shownProfile): \(changed.count) keys drawn") }

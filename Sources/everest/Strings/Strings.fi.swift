@@ -476,6 +476,9 @@ extension L10n {
         "status.configReloaded": "Asetuksia muutettiin sovelluksen ulkopuolella, ja ne ladattiin uudelleen.",
 
         // MARK: pad
+        "action.night": "Yötila",
+        "night.note": "Sammuttaa näppäimistön valot ja DisplayPadin ja mykistää äänen; paina uudelleen palauttaaksesi kaiken ennalleen.",
+        "night.active": "Yötila päällä",
         "action.profile": "Profiili",
         "profileAction.next": "Seuraava profiili",
         "profileAction.previous": "Edellinen profiili",

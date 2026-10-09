@@ -476,6 +476,9 @@ extension L10n {
         "status.configReloaded": "Innstillingene ble endret utenfor appen og er lastet inn på nytt.",
 
         // MARK: pad
+        "action.night": "Nattmodus",
+        "night.note": "Slår av tastaturlyset og DisplayPad og demper lyden; trykk igjen for å få alt tilbake som før.",
+        "night.active": "Nattmodus på",
         "action.profile": "Profil",
         "profileAction.next": "Neste profil",
         "profileAction.previous": "Forrige profil",

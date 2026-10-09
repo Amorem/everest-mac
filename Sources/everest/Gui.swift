@@ -347,6 +347,10 @@ struct DeviceCard: View {
                 Self.miniStat(tr("device.firmware"), model.firmware)
                 Self.miniStat(tr("device.dial"), DisplaysPage.modeTitle(model.dialMode))
             }
+            if model.nightMode {
+                Label(tr("night.active"), systemImage: "moon.fill")
+                    .font(.ui(11, .semibold)).foregroundStyle(Theme.indigo)
+            }
             HStack(spacing: 6) {
                 StatusDot(on: model.daemonActive, color: Theme.indigo)
                 Text(model.daemonActive ? tr("daemon.keysActive") : tr("daemon.stopped"))

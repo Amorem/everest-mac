@@ -19,6 +19,7 @@ enum ActionRunner {
         case .text: typeText(spec.value)
         case .profile:
             if let handler = profileHandler { handler(spec.value) } else { stderr("profile action: nobody to switch profiles here") }
+        case .night: NightMode.toggle()
         case .noAction: break
         }
     }

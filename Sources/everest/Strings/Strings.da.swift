@@ -476,6 +476,9 @@ extension L10n {
         "status.configReloaded": "Indstillingerne blev ændret uden for appen og er indlæst igen.",
 
         // MARK: pad
+        "action.night": "Nattilstand",
+        "night.note": "Slukker tastaturlyset og DisplayPad og slår lyden fra; tryk igen for at få det hele tilbage som før.",
+        "night.active": "Nattilstand til",
         "action.profile": "Profil",
         "profileAction.next": "Næste profil",
         "profileAction.previous": "Forrige profil",

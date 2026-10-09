@@ -135,8 +135,11 @@ enum Daemon {
         }
 
         // The keyboard's active profile — changed from the dial or by us.
+        // Night mode as last applied to the keyboard's lighting; nil after a
+        // profile change (switching profile restores the profile's lighting).
+        var nightApplied: Bool? = false
         var profile = Int(kb.currentProfile()) {
-            didSet { ActiveProfile.current = profile }
+            didSet { ActiveProfile.current = profile; nightApplied = nil }
         }
         ActiveProfile.current = profile
         let startMode = cfg.profileIndex(profile).flatMap { cfg.profiles[$0].dialMode } ?? cfg.mainDisplayMode
@@ -210,6 +213,15 @@ enum Daemon {
             // Pick up button changes made in the app without a restart.
             if now.timeIntervalSince(lastConfigCheck) >= 1 {
                 lastConfigCheck = now
+                // Night mode: the built-in "Off" lighting slot, then back to the
+                // profile's own slot. A slot switch only; nothing is saved.
+                let night = NightMode.active
+                if night != nightApplied {
+                    let own = cfg.profileIndex(profile).map { ProfileSwitch.slot(for: cfg.profiles[$0]) } ?? 0
+                    kb.send(FirmwareLighting.switchProfile(UInt8(profile), slot: night ? FirmwareLighting.Effect.off.slot : own), wait: 0.3)
+                    if nightApplied != nil || night { log(night ? "night mode: lights off" : "night mode: lights back on") }
+                    nightApplied = night
+                }
                 let stamp = configDate()
                 if stamp != configStamp {
                     configStamp = stamp

@@ -476,6 +476,9 @@ extension L10n {
         "status.configReloaded": "ההגדרות שונו מחוץ לאפליקציה ונטענו מחדש.",
 
         // MARK: pad
+        "action.night": "מצב לילה",
+        "night.note": "מכבה את תאורת המקלדת ואת ה־DisplayPad ומשתיק את הצליל; לחיצה נוספת מחזירה הכול כפי שהיה.",
+        "night.active": "מצב לילה פעיל",
         "action.profile": "פרופיל",
         "profileAction.next": "הפרופיל הבא",
         "profileAction.previous": "הפרופיל הקודם",

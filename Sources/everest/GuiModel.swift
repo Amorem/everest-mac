@@ -106,6 +106,10 @@ final class EverestModel: ObservableObject {
     /// Values shown on live pad keys in the app (sampled every 2 s while
     /// a key of the selected profile shows one).
     @Published var liveSample = MetricsSample()
+    /// Night mode is on (the state file, checked with the device status).
+    @Published var nightMode = NightMode.active
+    /// Mac-rendered lighting paused for the night, to resume in the morning.
+    var playerPausedForNight = false
     /// The DisplayPad gets its own queue: a pad that does not answer must not
     /// hold up the keyboard.
     let padQueue = DispatchQueue(label: "everest.pad", qos: .userInitiated)
@@ -211,12 +215,27 @@ final class EverestModel: ObservableObject {
     }
 
     /// Follow the keyboard: the dial's Profile menu changes it too.
+    /// The daemon switches the keyboard and pad off; the app pauses the
+    /// lighting it renders itself, and resumes it when night mode ends.
+    func followNightMode() {
+        let night = NightMode.active
+        if night != nightMode { nightMode = night }
+        if night, player != nil {
+            stopPlayer()
+            playerPausedForNight = true
+        } else if !night, playerPausedForNight {
+            playerPausedForNight = false
+            if source == .mac { startPlayer() }
+        }
+    }
+
     func pollProfile() {
         accessibilityOK = ActionRunner.accessibilityGranted()
         padConnected = DisplayPad.isPresent
         padState = daemonRunning && padConnected ? PadState.read() : nil
         if config.padButtons.contains(where: { $0.live != nil }) { liveSample = Metrics.latest(maxAge: 1.5) }
         reloadConfigIfChanged()
+        followNightMode()
         // Stay off the channel during a picture upload — ours, or one started
         // from the command line (it leaves the FlashBusy marker).
         guard keyUpload == nil, !FlashBusy.active else { return }

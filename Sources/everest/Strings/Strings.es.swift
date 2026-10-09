@@ -476,6 +476,9 @@ extension L10n {
         "status.configReloaded": "Los ajustes se cambiaron fuera de la app y se han recargado.",
 
         // MARK: pad
+        "action.night": "Modo noche",
+        "night.note": "Apaga la iluminación del teclado y el DisplayPad y silencia el sonido; pulsa de nuevo para dejarlo todo como estaba.",
+        "night.active": "Modo noche activo",
         "action.profile": "Perfil",
         "profileAction.next": "Perfil siguiente",
         "profileAction.previous": "Perfil anterior",

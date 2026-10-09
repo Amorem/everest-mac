@@ -476,6 +476,9 @@ extension L10n {
         "status.configReloaded": "Die Einstellungen wurden außerhalb der App geändert und neu geladen.",
 
         // MARK: pad
+        "action.night": "Nachtmodus",
+        "night.note": "Schaltet die Tastaturbeleuchtung und das DisplayPad aus und den Ton stumm; erneut drücken stellt alles wieder her.",
+        "night.active": "Nachtmodus an",
         "action.profile": "Profil",
         "profileAction.next": "Nächstes Profil",
         "profileAction.previous": "Vorheriges Profil",

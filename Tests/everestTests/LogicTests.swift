@@ -69,6 +69,15 @@ final class LogicTests: XCTestCase {
         XCTAssertTrue(json.map { String(decoding: $0, as: UTF8.self).contains(#""type":"profile""#) } ?? false)
     }
 
+    /// Night mode state: written atomically, read back by every process.
+    func testNightModeState() {
+        XCTAssertFalse(NightMode.active, "no file: day")
+        NightMode.write(NightMode.State(active: true, mutedByUs: true, savedVolume: nil))
+        XCTAssertEqual(NightMode.read(), NightMode.State(active: true, mutedByUs: true, savedVolume: nil))
+        XCTAssertTrue(NightMode.active)
+        XCTAssertEqual(ActionKind(rawValue: "night"), .night)
+    }
+
     // MARK: Factory defaults
 
     func testFactoryKeys() {
@@ -278,7 +287,7 @@ final class LogicTests: XCTestCase {
     func testPresets() {
         XCTAssertEqual(Set(ButtonPreset.all.map(\.id)).count, ButtonPreset.all.count, "preset ids are unique")
         for p in ButtonPreset.all {
-            guard let action = p.action else { continue }
+            guard let action = p.action, action.type != .night else { continue }   // night mode takes no value
             XCTAssertFalse(action.value.isEmpty, "\(p.id) has an action value")
             XCTAssertTrue([ActionKind.keypress, .shell, .app].contains(action.type), "\(p.id): \(action.type)")
         }
