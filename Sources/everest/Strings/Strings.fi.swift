@@ -356,7 +356,7 @@ extension L10n {
         "profiles.dontChange": "Älä muuta",
         "profiles.enable": "Ota käyttöön",
         "profiles.freeSlots": "%1$@ vapaata paikkaa",
-        "profiles.hardwareNote": "Näppäimistö säilyttää viittä profiilia muistissa (valitsimen Profile-valikko). Jokaisella on oma valaistuksensa, omat uudelleenmäärittelynsä ja omat D1–D4-kuvansa; sovellus lisää näppäintoiminnot, valitsimen tilan ja linkitetyt sovellukset.",
+        "profiles.hardwareNote": "Näppäimistö säilyttää viittä profiilia muistissa (valitsimen Profile-valikko). Jokaisella on oma valaistuksensa, omat uudelleenmäärittelynsä ja omat D1–D4-kuvansa; sovellus lisää näppäintoiminnot, valitsimen tilan ja linkitetyt sovellukset. DisplayPadin kaksitoista näppäintä tallennetaan myös jokaiseen profiiliin.",
         "profiles.header": "PROFIILI %1$@",
         "profiles.iconAndColour": "Kuvake ja väri",
         "profiles.keyboardLighting": "Näppäimistön valaistus",
@@ -370,7 +370,7 @@ extension L10n {
         "profiles.noLinkedApp": "Ei linkitettyä sovellusta",
         "profiles.otherwise": "Muuten palaa profiiliin",
         "profiles.slot": "Paikka %1$@",
-        "profiles.slotOfKeyboard": "Näppäimistön paikka %1$@",
+        "profiles.slotOf": "Profiili %1$@/%2$@",
 
         // MARK: reset
         "reset.title": "Palauta",
@@ -476,6 +476,10 @@ extension L10n {
         "status.configReloaded": "Asetuksia muutettiin sovelluksen ulkopuolella, ja ne ladattiin uudelleen.",
 
         // MARK: pad
+        "action.profile": "Profiili",
+        "profileAction.next": "Seuraava profiili",
+        "profileAction.previous": "Edellinen profiili",
+        "profiles.newCopyPad": "Uusi, profiilin ”%1$@” DisplayPad-näppäimillä",
         "pad.status.swapped": "%1$@ ja %2$@ vaihdettu.",
         "keyappearance.live": "Reaaliaikainen",
         "keyappearance.liveAction": "Avaa myös vastaava sovellus",

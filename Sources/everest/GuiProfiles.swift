@@ -148,7 +148,7 @@ struct ProfilesPage: View {
                 ProfileBadge(profile: p, size: 40)
                 VStack(alignment: .leading, spacing: 2) {
                     Text(p.title).font(.ui(15, .semibold)).foregroundStyle(Theme.text)
-                    Text(tr("profiles.slotOfKeyboard", p.id)).font(.ui(11)).foregroundStyle(Theme.textTertiary)
+                    Text(tr("profiles.slotOf", p.id, ProfileSwitch.maxProfiles)).font(.ui(11)).foregroundStyle(Theme.textTertiary)
                 }
                 Spacer()
                 if active { Pill(text: tr("common.active"), icon: "checkmark", tint: Theme.success) }
@@ -163,6 +163,9 @@ struct ProfilesPage: View {
                     }
                     .frame(maxWidth: .infinity)
                 }
+            }
+            if model.padConnected || p.padButtons.contains(where: { $0.iconPath != nil || $0.live != nil }) {
+                padRow(p, active: active)
             }
             VStack(alignment: .leading, spacing: 7) {
                 infoRow("light.max", lightingLabel(p))
@@ -203,6 +206,31 @@ struct ProfilesPage: View {
             .strokeBorder(active ? p.tint.opacity(0.7) : .clear, lineWidth: 1.5))
     }
 
+    /// The profile's DisplayPad keys, small, as on the pad (two rows of six).
+    private func padRow(_ p: ProfileConfig, active: Bool) -> some View {
+        VStack(alignment: .leading, spacing: 5) {
+            Text(tr("section.displaypad.title").uppercased()).font(.ui(9.5, .bold)).tracking(0.6)
+                .foregroundStyle(Theme.textTertiary)
+            LazyVGrid(columns: Array(repeating: GridItem(.fixed(24), spacing: 4), count: PadProto.columns),
+                      alignment: .leading, spacing: 4) {
+                ForEach(0..<PadProto.keyCount, id: \.self) { i in
+                    let b = p.padButtons[i]
+                    let image: NSImage? = b.live.flatMap { m in
+                        LiveTiles.image(m, sample: model.liveSample, side: 64).map { NSImage(cgImage: $0, size: NSSize(width: 24, height: 24)) }
+                    } ?? b.iconPath.flatMap(ImageFileCache.image)
+                    RoundedRectangle(cornerRadius: 4, style: .continuous).fill(Color.black)
+                        .overlay { if let image { Image(nsImage: image).resizable().interpolation(.high) } }
+                        .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
+                        .overlay(RoundedRectangle(cornerRadius: 4, style: .continuous).strokeBorder(.white.opacity(0.1)))
+                        .frame(width: 24, height: 24)
+                        .help(b.title.flatMap { $0.isEmpty ? nil : $0 } ?? "P\(i + 1)")
+                }
+            }
+            .padding(6)
+            .background(RoundedRectangle(cornerRadius: 8, style: .continuous).fill(Color(hex: 0x15161A)))
+        }
+    }
+
     private func infoRow(_ icon: String, _ text: String) -> some View {
         HStack(spacing: 6) {
             Image(systemName: icon).font(.ui(11)).foregroundStyle(Theme.textTertiary).frame(width: 16)
@@ -224,6 +252,13 @@ struct ProfilesPage: View {
                 Text(tr("menu.newProfile")).font(.ui(13, .semibold)).foregroundStyle(Theme.text)
                 Text(tr("profiles.freeSlots", ProfileSwitch.maxProfiles - model.profiles.count))
                     .font(.ui(11)).foregroundStyle(Theme.textTertiary)
+                if model.hasPadKeys {
+                    Button { model.addProfile(copyPad: true) } label: {
+                        Label(tr("profiles.newCopyPad", model.activeProfile?.title ?? ""), systemImage: "doc.on.doc")
+                    }
+                    .buttonStyle(.compact())
+                    .padding(.top, 4)
+                }
             }
             .frame(maxWidth: .infinity, minHeight: 250)
             .background(RoundedRectangle(cornerRadius: Theme.radius, style: .continuous)
@@ -258,7 +293,7 @@ struct ProfileEditor: View {
                     ProfileBadge(profile: p, size: 44)
                     VStack(alignment: .leading, spacing: 2) {
                         Text(tr("profile.defaultName", p.id)).font(.ui(17, .bold)).foregroundStyle(Theme.text)
-                        Text(tr("profiles.slotOfKeyboard", p.id)).font(.ui(12)).foregroundStyle(Theme.textSecondary)
+                        Text(tr("profiles.slotOf", p.id, ProfileSwitch.maxProfiles)).font(.ui(12)).foregroundStyle(Theme.textSecondary)
                     }
                     Spacer()
                     IconButton(icon: "xmark", help: tr("common.close")) { dismiss() }

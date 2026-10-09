@@ -356,7 +356,7 @@ extension L10n {
         "profiles.dontChange": "Não alterar",
         "profiles.enable": "Ativar",
         "profiles.freeSlots": "%1$@ slot(s) livre(s)",
-        "profiles.hardwareNote": "O teclado guarda cinco perfis na memória (menu Profile do dial). Cada um tem sua iluminação, seus remapeamentos e suas imagens D1–D4; o app adiciona as ações das teclas, o modo do dial e os apps vinculados.",
+        "profiles.hardwareNote": "O teclado guarda cinco perfis na memória (menu Profile do dial). Cada um tem sua iluminação, seus remapeamentos e suas imagens D1–D4; o app adiciona as ações das teclas, o modo do dial e os apps vinculados. As doze teclas do DisplayPad também são guardadas em cada perfil.",
         "profiles.header": "PERFIL %1$@",
         "profiles.iconAndColour": "Ícone e cor",
         "profiles.keyboardLighting": "Iluminação do teclado",
@@ -370,7 +370,7 @@ extension L10n {
         "profiles.noLinkedApp": "Nenhum app vinculado",
         "profiles.otherwise": "Caso contrário, voltar para",
         "profiles.slot": "Slot %1$@",
-        "profiles.slotOfKeyboard": "Slot %1$@ do teclado",
+        "profiles.slotOf": "Perfil %1$@ de %2$@",
 
         // MARK: reset
         "reset.title": "Redefinição",
@@ -476,6 +476,10 @@ extension L10n {
         "status.configReloaded": "As definições foram alteradas fora da app e foram recarregadas.",
 
         // MARK: pad
+        "action.profile": "Perfil",
+        "profileAction.next": "Perfil seguinte",
+        "profileAction.previous": "Perfil anterior",
+        "profiles.newCopyPad": "Novo, com as teclas do DisplayPad de «%1$@»",
         "pad.status.swapped": "%1$@ e %2$@ trocadas.",
         "keyappearance.live": "Em direto",
         "keyappearance.liveAction": "Abrir também a app correspondente",

@@ -356,7 +356,7 @@ extension L10n {
         "profiles.dontChange": "Ne pas changer",
         "profiles.enable": "Activer",
         "profiles.freeSlots": "%1$@ emplacement(s) libre(s)",
-        "profiles.hardwareNote": "Le clavier garde cinq profils en mémoire (menu Profile de la molette). Chacun a son éclairage, ses remaps et ses images D1–D4 ; l'app y ajoute les actions des touches, le mode de la molette et les apps liées.",
+        "profiles.hardwareNote": "Le clavier garde cinq profils en mémoire (menu Profile de la molette). Chacun a son éclairage, ses remaps et ses images D1–D4 ; l'app y ajoute les actions des touches, le mode de la molette et les apps liées. Les douze touches du DisplayPad sont elles aussi enregistrées dans chaque profil.",
         "profiles.header": "PROFIL %1$@",
         "profiles.iconAndColour": "Icône et couleur",
         "profiles.keyboardLighting": "Éclairage du clavier",
@@ -370,7 +370,7 @@ extension L10n {
         "profiles.noLinkedApp": "Aucune app liée",
         "profiles.otherwise": "Sinon, revenir sur",
         "profiles.slot": "Emplacement %1$@",
-        "profiles.slotOfKeyboard": "Emplacement %1$@ du clavier",
+        "profiles.slotOf": "Profil %1$@ sur %2$@",
 
         // MARK: reset
         "reset.title": "Réinitialisation",
@@ -476,6 +476,10 @@ extension L10n {
         "status.configReloaded": "Les réglages ont été modifiés en dehors de l'app et ont été rechargés.",
 
         // MARK: pad
+        "action.profile": "Profil",
+        "profileAction.next": "Profil suivant",
+        "profileAction.previous": "Profil précédent",
+        "profiles.newCopyPad": "Nouveau, avec les touches DisplayPad de « %1$@ »",
         "pad.status.swapped": "%1$@ et %2$@ échangées.",
         "keyappearance.live": "En direct",
         "keyappearance.liveAction": "Ouvrir aussi l'app correspondante",

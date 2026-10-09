@@ -206,6 +206,7 @@ extension ActionKind {
         case .open: return "folder.fill"
         case .keypress: return "command"
         case .text: return "text.cursor"
+        case .profile: return "square.stack.3d.up.fill"
         case .noAction: return "nosign"
         }
     }
@@ -218,6 +219,7 @@ extension ActionKind {
         case .open: return tr("action.open")
         case .keypress: return tr("action.keypress")
         case .text: return tr("action.text")
+        case .profile: return tr("action.profile")
         case .noAction: return tr("action.none")
         }
     }
@@ -229,7 +231,7 @@ extension ActionKind {
         case .open: return "~/Documents"
         case .keypress: return "cmd+shift+4 · mute · playpause"
         case .text: return tr("action.textToType")
-        case .app, .noAction: return ""
+        case .app, .profile, .noAction: return ""
         }
     }
 }
@@ -291,7 +293,9 @@ struct ButtonEditorCard: View {
             Segmented(items: ActionKind.allCases.map { .init(value: $0, title: "", icon: $0.icon, help: $0.title) },
                       selection: Binding(get: { action.type }, set: { model.setButton(target, type: $0) }),
                       tint: tint, fill: true)
-            if action.type == .app {
+            if action.type == .profile {
+                profileRow(value: action.value)
+            } else if action.type == .app {
                 appRow(path: action.value)
             } else if action.type != .noAction {
                 VStack(alignment: .leading, spacing: 6) {
@@ -327,6 +331,28 @@ struct ButtonEditorCard: View {
         }
         .padding(18)
         .background(SurfaceBackground())
+    }
+
+    /// Which profile the key switches to: the next or previous one, or a
+    /// given profile.
+    private func profileRow(value: String) -> some View {
+        let options: [(String, String)] = [("next", tr("profileAction.next")), ("previous", tr("profileAction.previous"))]
+            + model.profiles.map { ("\($0.id)", $0.title) }
+        return HStack(spacing: 10) {
+            Image(systemName: ActionKind.profile.icon).font(.system(size: 18)).foregroundStyle(tint)
+            Picker("", selection: Binding(get: { options.contains { $0.0 == value } ? value : "next" },
+                                          set: { model.setButton(target, value: $0) })) {
+                ForEach(options, id: \.0) { Text($0.1).tag($0.0) }
+            }
+            .labelsHidden()
+            .pickerStyle(.menu)
+            .frame(maxWidth: 260)
+            Spacer()
+        }
+        .padding(.horizontal, 10)
+        .frame(height: 48)
+        .background(RoundedRectangle(cornerRadius: 8, style: .continuous).fill(Theme.surfaceSunken))
+        .overlay(RoundedRectangle(cornerRadius: 8, style: .continuous).strokeBorder(Theme.stroke))
     }
 
     private func appRow(path: String) -> some View {

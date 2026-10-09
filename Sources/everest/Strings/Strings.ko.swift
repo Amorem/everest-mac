@@ -356,7 +356,7 @@ extension L10n {
         "profiles.dontChange": "변경하지 않음",
         "profiles.enable": "사용",
         "profiles.freeSlots": "빈 슬롯 %1$@개",
-        "profiles.hardwareNote": "키보드는 프로필 5개를 메모리에 보관합니다 (다이얼의 Profile 메뉴). 각 프로필에는 고유한 조명, 리맵, D1–D4 이미지가 있으며, 앱은 키 동작, 다이얼 모드, 연결된 앱을 추가합니다.",
+        "profiles.hardwareNote": "키보드는 프로필 5개를 메모리에 보관합니다 (다이얼의 Profile 메뉴). 각 프로필에는 고유한 조명, 리맵, D1–D4 이미지가 있으며, 앱은 키 동작, 다이얼 모드, 연결된 앱을 추가합니다. DisplayPad의 12개 키도 프로필마다 저장됩니다.",
         "profiles.header": "프로필 %1$@",
         "profiles.iconAndColour": "아이콘 및 색상",
         "profiles.keyboardLighting": "키보드 조명",
@@ -370,7 +370,7 @@ extension L10n {
         "profiles.noLinkedApp": "연결된 앱 없음",
         "profiles.otherwise": "그렇지 않으면 다음으로 되돌리기",
         "profiles.slot": "슬롯 %1$@",
-        "profiles.slotOfKeyboard": "키보드 슬롯 %1$@",
+        "profiles.slotOf": "프로필 %1$@/%2$@",
 
         // MARK: reset
         "reset.title": "초기화",
@@ -476,6 +476,10 @@ extension L10n {
         "status.configReloaded": "앱 밖에서 설정이 변경되어 다시 불러왔습니다.",
 
         // MARK: pad
+        "action.profile": "프로필",
+        "profileAction.next": "다음 프로필",
+        "profileAction.previous": "이전 프로필",
+        "profiles.newCopyPad": "«%1$@»의 DisplayPad 키로 새로 만들기",
         "pad.status.swapped": "%1$@과(와) %2$@을(를) 바꿨습니다.",
         "keyappearance.live": "실시간",
         "keyappearance.liveAction": "해당 앱도 열기",

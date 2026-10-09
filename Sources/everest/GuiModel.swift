@@ -176,6 +176,14 @@ final class EverestModel: ObservableObject {
     // MARK: - Lifecycle
 
     func start() {
+        // A profile key tried from the app (Test button) switches here.
+        ActionRunner.profileHandler = { [weak self] value in
+            DispatchQueue.main.async {
+                guard let self, let target = ProfileRequest.resolve(value, current: self.config.selectedProfile, config: self.config)
+                else { return }
+                self.switchProfile(to: target)
+            }
+        }
         previewTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / 30.0, repeats: true) { [weak self] _ in
             Task { @MainActor [weak self] in self?.tickPreview() }
         }

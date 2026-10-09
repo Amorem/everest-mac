@@ -356,7 +356,7 @@ extension L10n {
         "profiles.dontChange": "Nicht ändern",
         "profiles.enable": "Aktivieren",
         "profiles.freeSlots": "%1$@ freie(r) Slot(s)",
-        "profiles.hardwareNote": "Die Tastatur speichert fünf Profile (Menü „Profile“ des Dials). Jedes hat eigene Beleuchtung, Remaps und D1–D4-Bilder; die App ergänzt die Tastenaktionen, den Dial-Modus und die verknüpften Apps.",
+        "profiles.hardwareNote": "Die Tastatur speichert fünf Profile (Menü „Profile“ des Dials). Jedes hat eigene Beleuchtung, Remaps und D1–D4-Bilder; die App ergänzt die Tastenaktionen, den Dial-Modus und die verknüpften Apps. Die zwölf Tasten des DisplayPad werden ebenfalls in jedem Profil gespeichert.",
         "profiles.header": "PROFIL %1$@",
         "profiles.iconAndColour": "Symbol und Farbe",
         "profiles.keyboardLighting": "Tastaturbeleuchtung",
@@ -370,7 +370,7 @@ extension L10n {
         "profiles.noLinkedApp": "Keine verknüpfte App",
         "profiles.otherwise": "Andernfalls zurück zu",
         "profiles.slot": "Slot %1$@",
-        "profiles.slotOfKeyboard": "Tastatur-Slot %1$@",
+        "profiles.slotOf": "Profil %1$@ von %2$@",
 
         // MARK: reset
         "reset.title": "Zurücksetzen",
@@ -476,6 +476,10 @@ extension L10n {
         "status.configReloaded": "Die Einstellungen wurden außerhalb der App geändert und neu geladen.",
 
         // MARK: pad
+        "action.profile": "Profil",
+        "profileAction.next": "Nächstes Profil",
+        "profileAction.previous": "Vorheriges Profil",
+        "profiles.newCopyPad": "Neu, mit den DisplayPad-Tasten von „%1$@“",
         "pad.status.swapped": "%1$@ und %2$@ getauscht.",
         "keyappearance.live": "Live",
         "keyappearance.liveAction": "Auch die passende App öffnen",

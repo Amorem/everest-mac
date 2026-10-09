@@ -11,10 +11,11 @@ extension EverestModel {
 
 
     func frontAppChanged(_ bundleID: String?) {
-        // The daemon follows the front app itself (the app then follows the
-        // keyboard); doing both sent every switch twice. Never in the middle
-        // of a picture upload either.
-        guard !daemonRunning, keyUpload == nil else { return }
+        // The daemon follows the front app itself while it has a keyboard
+        // (the app then follows the keyboard); doing both sent every switch
+        // twice. Without a keyboard the app does it, and the DisplayPad
+        // follows the saved selection. Never in the middle of an upload.
+        guard !daemonRunning || !connected, keyUpload == nil else { return }
         if let target = switcher.update(frontApp: bundleID, current: config.selectedProfile, config: config) {
             switchProfile(to: target, byFrontApp: true)
         }
@@ -64,9 +65,18 @@ extension EverestModel {
 
     var canAddProfile: Bool { config.profiles.count < ProfileSwitch.maxProfiles }
 
-    func addProfile() {
+    /// The current profile has something on its DisplayPad keys worth copying.
+    var hasPadKeys: Bool {
+        config.padButtons.contains { $0.action.type != .noAction || $0.iconPath != nil || $0.live != nil }
+    }
+
+    /// `copyPad`: start with the DisplayPad keys of the current profile
+    /// instead of twelve blank ones.
+    func addProfile(copyPad: Bool = false) {
         guard let id = (1...ProfileSwitch.maxProfiles).first(where: { config.profileIndex($0) == nil }) else { return }
-        config.profiles.append(newProfile(id: id))
+        var p = newProfile(id: id)
+        if copyPad { p.pad = config.padButtons }
+        config.profiles.append(p)
         config.profiles.sort { $0.id < $1.id }
         persist()
         switchProfile(to: id)

@@ -356,7 +356,7 @@ extension L10n {
         "profiles.dontChange": "אל תשנה",
         "profiles.enable": "הפעל",
         "profiles.freeSlots": "%1$@ חריצים פנויים",
-        "profiles.hardwareNote": "המקלדת שומרת חמישה פרופילים בזיכרון (תפריט Profile של החוגה). לכל אחד תאורה, מיפויים ותמונות D1–D4 משלו; האפליקציה מוסיפה את פעולות המקשים, מצב החוגה והאפליקציות המקושרות.",
+        "profiles.hardwareNote": "המקלדת שומרת חמישה פרופילים בזיכרון (תפריט Profile של החוגה). לכל אחד תאורה, מיפויים ותמונות D1–D4 משלו; האפליקציה מוסיפה את פעולות המקשים, מצב החוגה והאפליקציות המקושרות. שנים־עשר המקשים של ה־DisplayPad נשמרים גם הם בכל פרופיל.",
         "profiles.header": "פרופיל %1$@",
         "profiles.iconAndColour": "סמל וצבע",
         "profiles.keyboardLighting": "תאורת המקלדת",
@@ -370,7 +370,7 @@ extension L10n {
         "profiles.noLinkedApp": "אין אפליקציה מקושרת",
         "profiles.otherwise": "אחרת, חזור אל",
         "profiles.slot": "חריץ %1$@",
-        "profiles.slotOfKeyboard": "חריץ %1$@ של המקלדת",
+        "profiles.slotOf": "פרופיל %1$@ מתוך %2$@",
 
         // MARK: reset
         "reset.title": "איפוס",
@@ -476,6 +476,10 @@ extension L10n {
         "status.configReloaded": "ההגדרות שונו מחוץ לאפליקציה ונטענו מחדש.",
 
         // MARK: pad
+        "action.profile": "פרופיל",
+        "profileAction.next": "הפרופיל הבא",
+        "profileAction.previous": "הפרופיל הקודם",
+        "profiles.newCopyPad": "חדש, עם מקשי ה־DisplayPad של „%1$@”",
         "pad.status.swapped": "%1$@ ו־%2$@ הוחלפו.",
         "keyappearance.live": "בזמן אמת",
         "keyappearance.liveAction": "לפתוח גם את האפליקציה המתאימה",

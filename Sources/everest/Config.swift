@@ -3,6 +3,8 @@ import Foundation
 /// What a screen key does. Stored in config.json by its raw value.
 enum ActionKind: String, Codable, CaseIterable {
     case shell, url, app, open, keypress, text
+    /// Switch profile: value "next", "previous" or a profile id ("3").
+    case profile
     case noAction = "none"
 }
 

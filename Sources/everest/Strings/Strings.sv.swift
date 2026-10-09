@@ -356,7 +356,7 @@ extension L10n {
         "profiles.dontChange": "Ändra inte",
         "profiles.enable": "Aktivera",
         "profiles.freeSlots": "%1$@ ledig(a) plats(er)",
-        "profiles.hardwareNote": "Tangentbordet lagrar fem profiler i minnet (rattens Profile-meny). Var och en har egen belysning, egna omkopplingar och egna D1–D4-bilder; appen lägger till tangentåtgärderna, rattläget och de länkade apparna.",
+        "profiles.hardwareNote": "Tangentbordet lagrar fem profiler i minnet (rattens Profile-meny). Var och en har egen belysning, egna omkopplingar och egna D1–D4-bilder; appen lägger till tangentåtgärderna, rattläget och de länkade apparna. DisplayPads tolv tangenter sparas också i varje profil.",
         "profiles.header": "PROFIL %1$@",
         "profiles.iconAndColour": "Ikon och färg",
         "profiles.keyboardLighting": "Tangentbordsbelysning",
@@ -370,7 +370,7 @@ extension L10n {
         "profiles.noLinkedApp": "Ingen länkad app",
         "profiles.otherwise": "Annars, gå tillbaka till",
         "profiles.slot": "Plats %1$@",
-        "profiles.slotOfKeyboard": "Tangentbordsplats %1$@",
+        "profiles.slotOf": "Profil %1$@ av %2$@",
 
         // MARK: reset
         "reset.title": "Återställ",
@@ -476,6 +476,10 @@ extension L10n {
         "status.configReloaded": "Inställningarna ändrades utanför appen och har lästs in igen.",
 
         // MARK: pad
+        "action.profile": "Profil",
+        "profileAction.next": "Nästa profil",
+        "profileAction.previous": "Föregående profil",
+        "profiles.newCopyPad": "Ny, med DisplayPad-tangenterna från ”%1$@”",
         "pad.status.swapped": "%1$@ och %2$@ har bytt plats.",
         "keyappearance.live": "Live",
         "keyappearance.liveAction": "Öppna även motsvarande app",

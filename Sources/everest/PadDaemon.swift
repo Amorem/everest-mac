@@ -137,6 +137,17 @@ enum PadDaemon {
                 }
                 lastTick = now
 
+                // A profile key with no keyboard session to take it: the
+                // profile is the app's selection, saved in the config.
+                if ActiveProfile.current == nil, let request = ProfileRequest.take(),
+                   let target = ProfileRequest.resolve(request, current: cfg.selectedProfile, config: cfg),
+                   target != cfg.selectedProfile {
+                    cfg.selectedProfile = target
+                    cfg.save()
+                    log("profile \(target) (profile key, no keyboard)")
+                    lastCheck = .distantPast
+                }
+
                 // Config and picture files, once a second.
                 if now.timeIntervalSince(lastCheck) >= 1 {
                     lastCheck = now

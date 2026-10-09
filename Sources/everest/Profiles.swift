@@ -64,3 +64,36 @@ final class AutoSwitcher {
         NSWorkspace.shared.frontmostApplication?.bundleIdentifier
     }
 }
+
+/// A profile switch asked for by a key ("next", "previous" or an id). Keys
+/// fire on the keyboard and DisplayPad threads of the daemon; the switch is
+/// done by whoever owns the profile: the keyboard session when a keyboard is
+/// there, otherwise the DisplayPad thread, which saves it in the config.
+enum ProfileRequest {
+    private static let lock = NSLock()
+    private static var pending: String?
+
+    static func post(_ value: String) {
+        lock.lock(); pending = value; lock.unlock()
+    }
+
+    static func take() -> String? {
+        lock.lock(); defer { lock.unlock() }
+        let v = pending
+        pending = nil
+        return v
+    }
+
+    /// The profile a request leads to, among the configured ones (in id
+    /// order, wrapping around), or nil if it names no such profile.
+    static func resolve(_ value: String, current: Int, config: Config) -> Int? {
+        let ids = config.profiles.map(\.id).sorted()
+        guard !ids.isEmpty else { return nil }
+        let at = ids.firstIndex(of: current) ?? 0
+        switch value {
+        case "next": return ids[(at + 1) % ids.count]
+        case "previous": return ids[(at + ids.count - 1) % ids.count]
+        default: return Int(value).flatMap { ids.contains($0) ? $0 : nil }
+        }
+    }
+}

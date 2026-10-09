@@ -356,7 +356,7 @@ extension L10n {
         "profiles.dontChange": "Skift ikke",
         "profiles.enable": "Aktivér",
         "profiles.freeSlots": "%1$@ ledig(e) plads(er)",
-        "profiles.hardwareNote": "Tastaturet husker fem profiler (drejeknappens Profile-menu). Hver har sin egen belysning, sine egne omtildelinger og sine egne D1–D4-billeder; appen tilføjer tastehandlingerne, drejeknappens tilstand og de tilknyttede apps.",
+        "profiles.hardwareNote": "Tastaturet husker fem profiler (drejeknappens Profile-menu). Hver har sin egen belysning, sine egne omtildelinger og sine egne D1–D4-billeder; appen tilføjer tastehandlingerne, drejeknappens tilstand og de tilknyttede apps. DisplayPads tolv taster gemmes også i hver profil.",
         "profiles.header": "PROFIL %1$@",
         "profiles.iconAndColour": "Ikon og farve",
         "profiles.keyboardLighting": "Tastaturbelysning",
@@ -370,7 +370,7 @@ extension L10n {
         "profiles.noLinkedApp": "Ingen tilknyttet app",
         "profiles.otherwise": "Ellers gå tilbage til",
         "profiles.slot": "Plads %1$@",
-        "profiles.slotOfKeyboard": "Tastaturplads %1$@",
+        "profiles.slotOf": "Profil %1$@ af %2$@",
 
         // MARK: reset
         "reset.title": "Nulstil",
@@ -476,6 +476,10 @@ extension L10n {
         "status.configReloaded": "Indstillingerne blev ændret uden for appen og er indlæst igen.",
 
         // MARK: pad
+        "action.profile": "Profil",
+        "profileAction.next": "Næste profil",
+        "profileAction.previous": "Forrige profil",
+        "profiles.newCopyPad": "Ny, med DisplayPad-tasterne fra »%1$@«",
         "pad.status.swapped": "%1$@ og %2$@ byttet.",
         "keyappearance.live": "Live",
         "keyappearance.liveAction": "Åbn også den tilhørende app",

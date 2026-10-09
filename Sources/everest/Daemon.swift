@@ -83,6 +83,10 @@ enum Daemon {
             exit(0)
         }
 
+        // Profile keys (D1–D4 or the pad) hand their request to whoever owns
+        // the profile: the keyboard session below, or the pad thread.
+        ActionRunner.profileHandler = { ProfileRequest.post($0) }
+
         // The DisplayPad is a device of its own, served on its own thread.
         if !args.contains("--no-pad") { PadDaemon.start() }
 
@@ -191,6 +195,16 @@ enum Daemon {
                     neutralise(target)
                     log("profile \(target) « \(cfg.profiles[i].name) » (front app)")
                 }
+            }
+
+            // A profile key was pressed (D1–D4 or the DisplayPad).
+            if let request = ProfileRequest.take(),
+               let target = ProfileRequest.resolve(request, current: profile, config: cfg),
+               let i = cfg.profileIndex(target), target != profile {
+                ProfileSwitch.activate(cfg.profiles[i], keyboard: kb)
+                profile = target
+                neutralise(target)
+                log("profile \(target) « \(cfg.profiles[i].name) » (profile key)")
             }
 
             // Pick up button changes made in the app without a restart.

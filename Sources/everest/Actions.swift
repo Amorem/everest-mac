@@ -5,6 +5,10 @@ import Foundation
 
 /// Executes button actions: shell commands, URLs, apps, key combos, text.
 enum ActionRunner {
+    /// Who switches profiles in this process: the app, or the daemon
+    /// (which hands the request to the keyboard session, see `ProfileRequest`).
+    nonisolated(unsafe) static var profileHandler: ((String) -> Void)?
+
     static func run(_ spec: ButtonAction) {
         switch spec.type {
         case .shell: runShell(spec.value)
@@ -13,6 +17,8 @@ enum ActionRunner {
         case .app: openApp(spec.value)
         case .keypress: sendKeys(spec.value)
         case .text: typeText(spec.value)
+        case .profile:
+            if let handler = profileHandler { handler(spec.value) } else { stderr("profile action: nobody to switch profiles here") }
         case .noAction: break
         }
     }

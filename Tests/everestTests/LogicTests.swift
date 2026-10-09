@@ -50,6 +50,25 @@ final class LogicTests: XCTestCase {
         XCTAssertEqual(app.type, .app)
     }
 
+    /// Profile keys: next / previous wrap around the configured profiles
+    /// (in id order, gaps allowed), an id must exist.
+    func testProfileRequests() {
+        var cfg = Config()
+        cfg.profiles = [1, 2, 4].map { ProfileConfig(id: $0, name: "P\($0)") }
+        XCTAssertEqual(ProfileRequest.resolve("next", current: 1, config: cfg), 2)
+        XCTAssertEqual(ProfileRequest.resolve("next", current: 2, config: cfg), 4)
+        XCTAssertEqual(ProfileRequest.resolve("next", current: 4, config: cfg), 1)
+        XCTAssertEqual(ProfileRequest.resolve("previous", current: 1, config: cfg), 4)
+        XCTAssertEqual(ProfileRequest.resolve("4", current: 1, config: cfg), 4)
+        XCTAssertNil(ProfileRequest.resolve("3", current: 1, config: cfg), "no profile 3")
+        XCTAssertNil(ProfileRequest.resolve("teleport", current: 1, config: cfg))
+        ProfileRequest.post("next")
+        XCTAssertEqual(ProfileRequest.take(), "next")
+        XCTAssertNil(ProfileRequest.take(), "taken once")
+        let json = try? JSONEncoder().encode(ButtonAction(type: .profile, value: "next"))
+        XCTAssertTrue(json.map { String(decoding: $0, as: UTF8.self).contains(#""type":"profile""#) } ?? false)
+    }
+
     // MARK: Factory defaults
 
     func testFactoryKeys() {

@@ -40,6 +40,8 @@ extension EverestModel {
     }
 
     func setButton(_ t: KeyTarget, name: String? = nil, type: ActionKind? = nil, value: String? = nil) {
+        // A profile key starts as "next profile" rather than keep, say, an app path.
+        let value = value ?? (type == .profile ? "next" : nil)
         guard t.isPad else { return setButton(t.index, name: name, type: type, value: value) }
         updatePadKey(t.index, typing: type == nil) { b in
             if let name { b.name = name }

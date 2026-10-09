@@ -356,7 +356,7 @@ extension L10n {
         "profiles.dontChange": "Don't change",
         "profiles.enable": "Enable",
         "profiles.freeSlots": "%1$@ free slot(s)",
-        "profiles.hardwareNote": "The keyboard keeps five profiles in memory (the dial's Profile menu). Each has its own lighting, remaps and D1–D4 pictures; the app adds the key actions, the dial mode and the linked apps.",
+        "profiles.hardwareNote": "The keyboard keeps five profiles in memory (the dial's Profile menu). Each has its own lighting, remaps and D1–D4 pictures; the app adds the key actions, the dial mode and the linked apps. The DisplayPad's twelve keys are saved in each profile too.",
         "profiles.header": "PROFILE %1$@",
         "profiles.iconAndColour": "Icon and colour",
         "profiles.keyboardLighting": "Keyboard lighting",
@@ -370,7 +370,7 @@ extension L10n {
         "profiles.noLinkedApp": "No linked app",
         "profiles.otherwise": "Otherwise, go back to",
         "profiles.slot": "Slot %1$@",
-        "profiles.slotOfKeyboard": "Keyboard slot %1$@",
+        "profiles.slotOf": "Profile %1$@ of %2$@",
 
         // MARK: reset
         "reset.title": "Reset",
@@ -476,6 +476,10 @@ extension L10n {
         "status.configReloaded": "Settings were changed outside the app and have been reloaded.",
 
         // MARK: pad
+        "action.profile": "Profile",
+        "profileAction.next": "Next profile",
+        "profileAction.previous": "Previous profile",
+        "profiles.newCopyPad": "New, with the DisplayPad keys of « %1$@ »",
         "pad.status.swapped": "%1$@ and %2$@ swapped.",
         "keyappearance.live": "Live",
         "keyappearance.liveAction": "Also open the matching app",

@@ -356,7 +356,7 @@ extension L10n {
         "profiles.dontChange": "Non cambiare",
         "profiles.enable": "Attiva",
         "profiles.freeSlots": "%1$@ slot libero/i",
-        "profiles.hardwareNote": "La tastiera conserva cinque profili in memoria (menu Profile del dial). Ognuno ha la propria illuminazione, i propri remap e le proprie immagini D1–D4; l'app aggiunge le azioni dei tasti, la modalità del dial e le app collegate.",
+        "profiles.hardwareNote": "La tastiera conserva cinque profili in memoria (menu Profile del dial). Ognuno ha la propria illuminazione, i propri remap e le proprie immagini D1–D4; l'app aggiunge le azioni dei tasti, la modalità del dial e le app collegate. Anche i dodici tasti del DisplayPad sono salvati in ogni profilo.",
         "profiles.header": "PROFILO %1$@",
         "profiles.iconAndColour": "Icona e colore",
         "profiles.keyboardLighting": "Illuminazione della tastiera",
@@ -370,7 +370,7 @@ extension L10n {
         "profiles.noLinkedApp": "Nessuna app collegata",
         "profiles.otherwise": "Altrimenti, torna a",
         "profiles.slot": "Slot %1$@",
-        "profiles.slotOfKeyboard": "Slot %1$@ della tastiera",
+        "profiles.slotOf": "Profilo %1$@ di %2$@",
 
         // MARK: reset
         "reset.title": "Ripristino",
@@ -476,6 +476,10 @@ extension L10n {
         "status.configReloaded": "Le impostazioni sono state modificate fuori dall'app e sono state ricaricate.",
 
         // MARK: pad
+        "action.profile": "Profilo",
+        "profileAction.next": "Profilo successivo",
+        "profileAction.previous": "Profilo precedente",
+        "profiles.newCopyPad": "Nuovo, con i tasti DisplayPad di «%1$@»",
         "pad.status.swapped": "%1$@ e %2$@ scambiati.",
         "keyappearance.live": "Dal vivo",
         "keyappearance.liveAction": "Apri anche l'app corrispondente",
