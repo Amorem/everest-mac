@@ -147,7 +147,7 @@ final class EverestModel: ObservableObject {
 
     func start() {
         previewTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / 30.0, repeats: true) { [weak self] _ in
-            Task { @MainActor in self?.tickPreview() }
+            Task { @MainActor [weak self] in self?.tickPreview() }
         }
         refreshDevice()
         if !config.keepFlashActions {
@@ -160,14 +160,14 @@ final class EverestModel: ObservableObject {
         }
         if config.daemonEnabled { startDaemon() }
         profileTimer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { [weak self] _ in
-            Task { @MainActor in self?.pollProfile() }
+            Task { @MainActor [weak self] in self?.pollProfile() }
         }
         pollProfile()
         NSWorkspace.shared.notificationCenter.addObserver(
             forName: NSWorkspace.didActivateApplicationNotification, object: nil, queue: .main
         ) { [weak self] note in
             let app = note.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication
-            Task { @MainActor in self?.frontAppChanged(app?.bundleIdentifier) }
+            Task { @MainActor [weak self] in self?.frontAppChanged(app?.bundleIdentifier) }
         }
     }
 
