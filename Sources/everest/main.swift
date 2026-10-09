@@ -109,6 +109,8 @@ func usage() {
                                     by default; --lighting switches the slot and restores
                                     it; --upload N sends a test picture to key N, then
                                     resets that key)
+      selftest --pad [--draw]       the same for the DisplayPad (read-only; --draw shows a
+                                    test pattern on key 12 in RAM, then restores it)
 
     Misc
       gui                           open the graphical interface

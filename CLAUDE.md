@@ -12,9 +12,10 @@ swift test                           # unit tests, no keyboard needed
 swift test --filter LayoutTests/testKeySetsAndGeometry   # single test
 ./make-app.sh [--install | --zip]    # builds + signs Everest.app (use this, not swift build, for the app)
 .build/debug/everest selftest [--lighting] [--upload N]  # talks to the REAL keyboard
+.build/debug/everest selftest --pad [--draw]             # the REAL DisplayPad (--draw: RAM-only test pattern)
 ```
 
-There is no linter. `selftest --upload N` writes the keyboard's flash; `--lighting` switches the lighting slot and restores it. Run plain `selftest` after touching anything in `Keyboard.swift`, `Transport.swift`, `Daemon.swift` or `Firmware.swift`.
+There is no linter. `selftest --upload N` writes the keyboard's flash; `--lighting` switches the lighting slot and restores it. Run plain `selftest` after touching anything in `Keyboard.swift`, `Transport.swift`, `Daemon.swift` or `Firmware.swift`, and `selftest --pad` after touching the DisplayPad files or `Transport.swift`.
 
 Dev aids (not user features): `EVEREST_SNAPSHOT=<dir> Everest.app/Contents/MacOS/everest gui` renders every page to PNG and quits; `everest effect-sheet|icon-sheet|layout-sheet|menubar-sheet <out.png>` render contact sheets; `everest rgb ... --dry-run` prints packets without sending; `EVEREST_DEBUG=1` logs raw HID traffic; `EVEREST_CONFIG_DIR` overrides `~/.config/everest-mac` (tests rely on it so they never touch the real config).
 

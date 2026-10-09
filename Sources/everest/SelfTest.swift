@@ -1,7 +1,8 @@
 import Foundation
 
 /// `everest selftest [--lighting] [--upload <1-4>]` — talks to the real
-/// keyboard to catch communication regressions.
+/// keyboard to catch communication regressions. `everest selftest --pad
+/// [--draw]` does the same for the DisplayPad (see `runPad`).
 ///
 /// - default: read-only. Opens the device, checks that every query is answered
 ///   by the right reply (the keyboard sends each answer to every program that
@@ -38,6 +39,7 @@ enum SelfTest {
     }
 
     static func run(_ args: [String]) {
+        if args.contains("--pad") { runPad(draw: args.contains("--draw")) }
         let doLighting = args.contains("--lighting")
         var uploadKey: Int?
         if let i = args.firstIndex(of: "--upload") {
@@ -178,5 +180,98 @@ enum SelfTest {
         kb.send(Proto.resetNumpadPics(1 << UInt8(key), slot: profile), wait: 0.6)
         kb.neutraliseKeyActions()
         check("keyboard still answers after the upload", info(kb) != nil)
+    }
+
+    // MARK: DisplayPad
+
+    /// Read-only by default: host mode, firmware gate, queries matched to their
+    /// replies, reopening, the picture interface, and the allow-list. With
+    /// `--draw`, a test pattern on key 12 in RAM, then the configured picture
+    /// back (nothing is written to the pad's flash).
+    static func runPad(draw: Bool) -> Never {
+        print("Reading the DisplayPad (\(draw ? "draws on key 12, RAM only" : "read-only"))")
+        // Keep the daemon off the command channel meanwhile.
+        PadBusy.set()
+        defer { PadBusy.clear() }
+        guard DisplayPad.isPresent else {
+            check("DisplayPad on the USB bus (3282:0009)", false, "plugged in? straight into the Mac, not a hub")
+            PadBusy.clear(); finish()
+        }
+        check("DisplayPad on the USB bus", true)
+
+        let started = Date()
+        let pad: DisplayPad
+        do {
+            pad = try DisplayPad(allowUnsupported: true)
+        } catch {
+            check("host mode answered (11 80)", false, "\(error)")
+            PadBusy.clear(); finish()
+        }
+        check("host mode answered (11 80)", true, String(format: "%.1f s", Date().timeIntervalSince(started)))
+        if let v = pad.firmware {
+            check("firmware info answered (11 00)", true, "firmware \(PadProto.firmwareString(v))")
+            check("firmware is the tested one", v == PadProto.supportedFirmware,
+                  "tested: \(PadProto.firmwareString(PadProto.supportedFirmware))")
+        } else {
+            check("firmware info answered (11 00)", false)
+        }
+
+        // Each query must get its own reply, even with other programs talking.
+        let level = try? pad.brightness()
+        check("brightness answered (12 00 00 01)", level != nil, level.map { "\($0) %" } ?? "")
+        let sleep = try? pad.request(PadProto.sleepQuery, echo: 2, timeout: 0.6)
+        check("screen sleep answered (22 00 00 01)", sleep != nil)
+        var matched = 0
+        for _ in 0..<4 {
+            if (try? pad.request(PadProto.firmwareInfo, echo: 2, timeout: 0.6)).flatMap({ $0 }).flatMap(PadProto.firmwareVersion) != nil { matched += 1 }
+            if (try? pad.brightness()).flatMap({ $0 }) != nil { matched += 1 }
+        }
+        check("alternating queries get their own replies", matched == 8, "\(matched)/8")
+
+        // The allow-list stops dangerous packets before they are written.
+        var refused = false
+        do { try pad.send(PadProto.packet([0x30, 0xAA, 0x55])) } catch DisplayPad.PadError.refused { refused = true } catch {}
+        check("firmware command refused before sending", refused)
+
+        // The picture interface opens (exclusive) and is released.
+        do {
+            let pipe = try PadPixelPipe()
+            pipe.close()
+            check("picture interface opened and released (IOUSBHost, interface 1)", true)
+        } catch {
+            check("picture interface opened and released (IOUSBHost, interface 1)", false, "\(error)")
+        }
+
+        if draw {
+            let key = PadProto.keyCount - 1
+            var pattern = [UInt8]()
+            for y in 0..<PadProto.keySide {
+                for _ in 0..<PadProto.keySide {
+                    // Red top row, green bottom row, blue elsewhere: the whole
+                    // picture must arrive (see docs/DISPLAYPAD.md, Pixels).
+                    pattern += y == 0 ? [0, 0, 255] : y == PadProto.keySide - 1 ? [0, 255, 0] : [255, 0, 0]
+                }
+            }
+            do {
+                try pad.setKeyImage(key, bgr: pattern)
+                check("test pattern drawn on P12", true, "blue, red top row, green bottom row")
+                Thread.sleep(forTimeInterval: 3)
+                let cfg = Config.load()
+                let b = cfg.padButtons(for: cfg.selectedProfile)[key]
+                try pad.setKeyImage(key, bgr: PadDaemon.bgr(for: b, brightness: cfg.padBrightness))
+                check("P12 restored", true)
+            } catch {
+                check("test pattern drawn on P12", false, "\(error)")
+            }
+        }
+
+        pad.close()
+        var reopened = 0
+        for _ in 0..<3 {
+            if let p = try? DisplayPad(allowUnsupported: true, startup: 2) { reopened += 1; p.close() }
+        }
+        check("closed and reopened 3 times", reopened == 3, "\(reopened)/3")
+        PadBusy.clear()
+        finish()
     }
 }

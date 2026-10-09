@@ -175,6 +175,8 @@ swift test                     # unit tests, no keyboard needed (also run by CI)
 everest selftest               # talks to the real keyboard, read-only
 everest selftest --lighting    # also switches the lighting slot and restores it
 everest selftest --upload 4    # also sends a test picture to D4, then resets D4
+everest selftest --pad         # the DisplayPad, read-only
+everest selftest --pad --draw  # also a test pattern on its key 12 (RAM only), then restores it
 ```
 
 The unit tests pin the exact bytes sent to the keyboard (lighting packets,
