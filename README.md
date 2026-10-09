@@ -23,12 +23,14 @@ hardware a job.
 - **DisplayPad** — the separate twelve-key Mountain DisplayPad, with the same
   pictures (presets, app icons, your images) and actions as D1–D4, per
   profile, plus its brightness; keys can also show live CPU, GPU, RAM,
-  disk, network, volume or the time. No driver, no root.
+  disk, network, volume or the time; drag a key onto another to swap them.
+  No driver, no root.
 - **Dial screen** — clock, CPU / GPU / RAM / disk / network / volume gauges,
   or a custom image.
 - **Profiles** — the keyboard's five hardware profiles, each with its own
-  lighting, D1–D4 setup and dial mode; link an app to a profile and the
-  keyboard switches when that app comes to the front.
+  lighting, D1–D4 setup, DisplayPad keys and dial mode; link an app to a
+  profile and the keyboard and pad switch when that app comes to the front,
+  or switch from any key (next, previous or a given profile).
 - **Layouts** — the keyboard layout is read from the firmware (10 layouts, ANSI
   and ISO) and the drawing, legends and effects follow it.
 - **Menu-bar app** — keeps working with the window closed, reconnects when the
@@ -39,6 +41,7 @@ hardware a job.
 |---|---|
 | ![Lighting](docs/screenshots/lighting-keyboard-effects.png) | ![Mac effects](docs/screenshots/lighting-mac-effects.png) |
 | ![Profiles](docs/screenshots/profiles.png) | ![Keys](docs/screenshots/keys.png) |
+| ![DisplayPad](docs/screenshots/displaypad.png) | |
 
 > The interface (window, menu-bar menu, messages) is available in **English,
 > French, German, Spanish, Italian, Portuguese, Norwegian, Swedish, Danish,
