@@ -476,6 +476,9 @@ extension L10n {
         "status.configReloaded": "Inställningarna ändrades utanför appen och har lästs in igen.",
 
         // MARK: pad
+        "keyappearance.live": "Live",
+        "keyappearance.liveAction": "Öppna även motsvarande app",
+        "keyappearance.liveNote": "Ritas om när värdet ändras (högst en gång per sekund) medan plattan är ansluten. Tangenten behåller sin åtgärd.",
         "pad.keysActive": "P1–P12-tangenter aktiva",
         "pad.overview.keys": "%1$@ av 12 tangenter inställda",
         "pad.overview.firmware": "Firmware %1$@",

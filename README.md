@@ -22,7 +22,8 @@ hardware a job.
   app, key combo, typed text. Factory pictures and actions can be restored.
 - **DisplayPad** — the separate twelve-key Mountain DisplayPad, with the same
   pictures (presets, app icons, your images) and actions as D1–D4, per
-  profile, plus its brightness. No driver, no root.
+  profile, plus its brightness; keys can also show live CPU, GPU, RAM,
+  disk, network, volume or the time. No driver, no root.
 - **Dial screen** — clock, CPU / GPU / RAM / disk / network / volume gauges,
   or a custom image.
 - **Profiles** — the keyboard's five hardware profiles, each with its own

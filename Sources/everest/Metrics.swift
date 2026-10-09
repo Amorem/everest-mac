@@ -19,6 +19,22 @@ enum Metrics {
     private static var prevNet: (bytes: UInt64, time: Date)?
     private static var smoothed: [Double] = [0, 0, 0, 0, 0]
 
+    private static let lock = NSLock()
+    private static var last: (sample: MetricsSample, at: Date)?
+
+    /// The latest sample, taken again only if it is older than `maxAge`.
+    /// The keyboard loop (dial gauges) and the DisplayPad thread (live keys)
+    /// share it: `sample()` keeps deltas between calls, so two callers
+    /// sampling on their own would each see half the CPU time.
+    static func latest(maxAge: TimeInterval = 0.4) -> MetricsSample {
+        lock.lock()
+        defer { lock.unlock() }
+        if let last, Date().timeIntervalSince(last.at) < maxAge { return last.sample }
+        let s = sample()
+        last = (s, Date())
+        return s
+    }
+
     static func sample() -> MetricsSample {
         var s = MetricsSample()
         let raw0 = cpuPercent()

@@ -156,4 +156,34 @@ final class PadTests: XCTestCase {
         PadState(status: .unsupported, firmware: "9").publish()
         XCTAssertEqual(PadState.read(), PadState(status: .unsupported, firmware: "9"))
     }
+
+    /// Live tiles: every metric draws at the key size and converts to the
+    /// pad's format; the signature changes only with the shown text.
+    func testLiveTiles() throws {
+        var sample = MetricsSample()
+        sample.cpu = 37; sample.gpu = 5; sample.ram = 64; sample.disk = 81; sample.networkMBs = 12; sample.volumeLevel = 60
+        let dump = ProcessInfo.processInfo.environment["EVEREST_TILE_DUMP"]
+        for m in LiveMetric.allCases {
+            let img = try XCTUnwrap(LiveTiles.image(m, sample: sample), m.rawValue)
+            XCTAssertEqual(img.width, 102)
+            XCTAssertEqual(try ImageTools.padBGR(image: img).count, 102 * 102 * 3)
+            if let dump, let big = LiveTiles.image(m, sample: sample, side: 204) {
+                let url = URL(fileURLWithPath: dump).appendingPathComponent("tile-\(m.rawValue).png")
+                let dest = CGImageDestinationCreateWithURL(url as CFURL, "public.png" as CFString, 1, nil)!
+                CGImageDestinationAddImage(dest, big, nil)
+                CGImageDestinationFinalize(dest)
+            }
+        }
+        XCTAssertEqual(LiveTiles.signature(.cpu, sample: sample), "live:cpu:37%")
+        var other = sample; other.ram = 10
+        XCTAssertEqual(LiveTiles.signature(.cpu, sample: other), LiveTiles.signature(.cpu, sample: sample))
+    }
+
+    func testLiveKeyRoundTrip() throws {
+        var b = PadKeys.button(0)
+        b.live = .ram
+        let back = try JSONDecoder().decode(ButtonConfig.self, from: JSONEncoder().encode(b))
+        XCTAssertEqual(back.live, .ram)
+        XCTAssertNil(try JSONDecoder().decode(ButtonConfig.self, from: JSONEncoder().encode(PadKeys.button(1))).live)
+    }
 }

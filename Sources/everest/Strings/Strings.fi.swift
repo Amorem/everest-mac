@@ -476,6 +476,9 @@ extension L10n {
         "status.configReloaded": "Asetuksia muutettiin sovelluksen ulkopuolella, ja ne ladattiin uudelleen.",
 
         // MARK: pad
+        "keyappearance.live": "Reaaliaikainen",
+        "keyappearance.liveAction": "Avaa myös vastaava sovellus",
+        "keyappearance.liveNote": "Piirretään uudelleen, kun arvo muuttuu (enintään kerran sekunnissa), kun pad on kytkettynä. Näppäin säilyttää toimintonsa.",
         "pad.keysActive": "Näppäimet P1–P12 käytössä",
         "pad.overview.keys": "%1$@/12 näppäintä määritetty",
         "pad.overview.firmware": "Laiteohjelmisto %1$@",

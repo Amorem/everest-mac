@@ -239,7 +239,7 @@ enum Daemon {
 
             if cfg.monitorMode, now.timeIntervalSince(lastMetrics) >= 0.5 {
                 lastMetrics = now
-                let m = Metrics.sample()
+                let m = Metrics.latest()
                 kb.sendMetric(index: 0, value: m.cpu)
                 kb.sendMetric(index: 1, value: m.gpu)
                 kb.sendMetric(index: 2, value: m.disk)

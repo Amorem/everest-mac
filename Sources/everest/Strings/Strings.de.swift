@@ -476,6 +476,9 @@ extension L10n {
         "status.configReloaded": "Die Einstellungen wurden außerhalb der App geändert und neu geladen.",
 
         // MARK: pad
+        "keyappearance.live": "Live",
+        "keyappearance.liveAction": "Auch die passende App öffnen",
+        "keyappearance.liveNote": "Wird neu gezeichnet, sobald sich der Wert ändert (höchstens einmal pro Sekunde), solange das Pad angeschlossen ist. Die Taste behält ihre Aktion.",
         "pad.keysActive": "Tasten P1–P12 aktiv",
         "pad.overview.keys": "%1$@ von 12 Tasten belegt",
         "pad.overview.firmware": "Firmware %1$@",

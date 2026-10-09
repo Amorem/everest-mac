@@ -38,6 +38,8 @@ struct ButtonConfig: Codable {
     /// can preview it.
     var iconPath: String?
     var action: ButtonAction
+    /// DisplayPad keys only: a live value drawn instead of the picture.
+    var live: LiveMetric? = nil
 }
 
 /// What the lighting page shows on launch.

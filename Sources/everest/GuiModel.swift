@@ -103,6 +103,9 @@ final class EverestModel: ObservableObject {
     @Published var padConnected = DisplayPad.isPresent
     /// What the daemon reports about the pad (nil while it is not running).
     @Published var padState: PadState?
+    /// Values shown on live pad keys in the app (sampled every 2 s while
+    /// a key of the selected profile shows one).
+    @Published var liveSample = MetricsSample()
     /// The DisplayPad gets its own queue: a pad that does not answer must not
     /// hold up the keyboard.
     let padQueue = DispatchQueue(label: "everest.pad", qos: .userInitiated)
@@ -204,6 +207,7 @@ final class EverestModel: ObservableObject {
         accessibilityOK = ActionRunner.accessibilityGranted()
         padConnected = DisplayPad.isPresent
         padState = daemonRunning && padConnected ? PadState.read() : nil
+        if config.padButtons.contains(where: { $0.live != nil }) { liveSample = Metrics.latest(maxAge: 1.5) }
         reloadConfigIfChanged()
         // Stay off the channel during a picture upload — ours, or one started
         // from the command line (it leaves the FlashBusy marker).

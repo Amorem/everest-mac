@@ -6,7 +6,7 @@ import UniformTypeIdentifiers
 /// installed app (its icon; the key opens it or brings it forward), or any
 /// image.
 struct KeyAppearanceSheet: View {
-    enum Tab: Hashable { case presets, apps, image }
+    enum Tab: Hashable { case presets, apps, image, live }
 
     @ObservedObject var model: EverestModel
     let target: KeyTarget
@@ -57,7 +57,9 @@ struct KeyAppearanceSheet: View {
             }
             Segmented(items: [.init(value: Tab.presets, title: tr("keyappearance.presets"), icon: "square.grid.3x3.fill"),
                               .init(value: Tab.apps, title: tr("keyappearance.apps"), icon: "app.dashed"),
-                              .init(value: Tab.image, title: tr("mode.image"), icon: "photo")],
+                              .init(value: Tab.image, title: tr("mode.image"), icon: "photo")]
+                              // Live values: DisplayPad keys only (D1–D4 pictures live in flash).
+                              + (target.isPad ? [.init(value: Tab.live, title: tr("keyappearance.live"), icon: "gauge.with.dots.needle.50percent")] : []),
                       selection: $tab, tint: tint, fill: true)
 
             Group {
@@ -65,6 +67,7 @@ struct KeyAppearanceSheet: View {
                 case .presets: presets
                 case .apps: appsTab
                 case .image: imageTab
+                case .live: liveTab
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -180,6 +183,33 @@ struct KeyAppearanceSheet: View {
                 let list = InstalledApp.scan()
                 DispatchQueue.main.async { apps = list }
             }
+        }
+    }
+
+    // MARK: Live
+
+    private var liveTab: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Toggle(isOn: $withAction) {
+                Text(tr("keyappearance.liveAction")).font(.ui(12.5)).foregroundStyle(Theme.text)
+            }
+            .toggleStyle(.switch)
+            Caption(tr("keyappearance.liveNote"), icon: "info.circle")
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 6), spacing: 12) {
+                ForEach(LiveMetric.allCases, id: \.self) { m in
+                    PickerTile(title: m.title, subtitle: nil) {
+                        Group {
+                            if let cg = LiveTiles.image(m, sample: model.liveSample, side: 128) {
+                                Image(nsImage: NSImage(cgImage: cg, size: NSSize(width: 64, height: 64))).resizable()
+                            }
+                        }
+                        .frame(width: 64, height: 64)
+                    } action: {
+                        begin { model.setLive(m, to: target.index, withAction: withAction) }
+                    }
+                }
+            }
+            Spacer()
         }
     }
 

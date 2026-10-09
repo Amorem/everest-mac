@@ -23,7 +23,19 @@ extension EverestModel {
             try? FileManager.default.createDirectory(at: IconFactory.directory, withIntermediateDirectories: true)
             if (try? FileManager.default.copyItem(at: url, to: copy)) != nil { path = copy.path }
         }
-        updatePadKey(i) { $0.iconPath = path }
+        updatePadKey(i) { $0.iconPath = path; $0.live = nil }
+        drawPadKeys([i])
+    }
+
+    /// A live value on a pad key, optionally with the matching action.
+    func setLive(_ metric: LiveMetric, to i: Int, withAction: Bool) {
+        updatePadKey(i) { b in
+            b.live = metric
+            b.iconPath = nil
+            b.name = metric.title
+            if withAction, let a = metric.suggestedAction { b.action = a }
+        }
+        liveSample = Metrics.latest(maxAge: 1)
         drawPadKeys([i])
     }
 

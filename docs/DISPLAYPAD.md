@@ -88,6 +88,17 @@ reads only the 61 announced blocks.
 keys 7–11 (left to right, top row first). Release = the same packet with no bit
 set. Verified for all twelve keys.
 
+## Live keys
+
+A pad key can show a live value instead of a picture: CPU, GPU, RAM, disk,
+network, volume or the time, drawn like the dial's gauges (`PadLive.swift`).
+The daemon checks once a second and redraws a key only when its text changes
+(`37%` → `38%`), so a quiet machine sends almost nothing. The values come from
+`Metrics.latest`, shared with the dial's gauges (sampling keeps deltas, so two
+samplers would each see half the CPU time). Pictures stay in the pad's RAM:
+no flash wear however often they change. Measured with three live keys: the
+daemon went from about 1–2 % to about 4 % of one core.
+
 ## Never sent
 
 `PadProto.isAllowed` lets through only the packets above, so these can never

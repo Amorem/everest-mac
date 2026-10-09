@@ -476,6 +476,9 @@ extension L10n {
         "status.configReloaded": "Los ajustes se cambiaron fuera de la app y se han recargado.",
 
         // MARK: pad
+        "keyappearance.live": "En directo",
+        "keyappearance.liveAction": "Abrir también la app correspondiente",
+        "keyappearance.liveNote": "Se redibuja cuando cambia el valor (como mucho una vez por segundo) mientras el pad está conectado. La tecla conserva su acción.",
         "pad.keysActive": "Teclas P1–P12 activas",
         "pad.overview.keys": "%1$@ de 12 teclas configuradas",
         "pad.overview.firmware": "Firmware %1$@",

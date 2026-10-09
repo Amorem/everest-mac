@@ -50,7 +50,11 @@ extension EverestModel {
 
     func image(for t: KeyTarget) -> NSImage? {
         guard t.isPad else { return displayImages[t.index] }
-        return config.padButtons[t.index].iconPath.flatMap(ImageFileCache.image)
+        let b = config.padButtons[t.index]
+        if let live = b.live, let cg = LiveTiles.image(live, sample: liveSample, side: 128) {
+            return NSImage(cgImage: cg, size: NSSize(width: 128, height: 128))
+        }
+        return b.iconPath.flatMap(ImageFileCache.image)
     }
 
     /// 0…1 while a picture is being sent to this key (the pad takes a

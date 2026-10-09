@@ -476,6 +476,9 @@ extension L10n {
         "status.configReloaded": "앱 밖에서 설정이 변경되어 다시 불러왔습니다.",
 
         // MARK: pad
+        "keyappearance.live": "실시간",
+        "keyappearance.liveAction": "해당 앱도 열기",
+        "keyappearance.liveNote": "패드가 연결되어 있는 동안 값이 바뀔 때마다(최대 초당 1회) 다시 그립니다. 키의 동작은 유지됩니다.",
         "pad.keysActive": "P1–P12 키 활성",
         "pad.overview.keys": "12개 중 %1$@개 키 설정됨",
         "pad.overview.firmware": "펌웨어 %1$@",

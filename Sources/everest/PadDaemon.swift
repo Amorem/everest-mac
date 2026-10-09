@@ -85,8 +85,21 @@ enum PadDaemon {
 
     /// What a key shows, darkened to the pad brightness (see `PadProto.backlight`).
     static func bgr(for b: ButtonConfig, brightness: Int) -> [UInt8] {
-        let raw = b.iconPath.flatMap { try? ImageTools.padBGR(path: $0) } ?? PadProto.solid(r: 0, g: 0, b: 0)
+        let raw: [UInt8]
+        if let live = b.live, let tile = LiveTiles.image(live, sample: Metrics.latest()),
+           let pixels = try? ImageTools.padBGR(image: tile) {
+            raw = pixels
+        } else {
+            raw = b.iconPath.flatMap { try? ImageTools.padBGR(path: $0) } ?? PadProto.solid(r: 0, g: 0, b: 0)
+        }
         return PadProto.dim(raw, percent: brightness)
+    }
+
+    /// What should be on a key now: its picture, or for a live key the text
+    /// of its reading (so it is redrawn only when that changes).
+    static func wanted(_ b: ButtonConfig, sample: () -> MetricsSample) -> String {
+        if let live = b.live { return LiveTiles.signature(live, sample: sample()) }
+        return signature(b)
     }
 
     private static func configDate() -> Date? {
@@ -131,7 +144,12 @@ enum PadDaemon {
                     if stamp != configStamp { configStamp = stamp; cfg = Config.load() }
                     let p = profile()
                     if p != shownProfile { shown = shown.map { _ in "-" }; shownProfile = p }
-                    wanted = cfg.padButtons(for: p).map(signature)
+                    let keys = cfg.padButtons(for: p)
+                    var sample: MetricsSample?
+                    wanted = keys.map { b in PadDaemon.wanted(b) {
+                        if sample == nil { sample = Metrics.latest(maxAge: 0.9) }
+                        return sample!
+                    } }
                 }
 
                 if !PadBusy.active {

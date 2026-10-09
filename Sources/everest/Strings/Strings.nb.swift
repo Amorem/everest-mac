@@ -476,6 +476,9 @@ extension L10n {
         "status.configReloaded": "Innstillingene ble endret utenfor appen og er lastet inn på nytt.",
 
         // MARK: pad
+        "keyappearance.live": "Direkte",
+        "keyappearance.liveAction": "Åpne også tilhørende app",
+        "keyappearance.liveNote": "Tegnes på nytt når verdien endres (høyst én gang i sekundet) mens paden er tilkoblet. Tasten beholder handlingen sin.",
         "pad.keysActive": "P1–P12-taster aktive",
         "pad.overview.keys": "%1$@ av 12 taster satt opp",
         "pad.overview.firmware": "Fastvare %1$@",

@@ -476,6 +476,9 @@ extension L10n {
         "status.configReloaded": "ההגדרות שונו מחוץ לאפליקציה ונטענו מחדש.",
 
         // MARK: pad
+        "keyappearance.live": "בזמן אמת",
+        "keyappearance.liveAction": "לפתוח גם את האפליקציה המתאימה",
+        "keyappearance.liveNote": "מצויר מחדש בכל שינוי בערך (לכל היותר פעם בשנייה) כל עוד המשטח מחובר. המקש שומר על הפעולה שלו.",
         "pad.keysActive": "מקשי P1–P12 פעילים",
         "pad.overview.keys": "%1$@ מתוך 12 מקשים הוגדרו",
         "pad.overview.firmware": "קושחה %1$@",
