@@ -27,6 +27,9 @@ hardware a job.
   No driver, no root.
 - **Dial screen** — clock, CPU / GPU / RAM / disk / network / volume gauges,
   or a custom image.
+- **Night mode** — one key (or `everest night`) turns the key lighting, the
+  dial and D1–D4 screens and the DisplayPad off and mutes the sound; the
+  same key brings everything back as it was. Nothing is written to flash.
 - **Profiles** — the keyboard's five hardware profiles, each with its own
   lighting, D1–D4 setup, DisplayPad keys and dial mode; link an app to a
   profile and the keyboard and pad switch when that app comes to the front,

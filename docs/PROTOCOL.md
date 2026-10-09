@@ -145,3 +145,21 @@ own bytes 7–9 of the state report): image 0x01, clock 0x11, volume 0x71, CPU
 `11 84 00 00`, then `11 84 00 01 00 00 MM DD HH MM SS style`. The dial's *Custom*
 menu entry (bit 7 of the menu mask) makes the media-dock buttons run functions
 assigned in Base Camp instead of the media keys; this app does not use it.
+
+## Display brightness (dial and D1–D4)
+
+The `11 14` reply / write (SDKDLL `GetExtendInfo` / `SetExtendInfo`) carries,
+at bytes 23–32, five (dial, numpad) display brightness pairs, one per lighting
+slot: `00` = follow the lighting brightness, `80 | v` = fixed v % (rounded to
+0/25/50/75/100). Base Camp writes `80 80` when a profile's lighting is Off.
+Other fields of the block, from Base Camp's struct: bytes 7–9 are the dial
+menu colour (RGB), byte 10 the screensaver type (high nibble) with
+"turn off" (bit 1) and "screensaver" (bit 0) enables, bytes 11–12 and 13–14
+the screensaver and turn-off delays in seconds (LE).
+
+Night mode reads the block (`11 14 00 00`), writes it back with the write
+flag and `80` in those ten bytes, and puts `00` back in the morning. The
+keyboard takes up to a few seconds to apply a settings write and drops a
+command sent meanwhile; it also re-applies the key lighting, so at night the
+screens are dimmed first and the lighting switched to its Off slot (8) last,
+checked by reading the active slot back (`11 00`, byte 11).
