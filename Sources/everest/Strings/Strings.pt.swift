@@ -476,6 +476,8 @@ extension L10n {
         "status.configReloaded": "As definições foram alteradas fora da app e foram recarregadas.",
 
         // MARK: pad
+        "night.displays": "Pôr também os ecrãs do Mac em repouso",
+        "night.displaysNote": "Só os ecrãs, não o Mac. Se o macOS pedir a palavra-passe quando o ecrã se desliga (definições de Ecrã bloqueado), a sessão fica bloqueada durante a noite.",
         "action.night": "Modo noite",
         "night.note": "Desliga a iluminação do teclado e o DisplayPad e silencia o som; prima de novo para repor tudo como estava.",
         "night.active": "Modo noite ativo",

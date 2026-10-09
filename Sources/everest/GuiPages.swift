@@ -300,8 +300,15 @@ struct ButtonEditorCard: View {
             } else if action.type == .app {
                 appRow(path: action.value)
             } else if action.type == .night {
-                Caption(tr("night.note"), icon: "moon.fill")
-                    .frame(height: 48, alignment: .center)
+                VStack(alignment: .leading, spacing: 8) {
+                    Caption(tr("night.note"), icon: "moon.fill")
+                    Toggle(isOn: Binding(get: { model.config.nightSleepsDisplays },
+                                         set: { model.config.nightSleepsDisplays = $0; model.persist() })) {
+                        Text(tr("night.displays")).font(.ui(12)).foregroundStyle(Theme.text)
+                    }
+                    .toggleStyle(.switch)
+                    Caption(tr("night.displaysNote"), icon: "lock")
+                }
             } else if action.type != .noAction {
                 VStack(alignment: .leading, spacing: 6) {
                     FieldLabel(action.type.title)

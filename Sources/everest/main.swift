@@ -519,6 +519,8 @@ case "listen": Daemon.run(rest)
 case "pad": PadCommand.run(rest)
 case "night":
     NightMode.toggle()
+    // The screens go to sleep a few seconds later: stay until then.
+    if NightMode.active && Config.load().nightSleepsDisplays { Thread.sleep(forTimeInterval: 4.5) }
     print(NightMode.active ? "Night mode on: lights off, sound muted (run `everest night` again, or press the night key, to undo)"
                            : "Night mode off: lights and sound back as they were")
 case "sniff": Daemon.sniff(rest)

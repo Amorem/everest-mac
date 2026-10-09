@@ -476,6 +476,8 @@ extension L10n {
         "status.configReloaded": "Settings were changed outside the app and have been reloaded.",
 
         // MARK: pad
+        "night.displays": "Also put the Mac's screens to sleep",
+        "night.displaysNote": "Screens only, not the Mac. If macOS asks for the password when the display turns off (Lock Screen settings), the session is locked overnight.",
         "action.night": "Night mode",
         "night.note": "Turns the keyboard lights and the DisplayPad off and mutes the sound; press again to bring everything back as it was.",
         "night.active": "Night mode on",

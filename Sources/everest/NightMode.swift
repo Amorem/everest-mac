@@ -36,6 +36,20 @@ enum NightMode {
     /// The night-mode key.
     static func toggle() {
         var state = read() ?? State(active: false)
+        let displays = Config.load().nightSleepsDisplays
+        defer {
+            // The Mac's screens: asleep once the keyboard and pad have gone
+            // dark (the daemon applies them within a few seconds), awake in
+            // the morning. Display sleep, not system sleep; macOS may lock
+            // the session depending on its "require password" setting.
+            if displays {
+                if state.active {
+                    run("/usr/bin/pmset", ["displaysleepnow"], after: 4)
+                } else {
+                    run("/usr/bin/caffeinate", ["-u", "-t", "2"], after: 0)
+                }
+            }
+        }
         if state.active {
             if state.mutedByUs { Audio.setMuted(false) }
             if let v = state.savedVolume { Audio.setVolume(v) }
@@ -49,6 +63,22 @@ enum NightMode {
             }
         }
         write(state)
+    }
+
+    private static func run(_ tool: String, _ args: [String], after delay: TimeInterval) {
+        let start = {
+            let p = Process()
+            p.executableURL = URL(fileURLWithPath: tool)
+            p.arguments = args
+            p.standardOutput = FileHandle.nullDevice
+            p.standardError = FileHandle.nullDevice
+            try? p.run()
+        }
+        if delay > 0 {
+            DispatchQueue.global().asyncAfter(deadline: .now() + delay, execute: start)
+        } else {
+            start()
+        }
     }
 
     /// The default output device: mute where it has a mute control, the

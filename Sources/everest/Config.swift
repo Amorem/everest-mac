@@ -151,6 +151,8 @@ struct Config: Codable {
     var language: String?
     /// DisplayPad backlight, 0–100 %.
     var padBrightness: Int = 75
+    /// Night mode also puts the Mac's screens to sleep (and wakes them).
+    var nightSleepsDisplays: Bool = true
 
     init() {}
 
@@ -203,7 +205,7 @@ struct Config: Codable {
 
     enum CodingKeys: String, CodingKey {
         case clockStyle, clockFormat, dialImagePath, monitorMode, mainDisplayMode, applyClockOnStart
-        case language, padBrightness, layoutOverride, lastLayout, keepFlashActions, daemonEnabled, keepRunning, profiles, selectedProfile, autoSwitch, defaultProfile
+        case language, padBrightness, nightSleepsDisplays, layoutOverride, lastLayout, keepFlashActions, daemonEnabled, keepRunning, profiles, selectedProfile, autoSwitch, defaultProfile
         case buttons, lighting   // legacy
     }
 
@@ -225,6 +227,7 @@ struct Config: Codable {
         defaultProfile = try c.decodeIfPresent(Int.self, forKey: .defaultProfile) ?? 1
         language = try c.decodeIfPresent(String.self, forKey: .language)
         padBrightness = try c.decodeIfPresent(Int.self, forKey: .padBrightness) ?? 75
+        nightSleepsDisplays = try c.decodeIfPresent(Bool.self, forKey: .nightSleepsDisplays) ?? true
         if let list = try c.decodeIfPresent([ProfileConfig].self, forKey: .profiles), !list.isEmpty {
             profiles = list
         } else {
@@ -256,6 +259,7 @@ struct Config: Codable {
         try c.encode(defaultProfile, forKey: .defaultProfile)
         try c.encodeIfPresent(language, forKey: .language)
         try c.encode(padBrightness, forKey: .padBrightness)
+        try c.encode(nightSleepsDisplays, forKey: .nightSleepsDisplays)
     }
 
     /// `~/.config/everest-mac`, or `$EVEREST_CONFIG_DIR` (the tests use it so

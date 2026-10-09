@@ -476,6 +476,8 @@ extension L10n {
         "status.configReloaded": "앱 밖에서 설정이 변경되어 다시 불러왔습니다.",
 
         // MARK: pad
+        "night.displays": "Mac 화면도 잠자기",
+        "night.displaysNote": "화면만 해당되며 Mac은 잠자지 않습니다. 화면이 꺼질 때 macOS가 암호를 요구하도록 설정되어 있으면(잠금 화면 설정) 밤 동안 세션이 잠깁니다.",
         "action.night": "야간 모드",
         "night.note": "키보드 조명과 DisplayPad를 끄고 소리를 음소거합니다. 다시 누르면 모든 것이 원래대로 돌아옵니다.",
         "night.active": "야간 모드 켜짐",

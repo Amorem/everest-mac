@@ -476,6 +476,8 @@ extension L10n {
         "status.configReloaded": "Les réglages ont été modifiés en dehors de l'app et ont été rechargés.",
 
         // MARK: pad
+        "night.displays": "Mettre aussi les écrans du Mac en veille",
+        "night.displaysNote": "Les écrans seulement, pas le Mac. Si macOS demande le mot de passe à l'extinction de l'écran (réglages Écran verrouillé), la session est verrouillée pendant la nuit.",
         "action.night": "Mode nuit",
         "night.note": "Éteint l'éclairage du clavier et le DisplayPad et coupe le son ; un nouvel appui rallume tout comme avant.",
         "night.active": "Mode nuit actif",

@@ -476,6 +476,8 @@ extension L10n {
         "status.configReloaded": "Le impostazioni sono state modificate fuori dall'app e sono state ricaricate.",
 
         // MARK: pad
+        "night.displays": "Metti in stop anche gli schermi del Mac",
+        "night.displaysNote": "Solo gli schermi, non il Mac. Se macOS chiede la password quando lo schermo si spegne (impostazioni Blocco schermo), la sessione resta bloccata durante la notte.",
         "action.night": "Modalità notte",
         "night.note": "Spegne l'illuminazione della tastiera e il DisplayPad e silenzia l'audio; premi di nuovo per ripristinare tutto.",
         "night.active": "Modalità notte attiva",

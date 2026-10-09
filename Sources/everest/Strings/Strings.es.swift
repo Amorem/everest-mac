@@ -476,6 +476,8 @@ extension L10n {
         "status.configReloaded": "Los ajustes se cambiaron fuera de la app y se han recargado.",
 
         // MARK: pad
+        "night.displays": "Poner también en reposo las pantallas del Mac",
+        "night.displaysNote": "Solo las pantallas, no el Mac. Si macOS pide la contraseña al apagarse la pantalla (ajustes de Pantalla bloqueada), la sesión queda bloqueada durante la noche.",
         "action.night": "Modo noche",
         "night.note": "Apaga la iluminación del teclado y el DisplayPad y silencia el sonido; pulsa de nuevo para dejarlo todo como estaba.",
         "night.active": "Modo noche activo",

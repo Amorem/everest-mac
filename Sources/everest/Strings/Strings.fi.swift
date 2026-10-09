@@ -476,6 +476,8 @@ extension L10n {
         "status.configReloaded": "Asetuksia muutettiin sovelluksen ulkopuolella, ja ne ladattiin uudelleen.",
 
         // MARK: pad
+        "night.displays": "Laita myös Macin näytöt lepoon",
+        "night.displaysNote": "Vain näytöt, ei Macia. Jos macOS kysyy salasanaa näytön sammuessa (Lukitusnäytön asetukset), istunto lukitaan yön ajaksi.",
         "action.night": "Yötila",
         "night.note": "Sammuttaa näppäimistön valot ja DisplayPadin ja mykistää äänen; paina uudelleen palauttaaksesi kaiken ennalleen.",
         "night.active": "Yötila päällä",

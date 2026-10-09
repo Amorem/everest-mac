@@ -476,6 +476,8 @@ extension L10n {
         "status.configReloaded": "Indstillingerne blev ændret uden for appen og er indlæst igen.",
 
         // MARK: pad
+        "night.displays": "Sæt også Mac'ens skærme i dvale",
+        "night.displaysNote": "Kun skærmene, ikke Mac'en. Hvis macOS kræver adgangskode, når skærmen slukkes (indstillinger for Låst skærm), låses sessionen om natten.",
         "action.night": "Nattilstand",
         "night.note": "Slukker tastaturlyset og DisplayPad og slår lyden fra; tryk igen for at få det hele tilbage som før.",
         "night.active": "Nattilstand til",

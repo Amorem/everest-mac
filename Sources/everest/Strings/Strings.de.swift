@@ -476,6 +476,8 @@ extension L10n {
         "status.configReloaded": "Die Einstellungen wurden außerhalb der App geändert und neu geladen.",
 
         // MARK: pad
+        "night.displays": "Auch die Bildschirme des Mac in den Ruhezustand versetzen",
+        "night.displaysNote": "Nur die Bildschirme, nicht der Mac. Verlangt macOS beim Ausschalten des Displays das Passwort (Einstellungen „Sperrbildschirm“), wird die Sitzung über Nacht gesperrt.",
         "action.night": "Nachtmodus",
         "night.note": "Schaltet die Tastaturbeleuchtung und das DisplayPad aus und den Ton stumm; erneut drücken stellt alles wieder her.",
         "night.active": "Nachtmodus an",

@@ -476,6 +476,8 @@ extension L10n {
         "status.configReloaded": "Inställningarna ändrades utanför appen och har lästs in igen.",
 
         // MARK: pad
+        "night.displays": "Försätt även Macens skärmar i vila",
+        "night.displaysNote": "Bara skärmarna, inte Macen. Om macOS kräver lösenord när skärmen stängs av (inställningar för Låsskärm) låses sessionen under natten.",
         "action.night": "Nattläge",
         "night.note": "Släcker tangentbordsbelysningen och DisplayPad och stänger av ljudet; tryck igen för att återställa allt.",
         "night.active": "Nattläge på",
