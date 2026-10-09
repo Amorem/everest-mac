@@ -99,6 +99,21 @@ samplers would each see half the CPU time). Pictures stay in the pad's RAM:
 no flash wear however often they change. Measured with three live keys: the
 daemon went from about 1–2 % to about 4 % of one core.
 
+## Claude and Codex keys (CodexBar)
+
+When [CodexBar](https://github.com/steipete/CodexBar) (MIT) is installed, live
+keys can show the Claude and Codex usage limits, one key per window (5 hours,
+week). `CodexBarUsage.swift` reads the JSON snapshot CodexBar writes for its
+widgets (`~/Library/Group Containers/Y5PE65HELJ.com.steipete.codexbar/widget-snapshot.json`),
+again only when its date changes. It is CodexBar's internal widget format, not
+a versioned API: the parse is lenient, missing fields show "—", values older
+than three hours are not trusted. CodexBar's documented alternatives
+(`codexbar serve`, `codexbar dashboard`) fetch from the network on every
+refresh (about 9 s and 4 s of CPU per call), so they are not used for a live
+display. macOS refuses the snapshot to Everest ("Operation not permitted")
+until it has Full Disk Access; the one-time "data from other apps" prompt is
+not reliably offered.
+
 ## Never sent
 
 `PadProto.isAllowed` lets through only the packets above, so these can never
