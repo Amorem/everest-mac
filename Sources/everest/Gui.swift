@@ -340,8 +340,8 @@ struct DeviceCard: View {
                 .foregroundStyle(Theme.textSecondary)
                 .lineLimit(1)
             HStack(spacing: 6) {
-                miniStat(tr("device.firmware"), model.firmware)
-                miniStat(tr("device.dial"), DisplaysPage.modeTitle(model.dialMode))
+                Self.miniStat(tr("device.firmware"), model.firmware)
+                Self.miniStat(tr("device.dial"), DisplaysPage.modeTitle(model.dialMode))
             }
             HStack(spacing: 6) {
                 StatusDot(on: model.daemonActive, color: Theme.indigo)
@@ -349,12 +349,44 @@ struct DeviceCard: View {
                     .font(.ui(11))
                     .foregroundStyle(Theme.textTertiary)
             }
+            if model.padConnected { pad }
         }
         .padding(12)
         .background(SurfaceBackground(radius: 12, fill: Color.white.opacity(0.04)))
     }
 
-    private func miniStat(_ title: String, _ value: String) -> some View {
+    /// The DisplayPad, listed like the keyboard while it is plugged in: its
+    /// name (or why it is left alone), then firmware and brightness.
+    private var pad: some View {
+        let status = model.padState?.status
+        let line: String
+        switch status {
+        case .unsupported: line = tr("pad.unsupported", model.padState?.firmware ?? "?")
+        case .noAnswer: line = tr("pad.noAnswer")
+        default: line = tr("section.displaypad.title")
+        }
+        return VStack(alignment: .leading, spacing: 10) {
+            Text(line)
+                .font(.ui(11))
+                .foregroundStyle(status == nil || status == .connected ? Theme.textSecondary : Theme.amber)
+                .lineLimit(1)
+            HStack(spacing: 6) {
+                Self.miniStat(tr("device.firmware"), model.padState?.firmware ?? "—")
+                Self.miniStat(tr("pad.brightness"), "\(model.config.padBrightness) %")
+            }
+            let live = model.daemonActive && (status == nil || status == .connected)
+            HStack(spacing: 6) {
+                StatusDot(on: live, color: Theme.indigo)
+                Text(live ? tr("pad.keysActive") : tr("daemon.stopped"))
+                    .font(.ui(11))
+                    .foregroundStyle(Theme.textTertiary)
+            }
+        }
+        .contentShape(Rectangle())
+        .onTapGesture { model.section = .displaypad }
+    }
+
+    private static func miniStat(_ title: String, _ value: String) -> some View {
         VStack(alignment: .leading, spacing: 1) {
             Text(title).font(.ui(9.5, .medium)).foregroundStyle(Theme.textTertiary)
             Text(value).font(.ui(11.5, .semibold).monospacedDigit()).foregroundStyle(Theme.text).lineLimit(1)

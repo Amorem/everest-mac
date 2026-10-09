@@ -474,6 +474,7 @@ extension L10n {
         "upload.phase.send": "שולח את התמונה",
 
         // MARK: pad
+        "pad.keysActive": "מקשי P1–P12 פעילים",
         "pad.overview.keys": "%1$@ מתוך 12 מקשים הוגדרו",
         "pad.overview.firmware": "קושחה %1$@",
         "section.displaypad.title": "DisplayPad",

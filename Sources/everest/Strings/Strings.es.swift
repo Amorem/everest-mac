@@ -474,6 +474,7 @@ extension L10n {
         "upload.phase.send": "Enviando la imagen",
 
         // MARK: pad
+        "pad.keysActive": "Teclas P1–P12 activas",
         "pad.overview.keys": "%1$@ de 12 teclas configuradas",
         "pad.overview.firmware": "Firmware %1$@",
         "section.displaypad.title": "DisplayPad",

@@ -474,6 +474,7 @@ extension L10n {
         "upload.phase.send": "이미지 전송 중",
 
         // MARK: pad
+        "pad.keysActive": "P1–P12 키 활성",
         "pad.overview.keys": "12개 중 %1$@개 키 설정됨",
         "pad.overview.firmware": "펌웨어 %1$@",
         "section.displaypad.title": "DisplayPad",

@@ -474,6 +474,7 @@ extension L10n {
         "upload.phase.send": "Lähetetään kuvaa",
 
         // MARK: pad
+        "pad.keysActive": "Näppäimet P1–P12 käytössä",
         "pad.overview.keys": "%1$@/12 näppäintä määritetty",
         "pad.overview.firmware": "Laiteohjelmisto %1$@",
         "section.displaypad.title": "DisplayPad",

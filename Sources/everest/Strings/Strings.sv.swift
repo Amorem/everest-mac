@@ -474,6 +474,7 @@ extension L10n {
         "upload.phase.send": "Skickar bilden",
 
         // MARK: pad
+        "pad.keysActive": "P1–P12-tangenter aktiva",
         "pad.overview.keys": "%1$@ av 12 tangenter inställda",
         "pad.overview.firmware": "Firmware %1$@",
         "section.displaypad.title": "DisplayPad",
