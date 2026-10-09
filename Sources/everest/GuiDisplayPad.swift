@@ -281,7 +281,7 @@ struct DisplayPadHero: View {
         .overlay(alignment: .topTrailing) {
             // Claude / Codex key that cannot read CodexBar: one click to the setting.
             if model.config.padButtons[i].live?.needsCodexBar == true && model.codexBarAccess == .denied {
-                Button { NSWorkspace.shared.open(CodexBarUsage.fullDiskAccessSettings) } label: {
+                Button { CodexBarUsage.showFullDiskAccess() } label: {
                     Image(systemName: "exclamationmark.triangle.fill")
                         .font(.system(size: max(10, keySize * 0.16), weight: .bold))
                         .foregroundStyle(.white)
@@ -316,7 +316,7 @@ struct CodexBarAccessRow: View {
             }
             Spacer(minLength: 8)
             if !ok {
-                Button(tr("codexbar.openSettings")) { NSWorkspace.shared.open(CodexBarUsage.fullDiskAccessSettings) }
+                Button(tr("codexbar.openSettings")) { CodexBarUsage.showFullDiskAccess() }
                     .buttonStyle(.compact(.primary))
             }
         }

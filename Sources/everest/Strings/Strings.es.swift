@@ -487,7 +487,7 @@ extension L10n {
         "profiles.newCopyPad": "Nuevo, con las teclas del DisplayPad de «%1$@»",
         "codexbar.ok": "Datos de CodexBar: OK",
         "codexbar.denied": "Everest no puede leer los datos de CodexBar",
-        "codexbar.deniedNote": "macOS protege los datos de otras apps. Añade Everest a «Acceso total al disco» y luego cierra y vuelve a abrir Everest.",
+        "codexbar.deniedNote": "macOS protege los datos de otras apps y una app no puede añadirse sola a «Acceso total al disco». Arrastra Everest desde la ventana del Finder a la lista (o usa +), actívalo y luego cierra y vuelve a abrir Everest.",
         "codexbar.openSettings": "Abrir ajustes",
         "live.week": "semana",
         "keyappearance.liveCodexBar": "Claude y Codex muestran tus límites de uso tal como los leyó CodexBar (los actualiza cada pocos minutos): una tecla para la ventana de 5 h y otra para la semana.",

@@ -487,7 +487,7 @@ extension L10n {
         "profiles.newCopyPad": "«%1$@»의 DisplayPad 키로 새로 만들기",
         "codexbar.ok": "CodexBar 데이터: 정상",
         "codexbar.denied": "Everest가 CodexBar 데이터를 읽을 수 없습니다",
-        "codexbar.deniedNote": "macOS는 다른 앱의 데이터를 보호합니다. Everest를 ‘전체 디스크 접근 권한’에 추가한 뒤 Everest를 종료했다가 다시 여세요.",
+        "codexbar.deniedNote": "macOS는 다른 앱의 데이터를 보호하며, 앱은 스스로 ‘전체 디스크 접근 권한’에 추가될 수 없습니다. Finder 창에서 Everest를 목록으로 끌어 놓고(또는 + 사용) 켠 다음, Everest를 종료했다가 다시 여세요.",
         "codexbar.openSettings": "설정 열기",
         "live.week": "주간",
         "keyappearance.liveCodexBar": "Claude와 Codex는 CodexBar가 마지막으로 읽은 사용 한도를 보여 줍니다(몇 분마다 갱신). 5시간 한도용 키 하나, 주간 한도용 키 하나입니다.",

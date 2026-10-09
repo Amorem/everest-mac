@@ -487,7 +487,7 @@ extension L10n {
         "profiles.newCopyPad": "חדש, עם מקשי ה־DisplayPad של „%1$@”",
         "codexbar.ok": "נתוני CodexBar: תקין",
         "codexbar.denied": "Everest לא יכול לקרוא את הנתונים של CodexBar",
-        "codexbar.deniedNote": "macOS מגן על נתונים של אפליקציות אחרות. הוסיפו את Everest ל״גישה מלאה לדיסק״, ואז צאו מ־Everest ופתחו אותו מחדש.",
+        "codexbar.deniedNote": "macOS מגן על נתונים של אפליקציות אחרות, ואפליקציה לא יכולה להוסיף את עצמה ל״גישה מלאה לדיסק״. גררו את Everest מחלון ה־Finder לרשימה (או השתמשו ב־+), הפעילו אותו, ואז צאו מ־Everest ופתחו אותו מחדש.",
         "codexbar.openSettings": "פתיחת ההגדרות",
         "live.week": "שבועי",
         "keyappearance.liveCodexBar": "Claude ו־Codex מציגים את מגבלות השימוש כפי ש־CodexBar קרא אותן לאחרונה (מתעדכן כל כמה דקות): מקש אחד לחלון של 5 שעות ואחד לשבוע.",
