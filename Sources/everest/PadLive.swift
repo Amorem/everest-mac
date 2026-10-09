@@ -130,7 +130,7 @@ enum LiveMetric: String, Codable, CaseIterable {
         case .codex, .codexWeek:
             return ButtonAction(type: .url, value: "https://chatgpt.com/codex/settings/usage")
         case .mrr, .revenueToday, .revenue30Days, .commitsToday:
-            return ButtonAction(type: .url, value: Config.load().mrrCalendarURL)
+            return ButtonAction(type: .url, value: MRRCalendar.baseURL)
         }
     }
 

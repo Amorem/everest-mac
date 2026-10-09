@@ -32,7 +32,7 @@ enum MRRCalendar {
         var trends: Trends
     }
 
-    static let defaultBaseURL = "https://mrrcalendar.com"
+    static let baseURL = "https://mrrcalendar.com"
     static let refreshInterval: TimeInterval = 300
 
     // MARK: Token (login keychain)
@@ -131,8 +131,8 @@ enum MRRCalendar {
         return result
     }
 
-    static func fetch(baseURL: String = Config.load().mrrCalendarURL) async -> Result<Metrics, FetchError> {
-        guard let token, let url = URL(string: baseURL.trimmingCharacters(in: .whitespaces) + "/api/public/v1/metrics") else {
+    static func fetch() async -> Result<Metrics, FetchError> {
+        guard let token, let url = URL(string: baseURL + "/api/public/v1/metrics") else {
             return .failure(.notConfigured)
         }
         var request = URLRequest(url: url, timeoutInterval: 20)

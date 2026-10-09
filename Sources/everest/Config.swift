@@ -151,9 +151,6 @@ struct Config: Codable {
     var language: String?
     /// DisplayPad backlight, 0–100 %.
     var padBrightness: Int = 75
-    /// MRRCalendar server for the MRR / revenue / commits keys (the token
-    /// itself is in the keychain, see `MRRCalendar`).
-    var mrrCalendarURL: String = MRRCalendar.defaultBaseURL
     /// Night mode also puts the Mac's screens to sleep (and wakes them).
     var nightSleepsDisplays: Bool = true
 
@@ -208,7 +205,7 @@ struct Config: Codable {
 
     enum CodingKeys: String, CodingKey {
         case clockStyle, clockFormat, dialImagePath, monitorMode, mainDisplayMode, applyClockOnStart
-        case language, padBrightness, nightSleepsDisplays, mrrCalendarURL, layoutOverride, lastLayout, keepFlashActions, daemonEnabled, keepRunning, profiles, selectedProfile, autoSwitch, defaultProfile
+        case language, padBrightness, nightSleepsDisplays, layoutOverride, lastLayout, keepFlashActions, daemonEnabled, keepRunning, profiles, selectedProfile, autoSwitch, defaultProfile
         case buttons, lighting   // legacy
     }
 
@@ -231,7 +228,6 @@ struct Config: Codable {
         language = try c.decodeIfPresent(String.self, forKey: .language)
         padBrightness = try c.decodeIfPresent(Int.self, forKey: .padBrightness) ?? 75
         nightSleepsDisplays = try c.decodeIfPresent(Bool.self, forKey: .nightSleepsDisplays) ?? true
-        mrrCalendarURL = try c.decodeIfPresent(String.self, forKey: .mrrCalendarURL) ?? MRRCalendar.defaultBaseURL
         if let list = try c.decodeIfPresent([ProfileConfig].self, forKey: .profiles), !list.isEmpty {
             profiles = list
         } else {
@@ -264,7 +260,6 @@ struct Config: Codable {
         try c.encodeIfPresent(language, forKey: .language)
         try c.encode(padBrightness, forKey: .padBrightness)
         try c.encode(nightSleepsDisplays, forKey: .nightSleepsDisplays)
-        try c.encode(mrrCalendarURL, forKey: .mrrCalendarURL)
     }
 
     /// `~/.config/everest-mac`, or `$EVEREST_CONFIG_DIR` (the tests use it so
