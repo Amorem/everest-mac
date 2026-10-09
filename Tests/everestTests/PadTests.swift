@@ -220,4 +220,44 @@ final class PadTests: XCTestCase {
         XCTAssertEqual(Metrics.bytesMoved(from: ["en0.in": 10, "en0.out": 5], to: ["en0.in": 110, "en0.out": 55, "en5.in": 9]), 150,
                        "an interface that just appeared counts from the next sample")
     }
+
+    /// CodexBar's widget snapshot, trimmed to what Everest reads.
+    func testCodexBarSnapshot() throws {
+        let json = #"""
+        {"generatedAt":"2026-10-09T08:50:38Z","entries":[
+          {"provider":"codex","updatedAt":"2026-10-09T08:50:00Z",
+           "secondary":{"usedPercent":65,"windowMinutes":10080,"resetsAt":"2026-10-14T03:29:30Z"}},
+          {"provider":"claude","updatedAt":"2026-10-09T08:50:00Z",
+           "primary":{"usedPercent":4,"windowMinutes":300,"resetsAt":"2026-10-09T10:20:00Z"},
+           "secondary":{"usedPercent":42,"windowMinutes":10080},"newField":{"x":1}},
+          {"updatedAt":"no provider"}
+        ]}
+        """#
+        let parsed = CodexBarUsage.parse(Data(json.utf8))
+        XCTAssertEqual(parsed["claude"]?.windows.map(\.usedPercent), [4, 42], "session first, then the week")
+        XCTAssertEqual(parsed["codex"]?.windows.map(\.usedPercent), [65])
+        XCTAssertEqual(parsed.count, 2)
+        XCTAssertTrue(CodexBarUsage.parse(Data("not json".utf8)).isEmpty)
+
+        let file = FileManager.default.temporaryDirectory.appendingPathComponent("codexbar-\(UUID().uuidString).json")
+        try Data(json.utf8).write(to: file)
+        setenv("EVEREST_CODEXBAR_SNAPSHOT", file.path, 1)
+        defer { unsetenv("EVEREST_CODEXBAR_SNAPSHOT"); try? FileManager.default.removeItem(at: file) }
+        let now = ISO8601DateFormatter().date(from: "2026-10-09T09:00:00Z")!
+        XCTAssertEqual(LiveMetric.claude.reading(MetricsSample(), at: now).text, "4%", "5-hour window")
+        XCTAssertEqual(LiveMetric.claudeWeek.reading(MetricsSample(), at: now).text, "42%", "the week")
+        XCTAssertEqual(LiveMetric.codexWeek.reading(MetricsSample(), at: now).text, "65%")
+        XCTAssertEqual(LiveMetric.codex.reading(MetricsSample(), at: now).text, "—", "no 5-hour window for this plan")
+        XCTAssertFalse(LiveMetric.codex.isAvailable, "not offered without the window")
+        XCTAssertTrue(LiveMetric.claudeWeek.isAvailable)
+        XCTAssertEqual(LiveTiles.signature(.claude, sample: MetricsSample(), date: now), "live:claude:4%")
+        // Hours old: CodexBar is not running, so the value is not trusted.
+        let later = now.addingTimeInterval(4 * 3600)
+        XCTAssertEqual(LiveMetric.claude.reading(MetricsSample(), at: later).text, "—")
+        XCTAssertNotNil(LiveTiles.image(.claude, sample: MetricsSample(), date: now))
+
+        setenv("EVEREST_CODEXBAR_SNAPSHOT", "/nonexistent/widget-snapshot.json", 1)
+        XCTAssertFalse(LiveMetric.claude.isAvailable)
+        XCTAssertTrue(LiveMetric.cpu.isAvailable)
+    }
 }

@@ -485,6 +485,8 @@ extension L10n {
         "profileAction.next": "Seuraava profiili",
         "profileAction.previous": "Edellinen profiili",
         "profiles.newCopyPad": "Uusi, profiilin ”%1$@” DisplayPad-näppäimillä",
+        "live.week": "viikko",
+        "keyappearance.liveCodexBar": "Claude ja Codex näyttävät käyttörajasi sellaisina kuin CodexBar ne viimeksi luki (päivittyy muutaman minuutin välein): yksi näppäin 5 tunnin jaksolle, toinen viikolle.",
         "pad.status.swapped": "%1$@ ja %2$@ vaihdettu.",
         "keyappearance.live": "Reaaliaikainen",
         "keyappearance.liveAction": "Avaa myös vastaava sovellus",

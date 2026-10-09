@@ -485,6 +485,8 @@ extension L10n {
         "profileAction.next": "הפרופיל הבא",
         "profileAction.previous": "הפרופיל הקודם",
         "profiles.newCopyPad": "חדש, עם מקשי ה־DisplayPad של „%1$@”",
+        "live.week": "שבועי",
+        "keyappearance.liveCodexBar": "Claude ו־Codex מציגים את מגבלות השימוש כפי ש־CodexBar קרא אותן לאחרונה (מתעדכן כל כמה דקות): מקש אחד לחלון של 5 שעות ואחד לשבוע.",
         "pad.status.swapped": "%1$@ ו־%2$@ הוחלפו.",
         "keyappearance.live": "בזמן אמת",
         "keyappearance.liveAction": "לפתוח גם את האפליקציה המתאימה",

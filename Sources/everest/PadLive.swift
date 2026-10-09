@@ -7,6 +7,27 @@ import Foundation
 /// wears nothing).
 enum LiveMetric: String, Codable, CaseIterable {
     case cpu, gpu, ram, disk, network, volume, clock
+    /// Usage limits read from CodexBar (`CodexBarUsage`): the 5-hour
+    /// window and the week, for Claude and for Codex.
+    case claude, claudeWeek, codex, codexWeek
+
+    /// Where a CodexBar metric comes from.
+    private var codexBar: (provider: String, span: CodexBarUsage.Span)? {
+        switch self {
+        case .claude: return ("claude", .session)
+        case .claudeWeek: return ("claude", .week)
+        case .codex: return ("codex", .session)
+        case .codexWeek: return ("codex", .week)
+        default: return nil
+        }
+    }
+
+    /// CodexBar metrics are offered only when its snapshot has that window
+    /// (Codex plans without a 5-hour limit have none).
+    var isAvailable: Bool {
+        guard let c = codexBar else { return true }
+        return CodexBarUsage.window(c.span, of: c.provider) != nil
+    }
 
     var title: String {
         switch self {
@@ -17,6 +38,10 @@ enum LiveMetric: String, Codable, CaseIterable {
         case .network: return tr("metric.network")
         case .volume: return tr("metric.volume")
         case .clock: return tr("mode.clock")
+        case .claude: return "Claude 5h"
+        case .claudeWeek: return "Claude \(tr("live.week"))"
+        case .codex: return "Codex 5h"
+        case .codexWeek: return "Codex \(tr("live.week"))"
         }
     }
 
@@ -30,6 +55,8 @@ enum LiveMetric: String, Codable, CaseIterable {
         case .network: return "network"
         case .volume: return "speaker.wave.2.fill"
         case .clock: return "clock.fill"
+        case .claude, .claudeWeek: return "sparkle"
+        case .codex, .codexWeek: return "chevron.left.forwardslash.chevron.right"
         }
     }
 
@@ -42,6 +69,8 @@ enum LiveMetric: String, Codable, CaseIterable {
         case .network: return 0x06B6D4
         case .volume: return 0x38BDF8
         case .clock: return 0xF3F4F7
+        case .claude, .claudeWeek: return 0xD97757
+        case .codex, .codexWeek: return 0x10A37F
         }
     }
 
@@ -56,6 +85,10 @@ enum LiveMetric: String, Codable, CaseIterable {
             return ButtonAction(type: .url, value: "x-apple.systempreferences:com.apple.Sound-Settings.extension")
         case .clock:
             return ButtonAction(type: .app, value: "/System/Applications/Clock.app")
+        case .claude, .claudeWeek:
+            return ButtonAction(type: .url, value: "https://claude.ai/settings/usage")
+        case .codex, .codexWeek:
+            return ButtonAction(type: .url, value: "https://chatgpt.com/codex/settings/usage")
         }
     }
 
@@ -85,6 +118,9 @@ enum LiveMetric: String, Codable, CaseIterable {
             f.dateFormat = "HH:mm"
             let c = Calendar.current.dateComponents([.minute], from: date)
             return (Double(c.minute ?? 0) / 60, f.string(from: date))
+        case .claude, .claudeWeek, .codex, .codexWeek:
+            guard let c = codexBar, let w = CodexBarUsage.window(c.span, of: c.provider, now: date) else { return (0, "—") }
+            return (w.usedPercent / 100, "\(Int(w.usedPercent.rounded()))%")
         }
     }
 }
