@@ -10,6 +10,10 @@ enum LiveMetric: String, Codable, CaseIterable {
     /// Usage limits read from CodexBar (`CodexBarUsage`): the 5-hour
     /// window and the week, for Claude and for Codex.
     case claude, claudeWeek, codex, codexWeek
+    /// From MRRCalendar (`MRRCalendar`), with a personal access token.
+    case mrr, revenueToday, revenue30Days, commitsToday
+
+    var needsMRRCalendar: Bool { [.mrr, .revenueToday, .revenue30Days, .commitsToday].contains(self) }
 
     /// Where a CodexBar metric comes from.
     private var codexBar: (provider: String, span: CodexBarUsage.Span)? {
@@ -30,13 +34,20 @@ enum LiveMetric: String, Codable, CaseIterable {
         switch codexBar?.span {
         case .session: return tr("live.fiveHours")
         case .week: return tr("live.week")
-        case nil: return title
+        case nil:
+            switch self {
+            case .revenueToday: return tr("live.today")
+            case .revenue30Days: return tr("live.days30")
+            case .commitsToday: return "Commits"
+            default: return title
+            }
         }
     }
 
     /// CodexBar metrics are offered only when its snapshot has that window
     /// (Codex plans without a 5-hour limit have none).
     var isAvailable: Bool {
+        if needsMRRCalendar { return MRRCalendar.isConfigured }
         guard let c = codexBar else { return true }
         // Unreadable (no permission yet): offer them anyway, the sheet says
         // what to allow.
@@ -59,6 +70,10 @@ enum LiveMetric: String, Codable, CaseIterable {
         case .claudeWeek: return "Claude \(tr("live.week"))"
         case .codex: return "Codex 5h"
         case .codexWeek: return "Codex \(tr("live.week"))"
+        case .mrr: return "MRR"
+        case .revenueToday: return tr("live.revenueToday")
+        case .revenue30Days: return tr("live.revenue30Days")
+        case .commitsToday: return tr("live.commitsToday")
         }
     }
 
@@ -74,6 +89,10 @@ enum LiveMetric: String, Codable, CaseIterable {
         case .clock: return "clock.fill"
         case .claude, .claudeWeek: return "sparkle"
         case .codex, .codexWeek: return "chevron.left.forwardslash.chevron.right"
+        case .mrr: return "chart.line.uptrend.xyaxis"
+        case .revenueToday: return "banknote.fill"
+        case .revenue30Days: return "calendar"
+        case .commitsToday: return "arrow.triangle.branch"
         }
     }
 
@@ -88,6 +107,10 @@ enum LiveMetric: String, Codable, CaseIterable {
         case .clock: return 0xF3F4F7
         case .claude, .claudeWeek: return 0xD97757
         case .codex, .codexWeek: return 0x10A37F
+        case .mrr: return 0x22C55E
+        case .revenueToday: return 0x84CC16
+        case .revenue30Days: return 0x14B8A6
+        case .commitsToday: return 0xA78BFA
         }
     }
 
@@ -106,6 +129,27 @@ enum LiveMetric: String, Codable, CaseIterable {
             return ButtonAction(type: .url, value: "https://claude.ai/settings/usage")
         case .codex, .codexWeek:
             return ButtonAction(type: .url, value: "https://chatgpt.com/codex/settings/usage")
+        case .mrr, .revenueToday, .revenue30Days, .commitsToday:
+            return ButtonAction(type: .url, value: Config.load().mrrCalendarURL)
+        }
+    }
+
+    /// MRRCalendar keys. Daily values fill the ring against the best day of
+    /// the last 30; MRR and 30-day revenue show their 30-day trend: half a
+    /// ring is flat, full is +100 %, empty is −100 %.
+    static func mrrCalendarReading(_ metric: LiveMetric, _ m: MRRCalendar.Metrics) -> (fraction: Double, text: String) {
+        func trend(_ percent: Double) -> Double { min(1, max(0, 0.5 + percent / 200)) }
+        switch metric {
+        case .mrr:
+            return (trend(m.trends.mrr), MRRCalendar.compactMoney(m.mrr, currency: m.currency))
+        case .revenueToday:
+            let best = m.revenue.daily.map(\.value).max() ?? 0
+            return (best > 0 ? min(1, m.revenue.today / best) : 0, MRRCalendar.compactMoney(m.revenue.today, currency: m.currency))
+        case .revenue30Days:
+            return (trend(m.trends.revenue), MRRCalendar.compactMoney(m.revenue.last30Days, currency: m.currency))
+        default:
+            guard m.commits.available else { return (0, "—") }
+            return (m.commits.maxDaily > 0 ? min(1, Double(m.commits.today) / Double(m.commits.maxDaily)) : 0, "\(m.commits.today)")
         }
     }
 
@@ -138,6 +182,9 @@ enum LiveMetric: String, Codable, CaseIterable {
         case .claude, .claudeWeek, .codex, .codexWeek:
             guard let c = codexBar, let w = CodexBarUsage.window(c.span, of: c.provider, now: date) else { return (0, "—") }
             return (w.usedPercent / 100, "\(Int(w.usedPercent.rounded()))%")
+        case .mrr, .revenueToday, .revenue30Days, .commitsToday:
+            guard let m = MRRCalendar.latest(now: date) else { return (0, "—") }
+            return LiveMetric.mrrCalendarReading(self, m)
         }
     }
 }
