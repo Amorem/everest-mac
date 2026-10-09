@@ -125,7 +125,12 @@ extension EverestModel {
                 }
                 let seconds = Int(Date().timeIntervalSince(started).rounded())
                 DispatchQueue.main.async {
-                    self?.setButton(button, iconPath: url.path)
+                    // The slot is the keyboard profile it went to, even if
+                    // another profile was selected meanwhile.
+                    if let self, let i = self.config.profileIndex(slot) {
+                        self.config.profiles[i].buttons[button].iconPath = url.path
+                        self.persist()
+                    }
                     self?.progress = nil
                     self?.keyUpload?.progress = 1
                     self?.keyUpload?.finished = true
