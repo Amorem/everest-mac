@@ -218,10 +218,14 @@ enum Daemon {
                 let night = NightMode.active
                 if night != nightApplied {
                     let own = cfg.profileIndex(profile).map { ProfileSwitch.slot(for: cfg.profiles[$0]) } ?? 0
-                    kb.send(FirmwareLighting.switchProfile(UInt8(profile), slot: night ? FirmwareLighting.Effect.off.slot : own), wait: 0.3)
-                    // The dial and D1–D4 screens: display brightness 0, then
-                    // back to following the lighting.
-                    if night || nightApplied != nil { kb.setDisplays(off: night) }
+                    // The settings write (dial and D1–D4 screens) brings the
+                    // key lighting back on, so at night it goes first and
+                    // the Off slot last; in the morning the profile's slot
+                    // first, then the screens back to following the lighting.
+                    let slot = night ? FirmwareLighting.Effect.off.slot : own
+                    if night { kb.setDisplays(off: true) }
+                    kb.send(FirmwareLighting.switchProfile(UInt8(profile), slot: slot), wait: 0.3)
+                    if !night && nightApplied != nil { kb.setDisplays(off: false) }
                     if nightApplied != nil || night { log(night ? "night mode: lights off" : "night mode: lights back on") }
                     nightApplied = night
                 }
