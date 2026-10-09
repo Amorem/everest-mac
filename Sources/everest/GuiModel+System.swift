@@ -15,7 +15,7 @@ extension EverestModel {
 
 
     func startDaemon() {
-        guard daemonProcess == nil else { return }
+        guard daemonProcess == nil, !Self.snapshotMode else { return }
         let exe = Bundle.main.executablePath ?? CommandLine.arguments[0]
         let p = Process()
         p.executableURL = URL(fileURLWithPath: exe)
