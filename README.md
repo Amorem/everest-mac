@@ -25,6 +25,12 @@ hardware a job.
   profile, plus its brightness; keys can also show live CPU, GPU, RAM,
   disk, network, volume or the time; drag a key onto another to swap them.
   No driver, no root.
+- **Claude and Codex limits on the pad** — with
+  [CodexBar](https://github.com/steipete/CodexBar) installed, keys can show
+  your Claude and Codex usage (5-hour window and week), read from the snapshot
+  CodexBar keeps for its widgets: no network, no sign-in. macOS protects other
+  apps' data, so Everest needs **Full Disk Access** for these keys; a badge on
+  the key opens the setting with Everest selected in Finder, ready to drag in.
 - **Dial screen** — clock, CPU / GPU / RAM / disk / network / volume gauges,
   or a custom image.
 - **Night mode** — one key (or `everest night`) turns the key lighting, the
