@@ -18,7 +18,13 @@ cp .build/release/everest "$APP/Contents/MacOS/everest"
 # App icon: assets/AppIcon.icns (made by tools/make-icon.swift from a logo file).
 [ -f assets/AppIcon.icns ] && cp assets/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
 
-cat > "$APP/Contents/Info.plist" <<'EOF'
+# One version, in Sources/everest/Version.swift; the build is the commit
+# count, with "+" when the working tree has uncommitted changes.
+VERSION=$(sed -n 's/.*static let number = "\(.*\)".*/\1/p' Sources/everest/Version.swift)
+BUILD=$(git rev-list --count HEAD 2>/dev/null || echo 0)
+[ -n "$(git status --porcelain 2>/dev/null)" ] && BUILD="$BUILD+"
+
+cat > "$APP/Contents/Info.plist" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -31,8 +37,8 @@ cat > "$APP/Contents/Info.plist" <<'EOF'
     <key>CFBundleExecutable</key><string>everest</string>
     <key>CFBundleIconFile</key><string>AppIcon</string>
     <key>CFBundlePackageType</key><string>APPL</string>
-    <key>CFBundleShortVersionString</key><string>0.1.0</string>
-    <key>CFBundleVersion</key><string>1</string>
+    <key>CFBundleShortVersionString</key><string>$VERSION</string>
+    <key>CFBundleVersion</key><string>$BUILD</string>
     <key>LSMinimumSystemVersion</key><string>13.0</string>
     <key>NSHighResolutionCapable</key><true/>
     <key>LSApplicationCategoryType</key><string>public.app-category.utilities</string>
@@ -52,10 +58,21 @@ codesign --force --sign - --identifier local.everest-mac \
     -r='designated => identifier "local.everest-mac"' "$APP"
 
 # The bundle must be somewhere Gatekeeper allows executables to run from.
+# A running copy keeps the old code in memory: quit it first, and open the
+# new one if it was running.
 if [ "$1" = "--install" ]; then
+    WAS_RUNNING=0
+    if pgrep -f "/Applications/$APP/Contents/MacOS/everest" >/dev/null; then
+        WAS_RUNNING=1
+        osascript -e 'quit app id "local.everest-mac"' >/dev/null 2>&1 || true
+        sleep 2
+        pkill -f "/Applications/$APP/Contents/MacOS/everest" 2>/dev/null || true
+        sleep 1
+    fi
     rm -rf "/Applications/$APP"
     cp -R "$APP" /Applications/
-    echo "Installed /Applications/$APP"
+    echo "Installed /Applications/$APP ($VERSION, build $BUILD)"
+    [ $WAS_RUNNING = 1 ] && open "/Applications/$APP"
 fi
 
 # A zip for a release page. The app is only ad-hoc signed, so downloaders must

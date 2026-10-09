@@ -532,7 +532,7 @@ case "effect-sheet": MainActor.assumeIsolated { Gui.effectSheet(to: rest.first ?
 case "layout-dump": Command.layoutDump()
 case "recover": Command.recover()
 case "gui": Gui.run()
-case "version": print("everest 0.1.0")
+case "version": print("everest \(AppVersion.display)")
 case "help", "-h", "--help": usage()
 default:
     stderr("unknown command '\(command)'\n")

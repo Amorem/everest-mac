@@ -251,7 +251,11 @@ struct Sidebar: View {
                 BrandTile(size: 34)
                 VStack(alignment: .leading, spacing: 1) {
                     Text("Everest").font(.ui(15, .bold)).foregroundStyle(Theme.text)
-                    Text(tr("app.tagline")).font(.ui(11, .medium)).foregroundStyle(Theme.textTertiary)
+                    // The build shows which version is running (it changes
+                    // with every commit).
+                    Text("\(tr("app.tagline")) · \(AppVersion.display)")
+                        .font(.ui(11, .medium).monospacedDigit()).foregroundStyle(Theme.textTertiary)
+                        .lineLimit(1)
                 }
             }
             .padding(.leading, 18)
