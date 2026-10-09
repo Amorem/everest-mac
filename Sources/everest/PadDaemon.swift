@@ -165,7 +165,8 @@ enum PadDaemon {
                     // in a row mean the handle is stale.
                     if now.timeIntervalSince(lastPing) >= 3 {
                         lastPing = now
-                        guard let answer = try? pad.brightness() else { return true }
+                        let answer: Int?
+                        do { answer = try pad.brightness() } catch { return true }   // write failed
                         missedPings = answer == nil ? missedPings + 1 : 0
                         if missedPings >= 3 { return true }
                     }
