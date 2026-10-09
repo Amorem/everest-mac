@@ -35,6 +35,8 @@ final class Transport {
     private var inbox: [[UInt8]] = []
     private let lock = NSLock()
     private var reportBuffer: UnsafeMutablePointer<UInt8>
+    /// The run loop the input callback was scheduled on (the opening thread).
+    private var runLoop: CFRunLoop?
 
     /// `productID` selects the device: the keyboard (0x0001) or the
     /// DisplayPad (`PadProto.productID`), which uses the same 64-byte vendor
@@ -59,8 +61,7 @@ final class Transport {
         guard res == kIOReturnSuccess else { throw TransportError.openFailed(res) }
 
         guard let set = IOHIDManagerCopyDevices(manager), CFSetGetCount(set) > 0 else {
-            IOHIDManagerClose(manager, IOOptionBits(kIOHIDOptionsTypeNone))
-            throw TransportError.notFound
+            throw TransportError.notFound   // deinit closes the manager
         }
         // A keyboard exposes several HID interfaces with the same usage page
         // and usage (boot keyboard + the real one); the real one is the
@@ -83,7 +84,8 @@ final class Transport {
             },
             Unmanaged.passUnretained(self).toOpaque()
         )
-        IOHIDDeviceScheduleWithRunLoop(dev, CFRunLoopGetCurrent(), CFRunLoopMode.defaultMode.rawValue)
+        runLoop = CFRunLoopGetCurrent()
+        IOHIDDeviceScheduleWithRunLoop(dev, runLoop!, CFRunLoopMode.defaultMode.rawValue)
     }
 
     /// USB location of the opened device, to reach its other interfaces.
@@ -179,18 +181,26 @@ final class Transport {
         return Array(buf.prefix(64))
     }
 
+    /// Safe to call more than once; also run by `deinit`, so a failed open
+    /// (the init throws once every property is set) releases what it took.
     func close() {
         if let device {
-            IOHIDDeviceUnscheduleFromRunLoop(device, CFRunLoopGetCurrent(), CFRunLoopMode.defaultMode.rawValue)
+            IOHIDDeviceRegisterInputReportCallback(device, reportBuffer, 1024, nil, nil)
+            if let runLoop {
+                IOHIDDeviceUnscheduleFromRunLoop(device, runLoop, CFRunLoopMode.defaultMode.rawValue)
+            }
             IOHIDDeviceClose(device, IOOptionBits(kIOHIDOptionsTypeNone))
         }
         if let manager {
             IOHIDManagerClose(manager, IOOptionBits(kIOHIDOptionsTypeNone))
         }
-        reportBuffer.deallocate()
         device = nil
         manager = nil
+        runLoop = nil
     }
 
-    deinit { }
+    deinit {
+        close()
+        reportBuffer.deallocate()
+    }
 }
