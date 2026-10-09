@@ -101,7 +101,7 @@ struct DisplaysPage: View {
                             Text(model.config.buttons[i].title ?? "D\(i + 1)")
                                 .font(.ui(12, .semibold)).foregroundStyle(Theme.text).lineLimit(1)
                             HStack(spacing: 6) {
-                                Button(tr("displays.change")) { appearance = AppearanceTarget(button: i) }.buttonStyle(.compact(.primary))
+                                Button(tr("displays.change")) { appearance = AppearanceTarget(target: .dkey(i)) }.buttonStyle(.compact(.primary))
                                 IconButton(icon: "arrow.uturn.backward", help: tr("displays.factoryIcon")) { model.resetButtonIcon(i) }
                                     .disabled(model.keysBusy)
                             }
@@ -118,7 +118,7 @@ struct DisplaysPage: View {
         .fileImporter(isPresented: $pickingDial, allowedContentTypes: [.image]) { result in
             if case .success(let url) = result { model.uploadDialImage(url: url) }
         }
-        .sheet(item: $appearance) { t in KeyAppearanceSheet(model: model, button: t.button, tab: t.tab) }
+        .sheet(item: $appearance) { t in KeyAppearanceSheet(model: model, target: t.target, tab: t.tab) }
     }
 }
 
@@ -156,9 +156,9 @@ struct ModeTile: View {
 
 /// Which key the appearance sheet is open for, and on which tab.
 struct AppearanceTarget: Identifiable {
-    let button: Int
+    let target: KeyTarget
     var tab: KeyAppearanceSheet.Tab = .presets
-    var id: Int { button }
+    var id: KeyTarget { target }
 }
 
 struct ButtonsPage: View {
@@ -182,23 +182,13 @@ struct ButtonsPage: View {
                 AccessibilityBanner(model: model)
             }
             if !model.daemonRunning {
-                HStack(spacing: 14) {
-                    IconBadge(icon: "bolt.fill", tint: Theme.amber, size: 30)
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(tr("buttons.daemonStopped")).font(.ui(13, .semibold)).foregroundStyle(Theme.text)
-                        Text(tr("buttons.daemonStoppedNote"))
-                            .font(.ui(11.5)).foregroundStyle(Theme.textSecondary)
-                    }
-                    Spacer()
-                    Button { model.toggleDaemon() } label: { Label(tr("common.start"), systemImage: "play.fill") }
-                        .buttonStyle(.primary(Theme.amber))
-                }
-                .padding(14)
-                .background(SurfaceBackground(fill: Theme.amber.opacity(0.07)))
+                DaemonStoppedBanner(model: model, note: tr("buttons.daemonStoppedNote"))
             }
 
             LazyVGrid(columns: [GridItem(.flexible(), spacing: 18), GridItem(.flexible(), spacing: 18)], spacing: 18) {
-                ForEach(0..<4, id: \.self) { i in buttonCard(i) }
+                ForEach(0..<4, id: \.self) { i in
+                    ButtonEditorCard(model: model, target: .dkey(i), appearance: $appearance)
+                }
             }
 
             Card(tr("buttons.flashMemory"), subtitle: tr("buttons.flashMemoryNote"),
@@ -212,10 +202,106 @@ struct ButtonsPage: View {
                 }
             }
         }
-        .sheet(item: $appearance) { t in KeyAppearanceSheet(model: model, button: t.button, tab: t.tab) }
+        .sheet(item: $appearance) { t in KeyAppearanceSheet(model: model, target: t.target, tab: t.tab) }
+    }
+}
+
+/// The daemon runs every key action; without it the keys do nothing.
+struct DaemonStoppedBanner: View {
+    @ObservedObject var model: EverestModel
+    let note: String
+
+    var body: some View {
+        HStack(spacing: 14) {
+            IconBadge(icon: "bolt.fill", tint: Theme.amber, size: 30)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(tr("buttons.daemonStopped")).font(.ui(13, .semibold)).foregroundStyle(Theme.text)
+                Text(note)
+                    .font(.ui(11.5)).foregroundStyle(Theme.textSecondary)
+            }
+            Spacer()
+            Button { model.toggleDaemon() } label: { Label(tr("common.start"), systemImage: "play.fill") }
+                .buttonStyle(.primary(Theme.amber))
+        }
+        .padding(14)
+        .background(SurfaceBackground(fill: Theme.amber.opacity(0.07)))
+    }
+}
+
+/// Name, picture and action of one screen key.
+struct ButtonEditorCard: View {
+    @ObservedObject var model: EverestModel
+    let target: KeyTarget
+    @Binding var appearance: AppearanceTarget?
+    private var tint: Color { target.tint }
+
+    var body: some View {
+        let button = model.button(target)
+        let action = button.action
+        let types = ButtonsPage.types
+        let type = types.first { $0.0 == action.type } ?? types.last!
+        return VStack(alignment: .leading, spacing: 14) {
+            HStack(spacing: 14) {
+                Button { appearance = AppearanceTarget(target: target) } label: {
+                    KeyScreen(image: model.image(for: target), label: target.label, size: 64,
+                              uploading: model.uploading(target))
+                        .overlay(alignment: .bottomTrailing) {
+                            Image(systemName: "photo.badge.plus")
+                                .font(.ui(10, .bold)).foregroundStyle(.white)
+                                .padding(4).background(Circle().fill(tint))
+                                .offset(x: 4, y: 4)
+                        }
+                }
+                .buttonStyle(.plain)
+                .help(tr("buttons.pickPresetAppImage", target.label))
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(tr("buttons.keyHeader", target.label)).font(.ui(10.5, .bold)).tracking(0.8).foregroundStyle(tint)
+                    StyledField(placeholder: tr("common.name"), text: Binding(
+                        get: { model.button(target).title ?? "" },
+                        set: { model.setButton(target, name: $0) }))
+                }
+            }
+            Segmented(items: types.map { .init(value: $0.0, title: "", icon: $0.1, help: $0.2) },
+                      selection: Binding(get: { action.type }, set: { model.setButton(target, type: $0) }),
+                      tint: tint, fill: true)
+            if action.type == "app" {
+                appRow(path: action.value)
+            } else if action.type != "none" {
+                VStack(alignment: .leading, spacing: 6) {
+                    FieldLabel(type.2)
+                    StyledField(placeholder: type.3, text: Binding(
+                        get: { model.button(target).action.value },
+                        set: { model.setButton(target, value: $0) }), icon: type.1, monospaced: action.type != "text")
+                }
+            } else {
+                Caption(tr("buttons.noAction"))
+                    .frame(height: 48, alignment: .center)
+            }
+            HStack {
+                Button { appearance = AppearanceTarget(target: target) } label: {
+                    Label(tr("buttons.presetsAndIcon"), systemImage: "square.grid.3x3.fill")
+                }
+                .buttonStyle(.compact())
+                Button { model.restoreFactory(target) } label: {
+                    Label(tr("buttons.factoryValues"), systemImage: "arrow.uturn.backward")
+                }
+                .buttonStyle(.compact(.ghost))
+                .disabled(model.keysBusy)
+                .help(tr("buttons.factoryValuesHelp", target.label))
+                Spacer()
+                Button {
+                    ActionRunner.run(model.button(target).action)
+                    model.report(tr("buttons.actionRan", target.label))
+                } label: { Label(tr("common.test"), systemImage: "play.fill") }
+                    .buttonStyle(.compact(.primary))
+                    .disabled(action.type == "none")
+            }
+        }
+        .padding(18)
+        .background(SurfaceBackground())
     }
 
-    private func appRow(_ i: Int, path: String) -> some View {
+    private func appRow(path: String) -> some View {
         let exists = !path.isEmpty && FileManager.default.fileExists(atPath: path)
         return HStack(spacing: 10) {
             if exists {
@@ -230,77 +316,13 @@ struct ButtonsPage: View {
                 Text(tr("buttons.noApp")).font(.ui(12.5)).foregroundStyle(Theme.textSecondary)
             }
             Spacer()
-            Button(tr("common.choose")) { appearance = AppearanceTarget(button: i, tab: .apps) }
+            Button(tr("common.choose")) { appearance = AppearanceTarget(target: target, tab: .apps) }
                 .buttonStyle(.compact())
         }
         .padding(.horizontal, 10)
         .frame(height: 48)
         .background(RoundedRectangle(cornerRadius: 8, style: .continuous).fill(Theme.surfaceSunken))
         .overlay(RoundedRectangle(cornerRadius: 8, style: .continuous).strokeBorder(Theme.stroke))
-    }
-
-    private func buttonCard(_ i: Int) -> some View {
-        let action = model.config.buttons[i].action
-        let type = Self.types.first { $0.0 == action.type } ?? Self.types.last!
-        return VStack(alignment: .leading, spacing: 14) {
-            HStack(spacing: 14) {
-                Button { appearance = AppearanceTarget(button: i) } label: {
-                    KeyScreen(image: model.displayImages[i], label: "D\(i + 1)", size: 64,
-                              uploading: model.keyUpload?.button == i ? model.keyUpload?.progress : nil)
-                        .overlay(alignment: .bottomTrailing) {
-                            Image(systemName: "photo.badge.plus")
-                                .font(.ui(10, .bold)).foregroundStyle(.white)
-                                .padding(4).background(Circle().fill(tint))
-                                .offset(x: 4, y: 4)
-                        }
-                }
-                .buttonStyle(.plain)
-                .help(tr("buttons.pickPresetAppImage", i + 1))
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(tr("buttons.keyHeader", i + 1)).font(.ui(10.5, .bold)).tracking(0.8).foregroundStyle(tint)
-                    StyledField(placeholder: tr("common.name"), text: Binding(
-                        get: { model.config.buttons[i].title ?? "" },
-                        set: { model.setButton(i, name: $0) }))
-                }
-            }
-            Segmented(items: Self.types.map { .init(value: $0.0, title: "", icon: $0.1, help: $0.2) },
-                      selection: Binding(get: { action.type }, set: { model.setButton(i, type: $0) }),
-                      tint: tint, fill: true)
-            if action.type == "app" {
-                appRow(i, path: action.value)
-            } else if action.type != "none" {
-                VStack(alignment: .leading, spacing: 6) {
-                    FieldLabel(type.2)
-                    StyledField(placeholder: type.3, text: Binding(
-                        get: { model.config.buttons[i].action.value },
-                        set: { model.setButton(i, value: $0) }), icon: type.1, monospaced: action.type != "text")
-                }
-            } else {
-                Caption(tr("buttons.noAction"))
-                    .frame(height: 48, alignment: .center)
-            }
-            HStack {
-                Button { appearance = AppearanceTarget(button: i) } label: {
-                    Label(tr("buttons.presetsAndIcon"), systemImage: "square.grid.3x3.fill")
-                }
-                .buttonStyle(.compact())
-                Button { model.restoreFactory(i) } label: {
-                    Label(tr("buttons.factoryValues"), systemImage: "arrow.uturn.backward")
-                }
-                .buttonStyle(.compact(.ghost))
-                .disabled(model.keysBusy)
-                .help(tr("buttons.factoryValuesHelp", i + 1))
-                Spacer()
-                Button {
-                    ActionRunner.run(model.config.buttons[i].action)
-                    model.report(tr("buttons.actionRan", i + 1))
-                } label: { Label(tr("common.test"), systemImage: "play.fill") }
-                    .buttonStyle(.compact(.primary))
-                    .disabled(action.type == "none")
-            }
-        }
-        .padding(18)
-        .background(SurfaceBackground())
     }
 }
 

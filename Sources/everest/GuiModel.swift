@@ -551,12 +551,12 @@ final class EverestModel: ObservableObject {
 
     func uploadIcon(button: Int, url: URL) {
         guard keyUpload == nil else {
-            report(tr("status.uploadBusyAlready", keyUpload!.button + 1), error: true)
+            report(tr("status.uploadBusyAlready", "D\(keyUpload!.button + 1)"), error: true)
             return
         }
         keyUpload = KeyUpload(button: button, preview: NSImage(contentsOf: url))
         progress = 0
-        report(tr("status.uploadStarted", button + 1))
+        report(tr("status.uploadStarted", "D\(button + 1)"))
         device.async { [weak self] in
             let started = Date()
             do {
@@ -579,14 +579,14 @@ final class EverestModel: ObservableObject {
                     self?.progress = nil
                     self?.keyUpload?.progress = 1
                     self?.keyUpload?.finished = true
-                    self?.report(tr("status.iconSent", button + 1, seconds))
+                    self?.report(tr("status.iconSent", "D\(button + 1)", seconds))
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) { self?.keyUpload = nil }
                 }
             } catch {
                 DispatchQueue.main.async {
                     self?.progress = nil
                     self?.keyUpload = nil
-                    self?.report(tr("status.uploadFailedKey", button + 1, error.localizedDescription), error: true)
+                    self?.report(tr("status.uploadFailedKey", "D\(button + 1)", error.localizedDescription), error: true)
                 }
             }
         }
@@ -629,7 +629,7 @@ final class EverestModel: ObservableObject {
 
     func resetButtonIcon(_ button: Int) {
         guard keyUpload == nil else {
-            report(tr("status.uploadBusy", keyUpload!.button + 1), error: true)
+            report(tr("status.uploadBusy", "D\(keyUpload!.button + 1)"), error: true)
             return
         }
         runDevice(tr("reset.title")) { kb in
@@ -638,7 +638,7 @@ final class EverestModel: ObservableObject {
             _ = kb.transport.read(timeout: 0.5)
             // The reset also brings back the factory action of the key.
             kb.neutraliseKeyActions()
-            return tr("status.factoryIconRestored", button + 1)
+            return tr("status.factoryIconRestored", "D\(button + 1)")
         }
         config.buttons[button].iconPath = nil
         config.save()

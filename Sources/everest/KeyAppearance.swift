@@ -9,7 +9,7 @@ struct KeyAppearanceSheet: View {
     enum Tab: Hashable { case presets, apps, image }
 
     @ObservedObject var model: EverestModel
-    let button: Int
+    let target: KeyTarget
     @State var tab: Tab = .presets
     @Environment(\.dismiss) private var dismiss
     @State private var withAction = true
@@ -19,17 +19,23 @@ struct KeyAppearanceSheet: View {
     @State private var pickingApp = false
     @State private var started = false
     private var myUpload: EverestModel.KeyUpload? {
-        model.keyUpload?.button == button ? model.keyUpload : nil
+        model.keyUpload?.button == target.index ? model.keyUpload : nil
     }
-    private var tint: Color { Section.buttons.tint }
+    private var busy: Bool { model.keyUpload != nil }
+    private var tint: Color { target.tint }
+
+    private func begin(_ run: () -> Void) {
+        run()
+        started = true
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(spacing: 14) {
-                KeyScreen(image: model.displayImages[button], label: "D\(button + 1)", size: 52,
+                KeyScreen(image: model.image(for: target), label: target.label, size: 52,
                           uploading: myUpload?.progress)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(tr("keyappearance.title", button + 1)).font(.ui(17, .bold)).foregroundStyle(Theme.text)
+                    Text(tr("keyappearance.title", target.label)).font(.ui(17, .bold)).foregroundStyle(Theme.text)
                     Text(tr("keyappearance.subtitle"))
                         .font(.ui(12)).foregroundStyle(Theme.textSecondary)
                 }
@@ -39,8 +45,8 @@ struct KeyAppearanceSheet: View {
             if let u = myUpload {
                 UploadPanel(upload: u) { dismiss() }
             } else {
-            if let other = model.keyUpload {
-                Caption(tr("keyappearance.busyOther", other.button + 1),
+            if busy, let other = model.keyUpload {
+                Caption(tr("keyappearance.busyOther", "D\(other.button + 1)"),
                         icon: "hourglass")
             }
             if started && model.statusIsError {
@@ -60,8 +66,8 @@ struct KeyAppearanceSheet: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-            .disabled(model.keyUpload != nil)
-            .opacity(model.keyUpload != nil ? 0.45 : 1)
+            .disabled(busy)
+            .opacity(busy ? 0.45 : 1)
             }
         }
         .padding(22)
@@ -74,14 +80,12 @@ struct KeyAppearanceSheet: View {
         .preferredColorScheme(.dark)
         .fileImporter(isPresented: $pickingImage, allowedContentTypes: [.image]) { result in
             if case .success(let url) = result {
-                model.uploadIcon(button: button, url: url)
-                started = true
+                begin { model.setIcon(target, url: url) }
             }
         }
         .fileImporter(isPresented: $pickingApp, allowedContentTypes: [.application]) { result in
             if case .success(let url) = result {
-                model.assignApp(url, to: button)
-                started = true
+                begin { model.assignApp(url, to: target) }
             }
         }
     }
@@ -114,8 +118,7 @@ struct KeyAppearanceSheet: View {
                                                 .frame(width: 64, height: 64)
                                         }
                                     } action: {
-                                        model.applyPreset(p, to: button, withAction: withAction)
-                                        started = true
+                                        begin { model.applyPreset(p, to: target, withAction: withAction) }
                                     }
                                 }
                             }
@@ -162,8 +165,7 @@ struct KeyAppearanceSheet: View {
                                 .frame(width: 64, height: 64)
                                 .background(Color.black)
                         } action: {
-                            model.assignApp(app.url, to: button)
-                            started = true
+                            begin { model.assignApp(app.url, to: target) }
                         }
                     }
                 }
@@ -203,7 +205,7 @@ struct KeyAppearanceSheet: View {
                         Button { pickingImage = true } label: { Label(tr("keyappearance.chooseFile"), systemImage: "photo") }
                             .buttonStyle(.primary(tint))
                         Button {
-                            model.resetButtonIcon(button)
+                            model.resetButtonIcon(target)
                             dismiss()
                         } label: { Label(tr("displays.factoryIcon"), systemImage: "arrow.uturn.backward") }
                             .buttonStyle(.secondary)

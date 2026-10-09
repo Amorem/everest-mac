@@ -138,7 +138,7 @@ final class EverestAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegat
             NSApp.terminate(nil)
             return
         }
-        let host = NSHostingView(rootView: KeyAppearanceSheet(model: model, button: 0, tab: tab))
+        let host = NSHostingView(rootView: KeyAppearanceSheet(model: model, target: .dkey(0), tab: tab))
         host.frame = NSRect(x: 0, y: 0, width: 680, height: 600)
         let w = NSWindow(contentRect: host.frame, styleMask: [.borderless], backing: .buffered, defer: false)
         w.isReleasedWhenClosed = false

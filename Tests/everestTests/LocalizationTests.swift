@@ -42,7 +42,7 @@ final class LocalizationTests: XCTestCase {
     func testFormattingSubstitutesEveryArgument() {
         for lang in Language.allCases {
             XCTAssertEqual(L10n.string("firmware.block.detected", in: lang, ["56"]).contains("56"), true, lang.rawValue)
-            let s = L10n.string("status.iconSent", in: lang, [2, 21])
+            let s = L10n.string("status.iconSent", in: lang, ["D2", 21])
             XCTAssertTrue(s.contains("D2") && s.contains("21"), "\(lang.rawValue): \(s)")
         }
     }
