@@ -485,6 +485,8 @@ extension L10n {
         "profileAction.next": "다음 프로필",
         "profileAction.previous": "이전 프로필",
         "profiles.newCopyPad": "«%1$@»의 DisplayPad 키로 새로 만들기",
+        "live.week": "주간",
+        "keyappearance.liveCodexBar": "Claude와 Codex는 CodexBar가 마지막으로 읽은 사용 한도를 보여 줍니다(몇 분마다 갱신). 5시간 한도용 키 하나, 주간 한도용 키 하나입니다.",
         "pad.status.swapped": "%1$@과(와) %2$@을(를) 바꿨습니다.",
         "keyappearance.live": "실시간",
         "keyappearance.liveAction": "해당 앱도 열기",

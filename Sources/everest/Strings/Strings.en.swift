@@ -485,6 +485,8 @@ extension L10n {
         "profileAction.next": "Next profile",
         "profileAction.previous": "Previous profile",
         "profiles.newCopyPad": "New, with the DisplayPad keys of « %1$@ »",
+        "live.week": "week",
+        "keyappearance.liveCodexBar": "Claude and Codex show your usage limits as CodexBar last read them (it refreshes them every few minutes): one key for the 5-hour window, one for the week.",
         "pad.status.swapped": "%1$@ and %2$@ swapped.",
         "keyappearance.live": "Live",
         "keyappearance.liveAction": "Also open the matching app",

@@ -195,8 +195,11 @@ struct KeyAppearanceSheet: View {
             }
             .toggleStyle(.switch)
             Caption(tr("keyappearance.liveNote"), icon: "info.circle")
+            if CodexBarUsage.isAvailable {
+                Caption(tr("keyappearance.liveCodexBar"), icon: "sparkle")
+            }
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 6), spacing: 12) {
-                ForEach(LiveMetric.allCases, id: \.self) { m in
+                ForEach(LiveMetric.allCases.filter(\.isAvailable), id: \.self) { m in
                     PickerTile(title: m.title, subtitle: nil) {
                         Group {
                             if let cg = LiveTiles.image(m, sample: model.liveSample, side: 128) {

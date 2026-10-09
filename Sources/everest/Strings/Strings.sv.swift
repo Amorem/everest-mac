@@ -485,6 +485,8 @@ extension L10n {
         "profileAction.next": "Nästa profil",
         "profileAction.previous": "Föregående profil",
         "profiles.newCopyPad": "Ny, med DisplayPad-tangenterna från ”%1$@”",
+        "live.week": "vecka",
+        "keyappearance.liveCodexBar": "Claude och Codex visar dina användningsgränser som CodexBar senast läste dem (uppdateras med några minuters mellanrum): en tangent för 5-timmarsfönstret, en för veckan.",
         "pad.status.swapped": "%1$@ och %2$@ har bytt plats.",
         "keyappearance.live": "Live",
         "keyappearance.liveAction": "Öppna även motsvarande app",
