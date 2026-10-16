@@ -477,7 +477,7 @@ extension L10n {
 
         // MARK: pad
         "night.displays": "Sett også Mac-skjermene i dvale",
-        "night.displaysNote": "Bare skjermene, ikke Macen. Hvis macOS ber om passord når skjermen slås av (innstillinger for Låst skjerm), låses økten om natten.",
+        "night.displaysNote": "Bare skjermene, ikke Macen. Hvis macOS ber om passord når skjermen slås av (innstillinger for Låst skjerm), låses økten om natten. Vekkes de ved pulten (mus, tastatur), slås alt på igjen; låses ikke økten opp innen 20 sekunder, starter nattmodus på nytt. En fjernøkt (RustDesk…) gjør ikke det: skjermene viser da svart på pulten, mens bildet eksternt er normalt. Omstart av Macen avslutter nattmodus.",
         "action.night": "Nattmodus",
         "night.note": "Slår av tastaturlyset og DisplayPad og demper lyden; trykk igjen for å få alt tilbake som før.",
         "night.active": "Nattmodus på",

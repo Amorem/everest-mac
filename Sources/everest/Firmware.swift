@@ -202,6 +202,13 @@ extension Keyboard {
         return 1
     }
 
+    /// The active lighting slot (`11 00` byte 11).
+    func lightingSlot() -> UInt8? {
+        transport.flush()
+        try? transport.write(Proto.packet([0x11, 0x00]))
+        return waitReply(0x00, timeout: 1).flatMap { $0.count > 11 ? $0[11] : nil }
+    }
+
     /// Apply a built-in effect the way Base Camp does. `save` commits the
     /// slot to flash so it survives a replug.
     func apply(_ lighting: FirmwareLighting, save: Bool = true, switchSlot: Bool = true) {

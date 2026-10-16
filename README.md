@@ -30,6 +30,11 @@ hardware a job.
 - **Night mode** — one key (or `everest night`) turns the key lighting, the
   dial and D1–D4 screens and the DisplayPad off and mutes the sound; the
   same key brings everything back as it was. Nothing is written to flash.
+  The Mac's screens sleep too. Waking them on the desk (mouse, keyboard)
+  brings everything back, and night mode starts again if the session is not
+  unlocked within 20 seconds. A remote session (RustDesk, Screen Sharing…)
+  leaves night mode on: the screens show black on the desk, with the remote
+  picture untouched. Restarting the Mac ends night mode.
 - **Profiles** — the keyboard's five hardware profiles, each with its own
   lighting, D1–D4 setup, DisplayPad keys and dial mode; link an app to a
   profile and the keyboard and pad switch when that app comes to the front,

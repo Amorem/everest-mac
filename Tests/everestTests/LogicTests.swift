@@ -78,6 +78,44 @@ final class LogicTests: XCTestCase {
         XCTAssertEqual(ActionKind(rawValue: "night"), .night)
     }
 
+    /// Night screens: a wake on the desk ends the night (on trial), a
+    /// remote session gets them black (not asleep), back to sleep when it
+    /// lets go.
+    func testNightScreensSteps() {
+        typealias S = NightScreens
+        XCTAssertEqual(S.step(enforce: true, awakeFor: 1.5, remote: false, blackedOut: false), .wake)
+        XCTAssertEqual(S.step(enforce: true, awakeFor: 0.5, remote: false, blackedOut: false), .none, "a remote session may still show up")
+        XCTAssertEqual(S.step(enforce: true, awakeFor: nil, remote: false, blackedOut: false), .none)
+        XCTAssertEqual(S.step(enforce: true, awakeFor: 0, remote: true, blackedOut: false), .blackOut)
+        XCTAssertEqual(S.step(enforce: true, awakeFor: nil, remote: true, blackedOut: false), .none, "asleep: left asleep")
+        XCTAssertEqual(S.step(enforce: true, awakeFor: 5, remote: true, blackedOut: true), .none)
+        XCTAssertEqual(S.step(enforce: true, awakeFor: 5, remote: false, blackedOut: true), .restoreAndSleep)
+        XCTAssertEqual(S.step(enforce: false, awakeFor: 5, remote: true, blackedOut: true), .restore, "night key")
+        XCTAssertEqual(S.step(enforce: false, awakeFor: 5, remote: false, blackedOut: false), .none)
+        XCTAssertNotNil(S.bootTime())
+
+        XCTAssertEqual(S.trial(elapsed: 5, locked: true, remote: false), .wait)
+        XCTAssertEqual(S.trial(elapsed: 5, locked: false, remote: false), .over, "unlocked: someone is there")
+        XCTAssertEqual(S.trial(elapsed: 20, locked: true, remote: false), .nightAgain)
+        XCTAssertEqual(S.trial(elapsed: 5, locked: false, remote: true), .nightAgain, "a remote session: dark on the desk")
+    }
+
+    /// A night from before the restart ends; one from this boot, or an old
+    /// file without a boot time, stays.
+    func testNightEndsAfterRestart() {
+        var cfg = Config()
+        cfg.nightSleepsDisplays = false   // ending it would wake the real screens
+        cfg.save()
+        NightMode.write(NightMode.State(active: true, bootTime: 1))
+        XCTAssertTrue(NightMode.endIfStale())
+        XCTAssertFalse(NightMode.active)
+        NightMode.write(NightMode.State(active: true, bootTime: NightScreens.bootTime()))
+        XCTAssertFalse(NightMode.endIfStale())
+        XCTAssertTrue(NightMode.active)
+        NightMode.write(NightMode.State(active: true))
+        XCTAssertFalse(NightMode.endIfStale())
+    }
+
     // MARK: Factory defaults
 
     func testFactoryKeys() {

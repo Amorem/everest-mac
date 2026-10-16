@@ -477,7 +477,7 @@ extension L10n {
 
         // MARK: pad
         "night.displays": "Metti in stop anche gli schermi del Mac",
-        "night.displaysNote": "Solo gli schermi, non il Mac. Se macOS chiede la password quando lo schermo si spegne (impostazioni Blocco schermo), la sessione resta bloccata durante la notte.",
+        "night.displaysNote": "Solo gli schermi, non il Mac. Se macOS chiede la password quando lo schermo si spegne (impostazioni Blocco schermo), la sessione resta bloccata durante la notte. Risvegliarli alla scrivania (mouse, tastiera) riaccende tutto; se la sessione non viene sbloccata entro 20 secondi, la modalità notte riprende. Una sessione remota (RustDesk…) non lo fa: sulla scrivania gli schermi mostrano nero, l'immagine remota resta normale. Riavviare il Mac termina la modalità notte.",
         "action.night": "Modalità notte",
         "night.note": "Spegne l'illuminazione della tastiera e il DisplayPad e silenzia l'audio; premi di nuovo per ripristinare tutto.",
         "night.active": "Modalità notte attiva",

@@ -87,8 +87,13 @@ enum Daemon {
         // the profile: the keyboard session below, or the pad thread.
         ActionRunner.profileHandler = { ProfileRequest.post($0) }
 
+        // A night begun before a restart is over.
+        if NightMode.endIfStale() { log("night mode from before the restart: ended") }
+
         // The DisplayPad is a device of its own, served on its own thread.
         if !args.contains("--no-pad") { PadDaemon.start() }
+        // Night mode keeps the Mac's screens dark until the night key.
+        NightScreens.start()
 
         var waiting: String?
         while true {
@@ -142,6 +147,20 @@ enum Daemon {
             didSet { ActiveProfile.current = profile; nightApplied = nil }
         }
         ActiveProfile.current = profile
+        // A night that ended with no session to see it (a restart, a crash)
+        // may have left the keyboard dark: run the morning steps. Checked
+        // before the dial mode below, which rewrites the screens' bytes.
+        if !NightMode.active {
+            let own = cfg.profileIndex(profile).map { ProfileSwitch.slot(for: cfg.profiles[$0]) } ?? 0
+            let off = FirmwareLighting.Effect.off.slot
+            if kb.state().flatMap({ Proto.displayBytes($0.raw) }) == Proto.displaysOff
+                || (own != off && kb.lightingSlot() == off) {
+                nightApplied = true
+            }
+        }
+        // Night screens put back on (a dial mode switch from the app
+        // rewrites their bytes) are switched off again, three times a night.
+        var displaysFixes = 0
         let startMode = cfg.profileIndex(profile).flatMap { cfg.profiles[$0].dialMode } ?? cfg.mainDisplayMode
         if let mode = Proto.MainMode(rawValue: startMode) { kb.setMainMode(mode) }
         var lastProfileQuery = Date()
@@ -223,10 +242,11 @@ enum Daemon {
                     // the Off slot last; in the morning the profile's slot
                     // first, then the screens back to following the lighting.
                     let slot = night ? FirmwareLighting.Effect.off.slot : own
-                    if night { kb.setDisplays(off: true) }
+                    if night, !kb.setDisplays(off: true) { log("night mode: the keyboard did not switch its screens off") }
                     let reported = kb.switchLighting(profile: UInt8(profile), slot: slot)
                     if reported != slot { log("night mode: the keyboard reports lighting slot \(reported.map(String.init) ?? "?"), not \(slot)") }
-                    if !night && nightApplied != nil { kb.setDisplays(off: false) }
+                    if !night && nightApplied != nil, !kb.setDisplays(off: false) { log("night mode: the keyboard did not switch its screens back on") }
+                    if !night { displaysFixes = 0 }
                     if nightApplied != nil || night { log(night ? "night mode: lights off" : "night mode: lights back on") }
                     nightApplied = night
                 }
@@ -244,6 +264,12 @@ enum Daemon {
                     stderr("rx \(packet.prefix(16).map { String(format: "%02x", $0) }.joined(separator: " "))")
                 }
                 if packet[0] == 0x11 && packet.count > 1 && (packet[1] == 0x14 || packet[1] == 0x00) { lastReply = now }
+                if nightApplied == true, packet.count >= 33, packet[0] == 0x11, packet[1] == 0x14,
+                   Proto.displayBytes(packet) != Proto.displaysOff, displaysFixes < 3 {
+                    displaysFixes += 1
+                    log("night mode: the keyboard's screens are on — dark again")
+                    nightApplied = nil   // the night steps again, at the next check
+                }
                 if packet[0] == 0x11 && packet.count > 10 && packet[1] == 0x00, (1...5).contains(packet[10]) {
                     let p = Int(packet[10])
                     if p != profile {

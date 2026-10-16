@@ -477,7 +477,7 @@ extension L10n {
 
         // MARK: pad
         "night.displays": "Poner también en reposo las pantallas del Mac",
-        "night.displaysNote": "Solo las pantallas, no el Mac. Si macOS pide la contraseña al apagarse la pantalla (ajustes de Pantalla bloqueada), la sesión queda bloqueada durante la noche.",
+        "night.displaysNote": "Solo las pantallas, no el Mac. Si macOS pide la contraseña al apagarse la pantalla (ajustes de Pantalla bloqueada), la sesión queda bloqueada durante la noche. Despertarlas en el escritorio (ratón, teclado) lo enciende todo; si la sesión no se desbloquea en 20 segundos, el modo noche vuelve a empezar. Una sesión remota (RustDesk…) no lo hace: las pantallas muestran negro en el escritorio y la imagen remota sigue normal. Reiniciar el Mac termina el modo noche.",
         "action.night": "Modo noche",
         "night.note": "Apaga la iluminación del teclado y el DisplayPad y silencia el sonido; pulsa de nuevo para dejarlo todo como estaba.",
         "night.active": "Modo noche activo",

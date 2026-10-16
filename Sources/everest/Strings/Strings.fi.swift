@@ -477,7 +477,7 @@ extension L10n {
 
         // MARK: pad
         "night.displays": "Laita myös Macin näytöt lepoon",
-        "night.displaysNote": "Vain näytöt, ei Macia. Jos macOS kysyy salasanaa näytön sammuessa (Lukitusnäytön asetukset), istunto lukitaan yön ajaksi.",
+        "night.displaysNote": "Vain näytöt, ei Macia. Jos macOS kysyy salasanaa näytön sammuessa (Lukitusnäytön asetukset), istunto lukitaan yön ajaksi. Herättäminen paikan päällä (hiiri, näppäimistö) sytyttää kaiken; jos istuntoa ei avata 20 sekunnissa, yötila alkaa uudelleen. Etäistunto (RustDesk…) ei tee niin: näytöt näyttävät silloin paikan päällä mustaa, mutta etäkuva pysyy normaalina. Macin uudelleenkäynnistys lopettaa yötilan.",
         "action.night": "Yötila",
         "night.note": "Sammuttaa näppäimistön valot ja DisplayPadin ja mykistää äänen; paina uudelleen palauttaaksesi kaiken ennalleen.",
         "night.active": "Yötila päällä",

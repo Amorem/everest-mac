@@ -4,12 +4,15 @@ import Foundation
 /// Night mode: one key turns everything dark and silent, the same key brings
 /// it all back as it was. The state is a small file in the config directory,
 /// so the app, the daemon (keyboard and DisplayPad threads) and the CLI all
-/// see it, and it survives a restart overnight. Each part reacts on its own:
+/// see it. A restart ends it (`endIfStale`, run by the daemon as it starts).
+/// Each part reacts on its own:
 /// - the keyboard goes to its built-in "Off" lighting slot (a slot switch,
-///   nothing is saved to flash), then back to the profile's slot;
+///   nothing is saved to flash) with its dial and D1–D4 screens dark, then
+///   back to the profile's slot;
 /// - the DisplayPad backlight goes to 0 (the screen really switches off),
 ///   then back to the chosen brightness;
 /// - the app pauses Mac-rendered lighting;
+/// - the Mac's screens sleep, and stay dark until the key (`NightScreens`);
 /// - the Mac's sound is muted here, and unmuted only if we muted it.
 enum NightMode {
     struct State: Codable, Equatable {
@@ -18,6 +21,8 @@ enum NightMode {
         var mutedByUs = false
         /// Output without a mute control: the volume we set to 0.
         var savedVolume: Float32?
+        /// The boot it began in: a restart ends it.
+        var bootTime: Int?
     }
 
     static var url: URL { Config.directory.appendingPathComponent(".night.json") }
@@ -35,34 +40,45 @@ enum NightMode {
 
     /// The night-mode key.
     static func toggle() {
-        var state = read() ?? State(active: false)
-        let displays = Config.load().nightSleepsDisplays
-        defer {
-            // The Mac's screens: asleep once the keyboard and pad have gone
-            // dark (the daemon applies them within a few seconds), awake in
-            // the morning. Display sleep, not system sleep; macOS may lock
-            // the session depending on its "require password" setting.
-            if displays {
-                if state.active {
-                    run("/usr/bin/pmset", ["displaysleepnow"], after: 4)
-                } else {
-                    run("/usr/bin/caffeinate", ["-u", "-t", "2"], after: 0)
-                }
-            }
-        }
-        if state.active {
-            if state.mutedByUs { Audio.setMuted(false) }
-            if let v = state.savedVolume { Audio.setVolume(v) }
-            state = State(active: false)
-        } else {
-            state = State(active: true)
-            if let muted = Audio.isMuted() {
-                if !muted { state.mutedByUs = Audio.setMuted(true) }
-            } else if let v = Audio.volume(), v > 0, Audio.setVolume(0) {
-                state.savedVolume = v
-            }
+        if read()?.active == true { end() } else { begin() }
+    }
+
+    static func begin() {
+        var state = State(active: true, bootTime: NightScreens.bootTime())
+        if let muted = Audio.isMuted() {
+            if !muted { state.mutedByUs = Audio.setMuted(true) }
+        } else if let v = Audio.volume(), v > 0, Audio.setVolume(0) {
+            state.savedVolume = v
         }
         write(state)
+        // The Mac's screens, asleep once the keyboard and pad have gone dark
+        // (the daemon applies them within a few seconds). Display sleep, not
+        // system sleep; macOS may lock the session depending on its "require
+        // password" setting. Asleep, a remote session's picture would go
+        // black: `NightScreens` blacks the screens out instead.
+        if Config.load().nightSleepsDisplays, NightScreens.remoteSession() == nil {
+            run("/usr/bin/pmset", ["displaysleepnow"], after: 4)
+        }
+    }
+
+    /// Everything back as it was: sound here, the keyboard and the pad
+    /// through the state file, the screens woken.
+    static func end() {
+        guard let state = read(), state.active else { return }
+        if state.mutedByUs { Audio.setMuted(false) }
+        if let v = state.savedVolume { Audio.setVolume(v) }
+        write(State(active: false))
+        if Config.load().nightSleepsDisplays { run("/usr/bin/caffeinate", ["-u", "-t", "2"], after: 0) }
+    }
+
+    /// A night begun before the last restart is over: a reboot brings
+    /// everything back. Returns whether there was one to end.
+    @discardableResult
+    static func endIfStale() -> Bool {
+        guard let state = read(), state.active, let boot = state.bootTime,
+              boot != NightScreens.bootTime() else { return false }
+        end()
+        return true
     }
 
     private static func run(_ tool: String, _ args: [String], after delay: TimeInterval) {

@@ -477,7 +477,7 @@ extension L10n {
 
         // MARK: pad
         "night.displays": "Pôr também os ecrãs do Mac em repouso",
-        "night.displaysNote": "Só os ecrãs, não o Mac. Se o macOS pedir a palavra-passe quando o ecrã se desliga (definições de Ecrã bloqueado), a sessão fica bloqueada durante a noite.",
+        "night.displaysNote": "Só os ecrãs, não o Mac. Se o macOS pedir a palavra-passe quando o ecrã se desliga (definições de Ecrã bloqueado), a sessão fica bloqueada durante a noite. Acordá-los na secretária (rato, teclado) acende tudo; se a sessão não for desbloqueada em 20 segundos, o modo noite recomeça. Uma sessão remota (RustDesk…) não o faz: os ecrãs mostram preto na secretária e a imagem remota mantém-se normal. Reiniciar o Mac termina o modo noite.",
         "action.night": "Modo noite",
         "night.note": "Desliga a iluminação do teclado e o DisplayPad e silencia o som; prima de novo para repor tudo como estava.",
         "night.active": "Modo noite ativo",

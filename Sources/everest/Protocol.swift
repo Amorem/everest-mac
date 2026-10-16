@@ -83,21 +83,30 @@ enum Proto {
         return p
     }
 
-    /// The `11 14` settings block written back with new display brightness
-    /// bytes (SDKDLL `SetExtendInfo`): the reply to `11 14 00 00` echoed with
-    /// the write flag, bytes 23–32 replaced. They are five (dial, numpad)
-    /// pairs, one per lighting slot: `00` = follow the lighting brightness,
-    /// `80 | v` = fixed v % (rounded to 0/25/50/75/100 by the firmware).
-    /// Base Camp writes `80 80` when a profile's lighting is Off. A settings
-    /// write, not a picture or sector write; no SaveFlash follows it.
+    /// The `11 14` settings write with new display brightness bytes (SDKDLL
+    /// `SetExtendInfo`): the mode switch above, on the dial mode the keyboard
+    /// reports, with bytes 23–32 set. They are five (dial, numpad) pairs, one
+    /// per lighting slot: `00` = follow the lighting brightness, `80 | v` =
+    /// fixed v % (rounded to 0/25/50/75/100 by the firmware). Base Camp
+    /// writes `80 80` when a profile's lighting is Off. The reply itself does
+    /// not work as a template: its bytes 4 and 20 say what is attached
+    /// (`01`), where a write needs `02`, and the keyboard ignores it. A
+    /// settings write, not a picture or sector write; no SaveFlash follows it.
     static func displayBrightness(from settings: [UInt8], byte: UInt8) -> [UInt8]? {
         guard settings.count >= 33, settings[0] == 0x11, settings[1] == 0x14 else { return nil }
-        var p = Array(settings.prefix(packetSize))
-        while p.count < packetSize { p.append(0) }
-        p[2] = 0x00
-        p[3] = 0x01
+        let state = DeviceState(raw: settings)
+        guard let mode = MainMode.allCases.first(where: { $0.menuByte == state.modeByte }) else { return nil }
+        var p = modeSwitch(deviceBytes: state.deviceBytes, mode: mode)
         for i in 23...32 { p[i] = byte }
         return p
+    }
+
+    /// The display brightness byte a settings block holds, when all ten are
+    /// the same.
+    static func displayBytes(_ settings: [UInt8]) -> UInt8? {
+        guard settings.count >= 33, settings[0] == 0x11, settings[1] == 0x14 else { return nil }
+        let b = settings[23]
+        return settings[23...32].allSatisfy { $0 == b } ? b : nil
     }
 
     /// Display brightness bytes: dark (fixed 0 %), or following the lighting

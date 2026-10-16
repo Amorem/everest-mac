@@ -130,18 +130,23 @@ final class Keyboard {
     }
 
     /// Dial and D1–D4 screens dark (`off`) or back to following the
-    /// lighting. Read-modify-write of the `11 14` settings block, so the
-    /// keyboard's own bytes are kept. Returns whether it was sent.
+    /// lighting: the settings write, then the block read back until the
+    /// keyboard reports the new bytes. Returns whether it did.
     @discardableResult
     func setDisplays(off: Bool) -> Bool {
-        guard let raw = state()?.raw,
-              let p = Proto.displayBrightness(from: raw, byte: off ? Proto.displaysOff : Proto.displaysFollowLighting)
-        else { return false }
+        let byte = off ? Proto.displaysOff : Proto.displaysFollowLighting
+        guard let raw = state()?.raw, let p = Proto.displayBrightness(from: raw, byte: byte) else { return false }
+        if Proto.displayBytes(raw) == byte { return true }
         try? transport.write(p)
         // Base Camp gives SetExtendInfo up to 2.8 s; a command sent while
-        // the keyboard is still applying it is dropped.
-        _ = waitReply(0x14, timeout: 3)
-        return true
+        // the keyboard is still applying it is dropped (a lost read here is
+        // simply asked again).
+        let deadline = Date().addingTimeInterval(3)
+        while Date() < deadline {
+            Thread.sleep(forTimeInterval: 0.3)
+            if let s = state(), Proto.displayBytes(s.raw) == byte { return true }
+        }
+        return false
     }
 
     /// Lighting slot of the active profile, then check the keyboard is on

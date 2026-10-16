@@ -190,15 +190,23 @@ final class ProtocolTests: XCTestCase {
     /// Night mode: the settings block echoed with the write flag, only the
     /// ten display brightness bytes changed.
     func testDisplayBrightness() throws {
-        var reply = Proto.packet([0x11, 0x14, 0x00, 0x00, 0x02, 0xFF, 0x00, 0xF3, 0xCC, 0x23, 0x11, 0x1E])
-        for i in 23...32 { reply[i] = 0xE4 }
+        // A reply read from the keyboard: dock and numpad attached (01 at
+        // bytes 4 and 20), dial on volume (71).
+        var reply = Proto.packet([0x11, 0x14, 0x00, 0x00, 0x01, 0xFF, 0x41, 0x00, 0x76, 0xCC, 0x71, 0x1E, 0x00, 0x1E, 0x00, 0x01,
+                                  0x12, 0x13, 0x14, 0x15, 0x01, 0x00, 0x32])
+        XCTAssertEqual(Proto.displayBytes(reply), 0x00)
         let off = try XCTUnwrap(Proto.displayBrightness(from: reply, byte: Proto.displaysOff))
-        XCTAssertEqual(Array(off[0...3]), [0x11, 0x14, 0x00, 0x01], "write flag")
-        XCTAssertEqual(Array(off[4...22]), Array(reply[4...22]), "the keyboard's own bytes are kept")
-        XCTAssertTrue(off[23...32].allSatisfy { $0 == 0x80 })
-        XCTAssertTrue(off[33...].allSatisfy { $0 == 0 })
+        var expected = Proto.modeSwitch(deviceBytes: [0x00, 0x76, 0xCC], mode: .volume)
+        for i in 23...32 { expected[i] = 0x80 }
+        XCTAssertEqual(off, expected, "the mode switch on the current mode, not the reply echoed (the keyboard ignores that)")
+        XCTAssertEqual(Array(off[0...5]), [0x11, 0x14, 0x00, 0x01, 0x02, 0xFF])
+        XCTAssertEqual(Proto.displayBytes(off), 0x80)
         let back = try XCTUnwrap(Proto.displayBrightness(from: reply, byte: Proto.displaysFollowLighting))
         XCTAssertTrue(back[23...32].allSatisfy { $0 == 0x00 })
+        reply[10] = 0x42
+        XCTAssertNil(Proto.displayBrightness(from: reply, byte: 0x80), "unknown dial mode: nothing written")
+        reply[24] = 0x80
+        XCTAssertNil(Proto.displayBytes(reply), "mixed bytes")
         XCTAssertNil(Proto.displayBrightness(from: Proto.packet([0x11, 0x00]), byte: 0x80), "not a settings reply")
     }
 }

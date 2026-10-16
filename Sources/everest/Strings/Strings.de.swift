@@ -477,7 +477,7 @@ extension L10n {
 
         // MARK: pad
         "night.displays": "Auch die Bildschirme des Mac in den Ruhezustand versetzen",
-        "night.displaysNote": "Nur die Bildschirme, nicht der Mac. Verlangt macOS beim Ausschalten des Displays das Passwort (Einstellungen „Sperrbildschirm“), wird die Sitzung über Nacht gesperrt.",
+        "night.displaysNote": "Nur die Bildschirme, nicht der Mac. Verlangt macOS beim Ausschalten des Displays das Passwort (Einstellungen „Sperrbildschirm“), wird die Sitzung über Nacht gesperrt. Werden sie vor Ort geweckt (Maus, Tastatur), geht alles wieder an; wird die Sitzung nicht innerhalb von 20 Sekunden entsperrt, beginnt der Nachtmodus erneut. Eine Fernsteuerung (RustDesk…) tut das nicht: Die Bildschirme zeigen dann vor Ort Schwarz, das Bild aus der Ferne bleibt normal. Ein Neustart des Mac beendet den Nachtmodus.",
         "action.night": "Nachtmodus",
         "night.note": "Schaltet die Tastaturbeleuchtung und das DisplayPad aus und den Ton stumm; erneut drücken stellt alles wieder her.",
         "night.active": "Nachtmodus an",

@@ -477,7 +477,7 @@ extension L10n {
 
         // MARK: pad
         "night.displays": "Försätt även Macens skärmar i vila",
-        "night.displaysNote": "Bara skärmarna, inte Macen. Om macOS kräver lösenord när skärmen stängs av (inställningar för Låsskärm) låses sessionen under natten.",
+        "night.displaysNote": "Bara skärmarna, inte Macen. Om macOS kräver lösenord när skärmen stängs av (inställningar för Låsskärm) låses sessionen under natten. Väcks de vid skrivbordet (mus, tangentbord) tänds allt igen; låses sessionen inte upp inom 20 sekunder börjar nattläget om. En fjärrsession (RustDesk…) gör inte det: skärmarna visar då svart vid skrivbordet medan fjärrbilden är normal. En omstart av Macen avslutar nattläget.",
         "action.night": "Nattläge",
         "night.note": "Släcker tangentbordsbelysningen och DisplayPad och stänger av ljudet; tryck igen för att återställa allt.",
         "night.active": "Nattläge på",
