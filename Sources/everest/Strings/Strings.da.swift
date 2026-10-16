@@ -490,7 +490,7 @@ extension L10n {
         "mrr.unauthorized": "Tokenet blev afvist: tjek det, eller opret et nyt.",
         "mrr.failed": "Kunne ikke nå MRRCalendar (%1$@).",
         "night.displays": "Sæt også Mac'ens skærme i dvale",
-        "night.displaysNote": "Kun skærmene, ikke Mac'en. Hvis macOS kræver adgangskode, når skærmen slukkes (indstillinger for Låst skærm), låses sessionen om natten.",
+        "night.displaysNote": "Kun skærmene, ikke Mac'en. Hvis macOS kræver adgangskode, når skærmen slukkes (indstillinger for Låst skærm), låses sessionen om natten. Vækkes de ved skrivebordet (mus, tastatur), tændes alt igen; låses sessionen ikke op inden for 20 sekunder, starter nattilstand igen. En fjernsession (RustDesk…) gør det ikke: skærmene viser da sort ved skrivebordet, mens fjernbilledet er normalt. En genstart af Mac'en afslutter nattilstand.",
         "action.night": "Nattilstand",
         "night.note": "Slukker tastaturlyset og DisplayPad og slår lyden fra; tryk igen for at få det hele tilbage som før.",
         "night.active": "Nattilstand til",

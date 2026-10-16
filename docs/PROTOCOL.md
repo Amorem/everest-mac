@@ -157,8 +157,13 @@ menu colour (RGB), byte 10 the screensaver type (high nibble) with
 "turn off" (bit 1) and "screensaver" (bit 0) enables, bytes 11–12 and 13–14
 the screensaver and turn-off delays in seconds (LE).
 
-Night mode reads the block (`11 14 00 00`), writes it back with the write
-flag and `80` in those ten bytes, and puts `00` back in the morning. The
+Night mode writes the dial mode switch above (on the mode the keyboard
+reports) with `80` in those ten bytes, reads the block back until it shows
+them, and puts `00` back in the morning. Echoing the reply itself with the
+write flag does not work: the reply has `01` at bytes 4 and 20 (dock and
+numpad attached) where a write has `02`, and the keyboard ignores it
+(verified on hardware). Any mode switch also writes `00` there, so it puts
+the screens back on. The
 keyboard takes up to a few seconds to apply a settings write and drops a
 command sent meanwhile; it also re-applies the key lighting, so at night the
 screens are dimmed first and the lighting switched to its Off slot (8) last,

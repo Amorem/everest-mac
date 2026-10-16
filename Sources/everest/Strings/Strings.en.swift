@@ -490,7 +490,7 @@ extension L10n {
         "mrr.unauthorized": "The token was refused: check it, or create a new one.",
         "mrr.failed": "Could not reach MRRCalendar (%1$@).",
         "night.displays": "Also put the Mac's screens to sleep",
-        "night.displaysNote": "Screens only, not the Mac. If macOS asks for the password when the display turns off (Lock Screen settings), the session is locked overnight.",
+        "night.displaysNote": "Screens only, not the Mac. If macOS asks for the password when the display turns off (Lock Screen settings), the session is locked overnight. Waking them on the desk (mouse, keyboard) brings everything back; if the session is not unlocked within 20 seconds, night mode starts again. A remote session (RustDesk…) does not: the screens then show black on the desk while the remote picture stays normal. Restarting the Mac ends night mode.",
         "action.night": "Night mode",
         "night.note": "Turns the keyboard lights and the DisplayPad off and mutes the sound; press again to bring everything back as it was.",
         "night.active": "Night mode on",

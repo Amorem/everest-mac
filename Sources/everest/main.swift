@@ -503,6 +503,15 @@ let rest = Array(rawArgs.dropFirst())
 
 switch command {
 case "info": Command.info()
+case "displays":
+    // Dev aid: the dial and D1–D4 screens dark or back to the lighting, as
+    // night mode does, and the bytes the keyboard reports afterwards.
+    let kb: Keyboard
+    do { kb = try Keyboard() } catch { fail("Error: \(error)") }
+    print(kb.setDisplays(off: rest.first == "off") ? "sent" : "not sent")
+    Thread.sleep(forTimeInterval: 3)
+    print("bytes 23-32:", kb.state().map { $0.raw[23...32].map { String(format: "%02x", $0) }.joined(separator: " ") } ?? "?")
+    kb.close()
 case "clock": Command.clock(rest)
 case "mode": Command.mode(rest)
 case "image": Command.image(rest)

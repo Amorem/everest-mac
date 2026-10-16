@@ -490,7 +490,7 @@ extension L10n {
         "mrr.unauthorized": "Le jeton a été refusé : vérifiez-le ou créez-en un nouveau.",
         "mrr.failed": "Impossible de joindre MRRCalendar (%1$@).",
         "night.displays": "Mettre aussi les écrans du Mac en veille",
-        "night.displaysNote": "Les écrans seulement, pas le Mac. Si macOS demande le mot de passe à l'extinction de l'écran (réglages Écran verrouillé), la session est verrouillée pendant la nuit.",
+        "night.displaysNote": "Les écrans seulement, pas le Mac. Si macOS demande le mot de passe à l'extinction de l'écran (réglages Écran verrouillé), la session est verrouillée pendant la nuit. Les réveiller sur place (souris, clavier) rallume tout ; si la session n'est pas déverrouillée dans les 20 secondes, le mode nuit reprend. Une prise en main à distance (RustDesk…) ne le fait pas : les écrans affichent alors du noir sur place, l'image à distance reste normale. Redémarrer le Mac met fin au mode nuit.",
         "action.night": "Mode nuit",
         "night.note": "Éteint l'éclairage du clavier et le DisplayPad et coupe le son ; un nouvel appui rallume tout comme avant.",
         "night.active": "Mode nuit actif",
