@@ -2,7 +2,9 @@ name: build
 on: [push, pull_request]
 jobs:
   build:
-    runs-on: macos-14
+    # Self-hosted Mac Studio runner on a public fork: never run code from a fork's PR.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: [self-hosted, macOS, ARM64, everest, macstudio]
     steps:
       - uses: actions/checkout@v4
       - name: Unit tests (no keyboard needed)
