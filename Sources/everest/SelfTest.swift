@@ -210,8 +210,8 @@ enum SelfTest {
         check("host mode answered (11 80)", true, String(format: "%.1f s", Date().timeIntervalSince(started)))
         if let v = pad.firmware {
             check("firmware info answered (11 00)", true, "firmware \(PadProto.firmwareString(v))")
-            check("firmware is the tested one", v == PadProto.supportedFirmware,
-                  "tested: \(PadProto.firmwareString(PadProto.supportedFirmware))")
+            check("firmware is a tested one", PadProto.isSupported(v),
+                  "tested: \(PadProto.supportedFirmwareList)")
         } else {
             check("firmware info answered (11 00)", false)
         }

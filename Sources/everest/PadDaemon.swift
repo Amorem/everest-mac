@@ -308,8 +308,8 @@ enum PadCommand {
             case "info":
                 print("DisplayPad 3282:0009")
                 print("  firmware   \(pad.firmware.map(PadProto.firmwareString) ?? "unknown")"
-                      + (pad.firmware == PadProto.supportedFirmware ? " (tested)" : " (NOT tested: read-only)"))
-                if pad.firmware == PadProto.supportedFirmware, let b = try pad.brightness() { print("  backlight  \(b) %") }
+                      + (PadProto.isSupported(pad.firmware) ? " (tested)" : " (NOT tested: read-only)"))
+                if PadProto.isSupported(pad.firmware), let b = try pad.brightness() { print("  backlight  \(b) %") }
             case "image":
                 try pad.setKeyImage(key(rest[0]), bgr: ImageTools.padBGR(path: rest[1]))
                 print("Key \(rest[0]) updated (until the pad is unplugged)")

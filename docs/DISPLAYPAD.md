@@ -36,8 +36,15 @@ because no kernel driver claims it.
 ## Firmware gate
 
 The pad answers `11 00` whether or not it is in host mode, so the firmware is
-read first and nothing else is sent unless it is the tested version (8). The
-daemon then leaves an unsupported pad alone until it is plugged in again.
+read first and nothing else is sent unless it is a tested version
+(`PadProto.supportedFirmwares`: 8, and 4). The daemon then leaves an
+unsupported pad alone until it is plugged in again.
+
+Firmware 4 is the launch firmware. Base Camp 1.9.10 (September 2026) no longer
+offers an update for it: its update check asks Mountain's server, which
+answers "no firmware available", and the installer carries no firmware file.
+A pad on firmware 4 passed `everest selftest --pad --draw` and showed and ran
+all twelve keys of a real configuration.
 
 ## Sharing the pad
 

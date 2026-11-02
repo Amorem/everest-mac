@@ -75,7 +75,7 @@ hardware a job.
 | Mountain Everest Max (keyboard + numpad + media dock) | `3282:0001` | Developed and tested on a **UK-ISO** board, **firmware 57 — the only firmware Everest will talk to** (see [Firmware](#firmware)) |
 | Other Everest Max layouts (US, FR, DE, IT, Nordic, ES, PT, Hebrew, Korean) | `3282:0001` | Detected and drawn from Base Camp's own tables, **not tested on hardware** |
 | Everest Core | `3282:0001` | The same keyboard without the modules; **untested** |
-| Mountain DisplayPad | `3282:0009` | Tested on **firmware 8** (the only one Everest writes to); see [docs/DISPLAYPAD.md](docs/DISPLAYPAD.md) |
+| Mountain DisplayPad | `3282:0009` | Tested on **firmware 8** and **firmware 4** (the only ones Everest writes to); see [docs/DISPLAYPAD.md](docs/DISPLAYPAD.md) |
 | Everest 60, Makalu mice, MacroPad | other ids | **Not supported** — different protocols |
 
 If you own a layout or a model that is not verified, a report (even just the

@@ -114,7 +114,7 @@ final class DisplayPad {
             case .notFound: return "DisplayPad not found (VID:PID 3282:0009)"
             case .noAnswer: return "the DisplayPad did not answer (still starting up, or on an unpowered hub)"
             case .unsupportedFirmware(let v):
-                return "DisplayPad firmware \(PadProto.firmwareString(v)) is not supported (tested: \(PadProto.firmwareString(PadProto.supportedFirmware)))"
+                return "DisplayPad firmware \(PadProto.firmwareString(v)) is not supported (tested: \(PadProto.supportedFirmwareList))"
             case .refused(let p): return String(format: "refused to send command %02x %02x to the DisplayPad", p[0], p[1])
             case .imageRejected(let k): return "the DisplayPad did not take the picture for key \(k + 1)"
             }
@@ -157,7 +157,7 @@ final class DisplayPad {
                 }
             } while firmware == nil && Date() < deadline
             guard let v = firmware else { throw PadError.noAnswer }
-            guard v == PadProto.supportedFirmware else {
+            guard PadProto.isSupported(v) else {
                 if allowUnsupported { return }
                 throw PadError.unsupportedFirmware(v)
             }
@@ -248,7 +248,7 @@ final class DisplayPad {
     /// `drawn` is told each key as soon as the pad has taken it.
     func setKeyImages(_ images: [(key: Int, bgr: [UInt8])], drawn: ((Int) -> Void)? = nil) throws {
         guard !images.isEmpty else { return }
-        guard firmware == PadProto.supportedFirmware else { throw PadError.unsupportedFirmware(firmware ?? 0) }
+        guard PadProto.isSupported(firmware) else { throw PadError.unsupportedFirmware(firmware ?? 0) }
         let pipe = try openPipe()
         defer { pipe.close() }
         for (key, bgr) in images {

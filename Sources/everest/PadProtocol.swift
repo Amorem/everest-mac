@@ -15,8 +15,17 @@ enum PadProto {
     static let keyCount = 12
     static let columns = 6
     static let keySide = 102
-    /// Firmware this code was tested with (`11 00` reply, bytes 4–5, BCD).
-    static let supportedFirmware: UInt16 = 0x0008
+    /// Firmware versions this code was tested with (`11 00` reply, bytes 4–5,
+    /// BCD): 8, and 4, the launch firmware, which Base Camp no longer offers to
+    /// update (its update server answers "no firmware available").
+    static let supportedFirmwares: [UInt16] = [0x0004, 0x0008]
+
+    static func isSupported(_ firmware: UInt16?) -> Bool {
+        firmware.map(supportedFirmwares.contains) ?? false
+    }
+
+    /// The tested versions as printed ("4, 8").
+    static var supportedFirmwareList: String { supportedFirmwares.map(firmwareString).joined(separator: ", ") }
 
     static let pixelChunk = 1024
     static let pixelChunks = 31

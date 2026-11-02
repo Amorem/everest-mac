@@ -66,6 +66,19 @@ final class PadTests: XCTestCase {
         let fw = PadProto.packet([0x11, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x06, 0x00, 0x01])
         XCTAssertEqual(PadProto.firmwareVersion(fw), 0x0008)
         XCTAssertEqual(PadProto.firmwareString(0x0008), "8")
+    }
+
+    /// Only the firmware versions checked on hardware may be written to.
+    func testFirmwareGate() {
+        XCTAssertTrue(PadProto.isSupported(0x0004))
+        XCTAssertTrue(PadProto.isSupported(0x0008))
+        XCTAssertFalse(PadProto.isSupported(0x0007))
+        XCTAssertFalse(PadProto.isSupported(0x0010))
+        XCTAssertFalse(PadProto.isSupported(nil))
+        XCTAssertEqual(PadProto.supportedFirmwareList, "4, 8")
+    }
+
+    func testReplyValues() {
         XCTAssertEqual(PadProto.brightness(PadProto.packet([0x12, 0x00, 0x00, 0x01, 0x01, 0x4B])), 75)
         XCTAssertTrue(PadProto.isImageReady(PadProto.packet([0x21, 0x00, 0x00, 0x00, 0x00, 0x3D])))
         XCTAssertTrue(PadProto.isImageDone(PadProto.packet([0x21, 0x00, 0xFF, 0xFF, 0xFF, 0xFF])))
