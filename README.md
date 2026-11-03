@@ -162,10 +162,11 @@ To open at login, tick **System → Launch Everest at login**
   linked apps. **Lighting** — keyboard effects and Mac effects.
   **Displays** — dial mode, clock, images. **Touches D1–D4** — actions, presets,
   icons. **Layout** — detected layout and the matching macOS input source.
-  **System** — daemon, login item, recovery.
+  **System** — application preferences, D1–D4 start/stop, login item and
+  troubleshooting for interrupted image transfers.
 - Closing the window keeps Everest running in the menu bar (profile switcher,
-  lighting, D1–D4 on/off). ⌘Q or the menu's *Quit Everest* quits for real.
-- Enable **Hide Dock icon** in the menu-bar menu or **System → Application**
+  lighting, Open Everest, About and Quit). ⌘Q or the menu's *Quit Everest* quits for real.
+- Enable **Hide Dock icon** in **System → Application**
   to keep Everest out of the Dock even with its window open. The choice is
   saved; use **Open Everest…** in the menu bar to bring the window back.
 - Defaults for D1–D4 are the factory behaviour (Base Camp's own pictures):

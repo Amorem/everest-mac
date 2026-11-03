@@ -14,6 +14,7 @@ extension L10n {
         "action.url": "Link",
 
         // MARK: app
+        "app.about": "Informazioni su Everest",
         "app.closeWindow": "Chiudi finestra",
         "app.copy": "Copia",
         "app.cut": "Taglia",
@@ -444,7 +445,7 @@ extension L10n {
         "system.autostartHint": "Avvio automatico al login: ./install-daemon.sh dal Terminale.",
         "system.background": "Everest lavora in background, dalla barra dei menu",
         "system.daemonSubtitle": "Esegue le azioni di D1–D4 e invia i valori al dial",
-        "system.daemonTitle": "Daemon dei tasti",
+        "system.daemonTitle": "Azioni D1–D4 e DisplayPad",
         "system.hideDockIcon": "Nascondi l’icona nel Dock",
         "system.hideDockIconNote": "Everest resta accessibile dalla barra dei menu, anche con la finestra aperta. Riaprila da questa icona.",
         "system.keepRunning": "Mantieni Everest attivo quando chiudo la finestra",
@@ -465,8 +466,9 @@ extension L10n {
         "system.openSettings": "Apri Impostazioni",
         "system.sendMetrics": "Invia CPU, GPU, RAM, disco, rete e volume",
         "system.stoppedState": "Fermo",
-        "system.unlock": "Sblocca la tastiera",
-        "system.unlockNote": "«Sblocca» invia il reset dell'SDK se un trasferimento di immagine è stato interrotto. Se non basta, scollega e ricollega la tastiera: non si perde nulla.",
+        "system.troubleshooting": "Risoluzione dei problemi",
+        "system.unlock": "Reimposta un trasferimento di immagine bloccato",
+        "system.unlockNote": "Solo se la tastiera non risponde dopo un trasferimento di immagine interrotto. Prova prima a scollegarla e ricollegarla. Questo comando reimposta il trasferimento e le immagini degli schermi; le impostazioni salvate in Everest vengono conservate.",
 
         // MARK: upload
         "upload.phase.connect": "Connessione alla tastiera",

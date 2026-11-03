@@ -20,19 +20,22 @@ final class BlockItem: NSMenuItem {
 }
 
 /// The menu-bar icon: Everest keeps working with the window closed, and the
-/// basics — profile, lighting, the D1–D4 listener, login item — are one click
-/// away.
+/// frequent actions — profile and lighting — are one click away. Application
+/// preferences and the key listener are managed inside the main window.
 @MainActor
 final class StatusBarController: NSObject, NSMenuDelegate {
     private let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     private let model: EverestModel
     private let openWindow: (Section?) -> Void
+    private let about: () -> Void
     private let quit: () -> Void
     private var bag = Set<AnyCancellable>()
 
-    init(model: EverestModel, openWindow: @escaping (Section?) -> Void, quit: @escaping () -> Void) {
+    init(model: EverestModel, openWindow: @escaping (Section?) -> Void,
+         about: @escaping () -> Void, quit: @escaping () -> Void) {
         self.model = model
         self.openWindow = openWindow
+        self.about = about
         self.quit = quit
         super.init()
         let menu = NSMenu()
@@ -60,25 +63,6 @@ final class StatusBarController: NSObject, NSMenuDelegate {
 
     func menuNeedsUpdate(_ menu: NSMenu) {
         menu.removeAllItems()
-
-        let status = model.connected ? model.attached : tr("menu.disconnected")
-        let header = NSMenuItem(title: "Everest — \(status)", action: nil, keyEquivalent: "")
-        header.isEnabled = false
-        menu.addItem(header)
-
-        if model.firmwareBlock != nil {
-            let warn = NSMenuItem(title: tr("menu.firmwareBlocked"), action: nil, keyEquivalent: "")
-            warn.image = NSImage(systemSymbolName: "exclamationmark.shield.fill", accessibilityDescription: nil)
-            warn.isEnabled = false
-            menu.addItem(warn)
-        }
-
-        if !model.accessibilityOK {
-            menu.addItem(BlockItem(tr("menu.allowAccessibility"), symbol: "exclamationmark.triangle.fill") { [model] in
-                model.openAccessibilitySettings()
-            })
-        }
-        menu.addItem(.separator())
 
         // Profiles
         let profiles = NSMenu()
@@ -126,34 +110,10 @@ final class StatusBarController: NSObject, NSMenuDelegate {
         lightItem.submenu = lighting
         menu.addItem(lightItem)
 
-        // Listener
-        menu.addItem(BlockItem(tr("daemon.keysActive"), symbol: "square.grid.2x2.fill", checked: model.daemonActive) { [model] in
-            model.toggleDaemon()
-        })
-
         menu.addItem(.separator())
 
-        // Language
-        let languages = NSMenu()
-        languages.addItem(BlockItem(tr("settings.language.automatic"), checked: model.language == nil) { [model] in
-            model.setLanguage(nil)
-        })
-        languages.addItem(.separator())
-        for l in Language.allCases {
-            languages.addItem(BlockItem(l.nativeName, checked: model.language == l) { [model] in model.setLanguage(l) })
-        }
-        let langItem = NSMenuItem(title: tr("settings.language.title"), action: nil, keyEquivalent: "")
-        langItem.image = NSImage(systemSymbolName: "globe", accessibilityDescription: nil)
-        langItem.submenu = languages
-        menu.addItem(langItem)
-
         menu.addItem(BlockItem(tr("menu.open"), symbol: "macwindow", key: "o") { [openWindow] in openWindow(nil) })
-        menu.addItem(BlockItem(tr("system.hideDockIcon"), symbol: "dock.rectangle", checked: model.config.hideDockIcon) { [model] in
-            model.setHideDockIcon(!model.config.hideDockIcon)
-        })
-        menu.addItem(BlockItem(tr("menu.launchAtLogin"), symbol: "power", checked: model.launchAtLogin) { [model] in
-            model.setLaunchAtLogin(!model.launchAtLogin)
-        })
+        menu.addItem(BlockItem(tr("app.about"), symbol: "info.circle") { [about] in about() })
         menu.addItem(.separator())
         menu.addItem(BlockItem(tr("app.quit"), key: "q") { [quit] in quit() })
     }

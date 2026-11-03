@@ -14,6 +14,7 @@ extension L10n {
         "action.url": "קישור",
 
         // MARK: app
+        "app.about": "אודות Everest",
         "app.closeWindow": "סגור חלון",
         "app.copy": "העתק",
         "app.cut": "גזור",
@@ -444,7 +445,7 @@ extension L10n {
         "system.autostartHint": "הפעלה אוטומטית בעת כניסה: ‎./install-daemon.sh מה-Terminal.",
         "system.background": "Everest פועל ברקע, משורת התפריטים",
         "system.daemonSubtitle": "מריץ את פעולות D1–D4 ושולח ערכים לחוגה",
-        "system.daemonTitle": "daemon המקשים",
+        "system.daemonTitle": "פעולות D1–D4 ו-DisplayPad",
         "system.hideDockIcon": "הסתרת הסמל ב-Dock",
         "system.hideDockIconNote": "Everest נשאר נגיש בשורת התפריטים גם כשהחלון פתוח. ניתן לפתוח אותו שוב דרך הסמל בשורת התפריטים.",
         "system.keepRunning": "השאר את Everest פועל כשאני סוגר את החלון",
@@ -465,8 +466,9 @@ extension L10n {
         "system.openSettings": "פתח הגדרות",
         "system.sendMetrics": "שלח CPU, GPU, RAM, דיסק, רשת ועוצמת שמע",
         "system.stoppedState": "נעצר",
-        "system.unlock": "שחרור המקלדת",
-        "system.unlockNote": "“שחרור” שולח את איפוס ה-SDK אם העברת תמונה הופסקה. אם זה לא מספיק, נתק וחבר את המקלדת מחדש: דבר לא הולך לאיבוד.",
+        "system.troubleshooting": "פתרון בעיות",
+        "system.unlock": "איפוס העברת תמונה שנתקעה",
+        "system.unlockNote": "רק אם המקלדת הפסיקה להגיב לאחר שהעברת תמונה נקטעה. תחילה כדאי לנתק ולחבר אותה מחדש. הפקודה מאפסת את ההעברה ואת תמונות המסכים; ההגדרות שנשמרו ב-Everest נשמרות.",
 
         // MARK: upload
         "upload.phase.connect": "מתחבר למקלדת",

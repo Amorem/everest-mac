@@ -14,6 +14,7 @@ extension L10n {
         "action.url": "링크",
 
         // MARK: app
+        "app.about": "Everest 정보",
         "app.closeWindow": "윈도우 닫기",
         "app.copy": "복사",
         "app.cut": "오려두기",
@@ -444,7 +445,7 @@ extension L10n {
         "system.autostartHint": "로그인 시 자동 시작: 터미널에서 ./install-daemon.sh 실행.",
         "system.background": "Everest는 메뉴 막대에서 백그라운드로 작동합니다",
         "system.daemonSubtitle": "D1–D4 동작을 실행하고 다이얼에 값을 보냅니다",
-        "system.daemonTitle": "키 데몬",
+        "system.daemonTitle": "D1–D4 및 DisplayPad 동작",
         "system.hideDockIcon": "Dock 아이콘 숨기기",
         "system.hideDockIconNote": "창이 열려 있어도 메뉴 막대에서 Everest에 접근할 수 있습니다. 메뉴 막대 아이콘에서 창을 다시 여세요.",
         "system.keepRunning": "윈도우를 닫아도 Everest 계속 실행",
@@ -465,8 +466,9 @@ extension L10n {
         "system.openSettings": "설정 열기",
         "system.sendMetrics": "CPU, GPU, RAM, 디스크, 네트워크, 볼륨 보내기",
         "system.stoppedState": "중지됨",
-        "system.unlock": "키보드 잠금 해제",
-        "system.unlockNote": "이미지 전송이 중단된 경우 “잠금 해제”가 SDK 리셋을 보냅니다. 그래도 해결되지 않으면 키보드를 뽑았다가 다시 연결하세요. 잃는 것은 없습니다.",
+        "system.troubleshooting": "문제 해결",
+        "system.unlock": "멈춘 이미지 전송 초기화",
+        "system.unlockNote": "이미지 전송이 중단된 후 키보드가 응답하지 않을 때만 사용하세요. 먼저 키보드를 분리한 후 다시 연결해 보세요. 이 명령은 전송과 화면 이미지를 초기화하며 Everest에 저장된 설정은 유지합니다.",
 
         // MARK: upload
         "upload.phase.connect": "키보드에 연결 중",

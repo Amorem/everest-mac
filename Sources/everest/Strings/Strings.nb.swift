@@ -14,6 +14,7 @@ extension L10n {
         "action.url": "Lenke",
 
         // MARK: app
+        "app.about": "Om Everest",
         "app.closeWindow": "Lukk vindu",
         "app.copy": "Kopier",
         "app.cut": "Klipp ut",
@@ -444,7 +445,7 @@ extension L10n {
         "system.autostartHint": "Automatisk start ved pålogging: ./install-daemon.sh fra Terminal.",
         "system.background": "Everest jobber i bakgrunnen, fra menylinjen",
         "system.daemonSubtitle": "Kjører D1–D4-handlingene og sender verdier til dreieknappen",
-        "system.daemonTitle": "Tastedaemon",
+        "system.daemonTitle": "D1–D4- og DisplayPad-handlinger",
         "system.hideDockIcon": "Skjul Dock-symbolet",
         "system.hideDockIconNote": "Everest er fortsatt tilgjengelig i menylinjen, også når vinduet er åpent. Åpne det igjen fra symbolet i menylinjen.",
         "system.keepRunning": "La Everest kjøre når jeg lukker vinduet",
@@ -465,8 +466,9 @@ extension L10n {
         "system.openSettings": "Åpne innstillinger",
         "system.sendMetrics": "Send CPU, GPU, RAM, disk, nettverk og volum",
         "system.stoppedState": "Stoppet",
-        "system.unlock": "Lås opp tastaturet",
-        "system.unlockNote": "«Lås opp» sender SDK-tilbakestillingen hvis en bildeoverføring ble avbrutt. Hvis det ikke er nok, koble fra og til tastaturet igjen: Ingenting går tapt.",
+        "system.troubleshooting": "Feilsøking",
+        "system.unlock": "Tilbakestill en fastlåst bildeoverføring",
+        "system.unlockNote": "Bare hvis tastaturet slutter å svare etter en avbrutt bildeoverføring. Prøv først å koble det fra og til igjen. Kommandoen tilbakestiller overføringen og skjermbildene; innstillinger lagret i Everest beholdes.",
 
         // MARK: upload
         "upload.phase.connect": "Kobler til tastaturet",

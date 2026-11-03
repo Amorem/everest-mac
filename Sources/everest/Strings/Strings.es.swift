@@ -14,6 +14,7 @@ extension L10n {
         "action.url": "Enlace",
 
         // MARK: app
+        "app.about": "Acerca de Everest",
         "app.closeWindow": "Cerrar ventana",
         "app.copy": "Copiar",
         "app.cut": "Cortar",
@@ -444,7 +445,7 @@ extension L10n {
         "system.autostartHint": "Inicio automático al iniciar sesión: ./install-daemon.sh desde tu Terminal.",
         "system.background": "Everest trabaja en segundo plano, desde la barra de menús",
         "system.daemonSubtitle": "Ejecuta las acciones de D1–D4 y envía valores al dial",
-        "system.daemonTitle": "Daemon de las teclas",
+        "system.daemonTitle": "Acciones D1–D4 y DisplayPad",
         "system.hideDockIcon": "Ocultar el icono del Dock",
         "system.hideDockIconNote": "Everest sigue accesible en la barra de menús, incluso con la ventana abierta. Vuelve a abrirla desde ese icono.",
         "system.keepRunning": "Mantener Everest activo al cerrar la ventana",
@@ -465,8 +466,9 @@ extension L10n {
         "system.openSettings": "Abrir ajustes",
         "system.sendMetrics": "Enviar CPU, GPU, RAM, disco, red y volumen",
         "system.stoppedState": "Detenido",
-        "system.unlock": "Desbloquear el teclado",
-        "system.unlockNote": "«Desbloquear» envía el restablecimiento del SDK si se interrumpió una transferencia de imagen. Si no basta, desenchufa y vuelve a enchufar el teclado: no se pierde nada.",
+        "system.troubleshooting": "Solución de problemas",
+        "system.unlock": "Restablecer una transferencia de imagen bloqueada",
+        "system.unlockNote": "Solo si el teclado deja de responder tras una transferencia de imagen interrumpida. Prueba primero a desconectarlo y volverlo a conectar. Este comando restablece la transferencia y las imágenes de las pantallas; se conservan los ajustes guardados en Everest.",
 
         // MARK: upload
         "upload.phase.connect": "Conectando con el teclado",

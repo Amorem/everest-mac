@@ -1,4 +1,5 @@
 import CoreGraphics
+import AppKit
 import Foundation
 
 // MARK: - helpers
@@ -524,7 +525,11 @@ case "metrics": Command.metricsOnce()
 case "monitor": Command.monitor()
 case "reset-dial": Command.resetDial()
 case "reset-numpad": Command.resetNumpad(rest)
-case "listen": Daemon.run(rest)
+case "listen":
+    // This helper shares the app executable and bundle identity. It never
+    // presents UI and must not leave a second, unfinished Dock launch behind.
+    NSApplication.shared.setActivationPolicy(.prohibited)
+    Daemon.run(rest)
 case "pad": PadCommand.run(rest)
 case "night":
     NightMode.toggle()

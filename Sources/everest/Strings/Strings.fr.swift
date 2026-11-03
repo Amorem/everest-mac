@@ -14,6 +14,7 @@ extension L10n {
         "action.url": "Lien",
 
         // MARK: app
+        "app.about": "À propos d’Everest",
         "app.closeWindow": "Fermer la fenêtre",
         "app.copy": "Copier",
         "app.cut": "Couper",
@@ -444,7 +445,7 @@ extension L10n {
         "system.autostartHint": "Démarrage automatique à l'ouverture de session : ./install-daemon.sh depuis ton Terminal.",
         "system.background": "Everest travaille en arrière-plan, depuis la barre de menus",
         "system.daemonSubtitle": "Exécute les actions de D1–D4 et pousse les valeurs vers la molette",
-        "system.daemonTitle": "Daemon des touches",
+        "system.daemonTitle": "Actions D1–D4 et DisplayPad",
         "system.hideDockIcon": "Masquer l’icône dans le Dock",
         "system.hideDockIconNote": "Everest reste accessible dans la barre de menus, même lorsque sa fenêtre est ouverte. Rouvrez-la depuis cette icône.",
         "system.keepRunning": "Garder Everest actif quand je ferme la fenêtre",
@@ -465,8 +466,9 @@ extension L10n {
         "system.openSettings": "Ouvrir les réglages",
         "system.sendMetrics": "Envoyer CPU, GPU, RAM, disque, réseau et volume",
         "system.stoppedState": "Arrêté",
-        "system.unlock": "Débloquer le clavier",
-        "system.unlockNote": "« Débloquer » envoie la réinitialisation du SDK si un transfert d'image a été interrompu. Si ça ne suffit pas, débranche et rebranche le clavier : rien n'est perdu.",
+        "system.troubleshooting": "Dépannage",
+        "system.unlock": "Réinitialiser un transfert d’image bloqué",
+        "system.unlockNote": "Uniquement si le clavier ne répond plus après un transfert d’image interrompu. Essaie d’abord de le débrancher et rebrancher. Cette commande réinitialise le transfert et les images des écrans ; les réglages enregistrés dans Everest sont conservés.",
 
         // MARK: upload
         "upload.phase.connect": "Connexion au clavier",

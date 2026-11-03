@@ -14,6 +14,7 @@ extension L10n {
         "action.url": "Linkki",
 
         // MARK: app
+        "app.about": "Tietoja Everestistä",
         "app.closeWindow": "Sulje ikkuna",
         "app.copy": "Kopioi",
         "app.cut": "Leikkaa",
@@ -444,7 +445,7 @@ extension L10n {
         "system.autostartHint": "Automaattinen käynnistys kirjautuessa: ./install-daemon.sh Terminalista.",
         "system.background": "Everest toimii taustalla valikkopalkista käsin",
         "system.daemonSubtitle": "Suorittaa D1–D4-toiminnot ja lähettää arvoja valitsimeen",
-        "system.daemonTitle": "Näppäindaemon",
+        "system.daemonTitle": "D1–D4- ja DisplayPad-toiminnot",
         "system.hideDockIcon": "Piilota Dock-kuvake",
         "system.hideDockIconNote": "Everest on käytettävissä valikkoriviltä myös ikkunan ollessa auki. Avaa ikkuna uudelleen valikkorivin kuvakkeesta.",
         "system.keepRunning": "Pidä Everest käynnissä, kun suljen ikkunan",
@@ -465,8 +466,9 @@ extension L10n {
         "system.openSettings": "Avaa asetukset",
         "system.sendMetrics": "Lähetä CPU, GPU, RAM, levy, verkko ja äänenvoimakkuus",
         "system.stoppedState": "Pysäytetty",
-        "system.unlock": "Vapauta näppäimistö",
-        "system.unlockNote": "“Vapauta” lähettää SDK-nollauksen, jos kuvansiirto keskeytyi. Jos se ei riitä, irrota ja liitä näppäimistö uudelleen: mitään ei menetetä.",
+        "system.troubleshooting": "Vianmääritys",
+        "system.unlock": "Nollaa juuttunut kuvansiirto",
+        "system.unlockNote": "Vain jos näppäimistö ei vastaa keskeytyneen kuvansiirron jälkeen. Kokeile ensin irrottaa ja kytkeä se uudelleen. Komento nollaa siirron ja näyttöjen kuvat; Everestiin tallennetut asetukset säilyvät.",
 
         // MARK: upload
         "upload.phase.connect": "Yhdistetään näppäimistöön",

@@ -9,9 +9,10 @@ enum Gui {
         MainActor.assumeIsolated {
             let app = NSApplication.shared
             let delegate = EverestAppDelegate()
-            app.setActivationPolicy(delegate.model.config.hideDockIcon ? .accessory : .regular)
+            // Start as an agent, including at login. Only a presented window
+            // may opt into the Dock after the launch event has been handled.
+            app.setActivationPolicy(.accessory)
             app.delegate = delegate
-            app.activate(ignoringOtherApps: true)
             app.run()
         }
     }
@@ -76,6 +77,20 @@ final class EverestAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegat
 
     private var bag = Set<AnyCancellable>()
 
+    func showAbout() {
+        let credits = NSAttributedString(string: "GitHub · Amorem/everest-mac", attributes: [
+            .link: AppVersion.repositoryURL,
+            .font: NSFont.systemFont(ofSize: 12),
+        ])
+        NSApp.orderFrontStandardAboutPanel(options: [
+            .applicationName: "Everest",
+            .applicationVersion: AppVersion.display,
+            .version: "",
+            .credits: credits,
+        ])
+        NSApp.activate(ignoringOtherApps: true)
+    }
+
     /// The menu bar of the app itself (not the status-item menu, which is
     /// rebuilt every time it opens).
     private func buildMainMenu() {
@@ -83,6 +98,8 @@ final class EverestAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegat
         let appItem = NSMenuItem()
         menu.addItem(appItem)
         let appMenu = NSMenu()
+        appMenu.addItem(BlockItem(tr("app.about")) { [weak self] in self?.showAbout() })
+        appMenu.addItem(.separator())
         appMenu.addItem(withTitle: tr("app.hide"), action: #selector(NSApplication.hide(_:)), keyEquivalent: "h")
         appMenu.addItem(.separator())
         appMenu.addItem(withTitle: tr("app.closeWindow"), action: #selector(NSWindow.performClose(_:)), keyEquivalent: "w")
@@ -133,6 +150,7 @@ final class EverestAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegat
         model.start()
         statusBar = StatusBarController(model: model,
                                         openWindow: { [weak self] section in self?.showWindow(section) },
+                                        about: { [weak self] in self?.showAbout() },
                                         quit: { [weak self] in
                                             self?.model.stopEverything()
                                             NSApp.terminate(nil)

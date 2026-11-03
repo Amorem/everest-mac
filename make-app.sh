@@ -40,6 +40,9 @@ cat > "$APP/Contents/Info.plist" <<EOF
     <key>CFBundleShortVersionString</key><string>$VERSION</string>
     <key>CFBundleVersion</key><string>$BUILD</string>
     <key>LSMinimumSystemVersion</key><string>13.0</string>
+    <!-- The GUI opts into the Dock when requested. Helper processes using
+         this executable must remain agents too, without a launch Dock tile. -->
+    <key>LSUIElement</key><true/>
     <key>NSHighResolutionCapable</key><true/>
     <key>LSApplicationCategoryType</key><string>public.app-category.utilities</string>
 </dict>

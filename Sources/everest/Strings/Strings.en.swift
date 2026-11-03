@@ -14,6 +14,7 @@ extension L10n {
         "action.url": "Link",
 
         // MARK: app
+        "app.about": "About Everest",
         "app.closeWindow": "Close window",
         "app.copy": "Copy",
         "app.cut": "Cut",
@@ -444,7 +445,7 @@ extension L10n {
         "system.autostartHint": "Automatic start at login: ./install-daemon.sh from your Terminal.",
         "system.background": "Everest works in the background, from the menu bar",
         "system.daemonSubtitle": "Runs the D1–D4 actions and pushes values to the dial",
-        "system.daemonTitle": "Keys daemon",
+        "system.daemonTitle": "D1–D4 and DisplayPad actions",
         "system.hideDockIcon": "Hide Dock icon",
         "system.hideDockIconNote": "Keep Everest in the menu bar, even with its window open. Open it again from the menu-bar icon.",
         "system.keepRunning": "Keep Everest running when I close the window",
@@ -465,8 +466,9 @@ extension L10n {
         "system.openSettings": "Open Settings",
         "system.sendMetrics": "Send CPU, GPU, RAM, disk, network and volume",
         "system.stoppedState": "Stopped",
-        "system.unlock": "Unblock the keyboard",
-        "system.unlockNote": "“Unblock” sends the SDK reset if an image transfer was interrupted. If that is not enough, unplug and replug the keyboard: nothing is lost.",
+        "system.troubleshooting": "Troubleshooting",
+        "system.unlock": "Reset a stuck image transfer",
+        "system.unlockNote": "Only for a keyboard that stopped responding after an interrupted image transfer. Try unplugging and reconnecting it first. This command resets the transfer and screen pictures; settings saved in Everest are kept.",
 
         // MARK: upload
         "upload.phase.connect": "Connecting to the keyboard",

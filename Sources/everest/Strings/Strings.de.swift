@@ -14,6 +14,7 @@ extension L10n {
         "action.url": "Link",
 
         // MARK: app
+        "app.about": "Über Everest",
         "app.closeWindow": "Fenster schließen",
         "app.copy": "Kopieren",
         "app.cut": "Ausschneiden",
@@ -444,7 +445,7 @@ extension L10n {
         "system.autostartHint": "Automatischer Start bei der Anmeldung: ./install-daemon.sh im Terminal.",
         "system.background": "Everest arbeitet im Hintergrund, über die Menüleiste",
         "system.daemonSubtitle": "Führt die D1–D4-Aktionen aus und sendet Werte an das Dial",
-        "system.daemonTitle": "Tasten-Daemon",
+        "system.daemonTitle": "D1–D4- und DisplayPad-Aktionen",
         "system.hideDockIcon": "Dock-Symbol ausblenden",
         "system.hideDockIconNote": "Everest bleibt über die Menüleiste erreichbar, auch bei geöffnetem Fenster. Öffne es erneut über das Menüleistensymbol.",
         "system.keepRunning": "Everest weiterlaufen lassen, wenn ich das Fenster schließe",
@@ -465,8 +466,9 @@ extension L10n {
         "system.openSettings": "Einstellungen öffnen",
         "system.sendMetrics": "CPU, GPU, RAM, Datenträger, Netzwerk und Lautstärke senden",
         "system.stoppedState": "Angehalten",
-        "system.unlock": "Tastatur entsperren",
-        "system.unlockNote": "„Entsperren“ sendet das SDK-Reset, falls eine Bildübertragung unterbrochen wurde. Reicht das nicht, trenne die Tastatur und schließe sie neu an: Nichts geht verloren.",
+        "system.troubleshooting": "Fehlerbehebung",
+        "system.unlock": "Blockierte Bildübertragung zurücksetzen",
+        "system.unlockNote": "Nur wenn die Tastatur nach einer unterbrochenen Bildübertragung nicht mehr reagiert. Trenne sie zuerst und schließe sie erneut an. Dieser Befehl setzt die Übertragung und die Bildschirmbilder zurück; in Everest gespeicherte Einstellungen bleiben erhalten.",
 
         // MARK: upload
         "upload.phase.connect": "Verbindung zur Tastatur",

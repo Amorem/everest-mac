@@ -14,6 +14,7 @@ extension L10n {
         "action.url": "Länk",
 
         // MARK: app
+        "app.about": "Om Everest",
         "app.closeWindow": "Stäng fönster",
         "app.copy": "Kopiera",
         "app.cut": "Klipp ut",
@@ -444,7 +445,7 @@ extension L10n {
         "system.autostartHint": "Automatisk start vid inloggning: ./install-daemon.sh från Terminal.",
         "system.background": "Everest arbetar i bakgrunden, från menyraden",
         "system.daemonSubtitle": "Kör D1–D4-åtgärderna och skickar värden till ratten",
-        "system.daemonTitle": "Tangentdaemon",
+        "system.daemonTitle": "D1–D4- och DisplayPad-åtgärder",
         "system.hideDockIcon": "Dölj Dock-symbolen",
         "system.hideDockIconNote": "Everest är tillgängligt i menyraden även när fönstret är öppet. Öppna det igen från symbolen i menyraden.",
         "system.keepRunning": "Låt Everest köra när jag stänger fönstret",
@@ -465,8 +466,9 @@ extension L10n {
         "system.openSettings": "Öppna inställningar",
         "system.sendMetrics": "Skicka CPU, GPU, RAM, disk, nätverk och volym",
         "system.stoppedState": "Stoppad",
-        "system.unlock": "Lås upp tangentbordet",
-        "system.unlockNote": "”Lås upp” skickar SDK-återställningen om en bildöverföring avbröts. Räcker inte det, koppla från och anslut tangentbordet igen: inget går förlorat.",
+        "system.troubleshooting": "Felsökning",
+        "system.unlock": "Återställ en låst bildöverföring",
+        "system.unlockNote": "Bara om tangentbordet slutar svara efter en avbruten bildöverföring. Prova först att koppla ur och ansluta det igen. Kommandot återställer överföringen och skärmbilderna; inställningar sparade i Everest behålls.",
 
         // MARK: upload
         "upload.phase.connect": "Ansluter till tangentbordet",

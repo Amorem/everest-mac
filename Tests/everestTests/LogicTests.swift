@@ -1,3 +1,4 @@
+import AppKit
 import XCTest
 @testable import everest
 
@@ -15,6 +16,34 @@ final class LogicTests: XCTestCase {
         unsetenv("EVEREST_CONFIG_DIR")
         try? FileManager.default.removeItem(at: dir)
         LedLayout.use(.uk)
+    }
+
+    func testMenuKeepsQuickActionsAndAbout() async {
+        await MainActor.run {
+            _ = NSApplication.shared
+            let model = EverestModel()
+            var opened = false
+            var about = false
+            var quit = false
+            let controller = StatusBarController(model: model, openWindow: { _ in opened = true },
+                                                 about: { about = true }, quit: { quit = true })
+            let menu = NSMenu()
+            controller.menuNeedsUpdate(menu)
+            let actions = menu.items.filter { !$0.isSeparatorItem }
+            XCTAssertEqual(actions.map(\.title), [
+                tr("menu.profile", model.activeProfile?.title ?? "—"), tr("lighting.title"),
+                tr("menu.open"), tr("app.about"), tr("app.quit"),
+            ])
+            XCTAssertNotNil(actions[0].submenu)
+            XCTAssertNotNil(actions[1].submenu)
+            for item in actions.prefix(4) { XCTAssertNotNil(item.image) }
+            for item in actions.suffix(3) {
+                XCTAssertTrue(NSApp.sendAction(item.action!, to: item.target, from: item))
+            }
+            XCTAssertTrue(opened)
+            XCTAssertTrue(about)
+            XCTAssertTrue(quit)
+        }
     }
 
     // MARK: Config file

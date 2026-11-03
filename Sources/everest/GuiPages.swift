@@ -528,6 +528,8 @@ struct SystemPage: View {
     @ObservedObject var model: EverestModel
     private var tint: Color { Section.system.tint }
 
+    @State private var showTroubleshooting = false
+
     private var inApplications: Bool { Bundle.main.bundlePath.hasPrefix("/Applications/") }
 
     var body: some View {
@@ -586,8 +588,6 @@ struct SystemPage: View {
                         }
                         .buttonStyle(model.daemonRunning ? .secondary : .primary(Theme.indigo))
                     }
-                    Caption(tr("system.autostartHint"),
-                            icon: "terminal")
                 }
                 Card(tr("system.monitoring"), subtitle: tr("system.monitoringNote"),
                      icon: "chart.xyaxis.line", tint: Theme.emerald) {
@@ -613,12 +613,26 @@ struct SystemPage: View {
                 HStack(spacing: 10) {
                     Button { model.refreshDevice() } label: { Label(tr("common.refresh"), systemImage: "arrow.clockwise") }
                         .buttonStyle(.secondary)
-                    Button { model.recover() } label: { Label(tr("system.unlock"), systemImage: "cross.case.fill") }
-                        .buttonStyle(.primary(tint))
                     Spacer()
                 }
-                Caption(tr("system.unlockNote"),
-                        icon: "lifepreserver")
+            }
+
+            Card(tint: Theme.amber) {
+                DisclosureGroup(isExpanded: $showTroubleshooting) {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Caption(tr("system.unlockNote"), icon: "info.circle")
+                        Button { model.recover() } label: {
+                            Label(tr("system.unlock"), systemImage: "arrow.counterclockwise")
+                        }
+                        .buttonStyle(.secondary)
+                        .disabled(!model.connected || model.firmwareBlock != nil || model.keyUpload != nil)
+                    }
+                    .padding(.top, 10)
+                } label: {
+                    Label(tr("system.troubleshooting"), systemImage: "lifepreserver")
+                }
+                .font(.ui(13, .medium))
+                .tint(Theme.textSecondary)
             }
         }
     }
