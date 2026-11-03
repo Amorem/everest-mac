@@ -8,8 +8,8 @@ enum Gui {
     static func run() {
         MainActor.assumeIsolated {
             let app = NSApplication.shared
-            app.setActivationPolicy(.regular)
             let delegate = EverestAppDelegate()
+            app.setActivationPolicy(delegate.model.config.hideDockIcon ? .accessory : .regular)
             app.delegate = delegate
             app.activate(ignoringOtherApps: true)
             app.run()
@@ -32,12 +32,25 @@ final class EverestAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegat
             && event?.paramDescriptor(forKeyword: AEKeyword(keyAEPropData))?.enumCodeValue == AEKeyword(keyAELaunchedAsLogInItem)
     }
 
-    /// Bring the window up (and the Dock icon with it).
+    /// Bring the window up, respecting the saved Dock preference.
     func showWindow(_ section: Section? = nil) {
         if let section { model.section = section }
-        NSApp.setActivationPolicy(.regular)
+        NSApp.setActivationPolicy(model.config.hideDockIcon ? .accessory : .regular)
         window?.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
+    }
+
+    /// Background-only operation stays accessory, as before. Changing the
+    /// preference while editing must not send the current window behind others.
+    private func updateDockVisibility(hidden: Bool) {
+        guard let window else { return }
+        let hasWindow = window.isVisible || window.isMiniaturized
+        let restoreFocus = NSApp.isActive && window.isKeyWindow
+        NSApp.setActivationPolicy(hidden || !hasWindow ? .accessory : .regular)
+        if restoreFocus {
+            window.makeKeyAndOrderFront(nil)
+            NSApp.activate(ignoringOtherApps: true)
+        }
     }
 
     /// Closing the window keeps Everest running in the menu bar.
@@ -91,6 +104,13 @@ final class EverestAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegat
         // The app menu is built once, so rebuild it when the language changes.
         model.$config.map(\.language).removeDuplicates()
             .sink { [weak self] _ in self?.buildMainMenu() }
+            .store(in: &bag)
+
+        // Also responds to configuration changes reloaded from disk. Deliver
+        // after @Published's willSet and after a status-menu action has closed.
+        model.$config.map(\.hideDockIcon).removeDuplicates().dropFirst()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] hidden in self?.updateDockVisibility(hidden: hidden) }
             .store(in: &bag)
 
         let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1240, height: 820),

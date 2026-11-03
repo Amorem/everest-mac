@@ -445,6 +445,8 @@ extension L10n {
         "system.background": "Everest toimii taustalla valikkopalkista käsin",
         "system.daemonSubtitle": "Suorittaa D1–D4-toiminnot ja lähettää arvoja valitsimeen",
         "system.daemonTitle": "Näppäindaemon",
+        "system.hideDockIcon": "Piilota Dock-kuvake",
+        "system.hideDockIconNote": "Everest on käytettävissä valikkoriviltä myös ikkunan ollessa auki. Avaa ikkuna uudelleen valikkorivin kuvakkeesta.",
         "system.keepRunning": "Pidä Everest käynnissä, kun suljen ikkunan",
         "system.keepRunningNote": "D1–D4-näppäimet, profiilit ja tehosteet toimivat edelleen; kuvake pysyy valikkopalkissa. Lopetus: kuvakkeen valikko tai ⌘Q.",
         "system.keyboardCard": "Näppäimistö",

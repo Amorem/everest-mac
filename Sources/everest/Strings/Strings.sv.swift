@@ -445,6 +445,8 @@ extension L10n {
         "system.background": "Everest arbetar i bakgrunden, från menyraden",
         "system.daemonSubtitle": "Kör D1–D4-åtgärderna och skickar värden till ratten",
         "system.daemonTitle": "Tangentdaemon",
+        "system.hideDockIcon": "Dölj Dock-symbolen",
+        "system.hideDockIconNote": "Everest är tillgängligt i menyraden även när fönstret är öppet. Öppna det igen från symbolen i menyraden.",
         "system.keepRunning": "Låt Everest köra när jag stänger fönstret",
         "system.keepRunningNote": "Tangenterna D1–D4, profilerna och effekterna fortsätter fungera; ikonen finns kvar i menyraden. Avsluta: ikonmenyn eller ⌘Q.",
         "system.keyboardCard": "Tangentbord",

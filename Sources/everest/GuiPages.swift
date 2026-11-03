@@ -555,6 +555,11 @@ struct SystemPage: View {
                                 icon: "info.circle")
                     }
                     Divider().overlay(Theme.stroke)
+                    settingRow(tr("system.hideDockIcon"),
+                               tr("system.hideDockIconNote"),
+                               Binding(get: { model.config.hideDockIcon },
+                                       set: { model.setHideDockIcon($0) }))
+                    Divider().overlay(Theme.stroke)
                     settingRow(tr("system.keepRunning"),
                                tr("system.keepRunningNote"),
                                Binding(get: { model.config.keepRunning },

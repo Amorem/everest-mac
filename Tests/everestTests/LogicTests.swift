@@ -149,13 +149,27 @@ final class LogicTests: XCTestCase {
         cfg.profiles[1].apps = [LinkedApp(bundleID: "com.apple.logic10", name: "Logic Pro", path: "/Applications/Logic Pro.app")]
         cfg.layoutOverride = .french
         cfg.daemonEnabled = false
+        cfg.hideDockIcon = true
         cfg.save()
         let back = Config.load()
         XCTAssertEqual(back.profiles.map(\.name), ["Coding", "Music"])
         XCTAssertEqual(back.profiles[1].apps.first?.bundleID, "com.apple.logic10")
         XCTAssertEqual(back.layoutOverride, .french)
         XCTAssertFalse(back.daemonEnabled)
+        XCTAssertTrue(back.hideDockIcon)
         XCTAssertTrue(back.keepRunning, "defaults survive")
+    }
+
+    func testDockPreferenceDefaultsAndCanBeDisabled() throws {
+        let legacy = try JSONDecoder().decode(Config.self, from: Data("{}".utf8))
+        XCTAssertFalse(legacy.hideDockIcon, "old configurations keep the Dock icon")
+        var cfg = Config()
+        cfg.hideDockIcon = true
+        cfg.save()
+        cfg = Config.load()
+        cfg.hideDockIcon = false
+        cfg.save()
+        XCTAssertFalse(Config.load().hideDockIcon, "turning the option off is saved too")
     }
 
     func testMigrationFromSingleProfileFile() throws {

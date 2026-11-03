@@ -445,6 +445,8 @@ extension L10n {
         "system.background": "Everest lavora in background, dalla barra dei menu",
         "system.daemonSubtitle": "Esegue le azioni di D1–D4 e invia i valori al dial",
         "system.daemonTitle": "Daemon dei tasti",
+        "system.hideDockIcon": "Nascondi l’icona nel Dock",
+        "system.hideDockIconNote": "Everest resta accessibile dalla barra dei menu, anche con la finestra aperta. Riaprila da questa icona.",
         "system.keepRunning": "Mantieni Everest attivo quando chiudo la finestra",
         "system.keepRunningNote": "I tasti D1–D4, i profili e gli effetti continuano a funzionare; l'icona resta nella barra dei menu. Per uscire: menu dell'icona o ⌘Q.",
         "system.keyboardCard": "Tastiera",

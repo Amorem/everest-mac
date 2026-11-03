@@ -445,6 +445,8 @@ extension L10n {
         "system.background": "Everest works in the background, from the menu bar",
         "system.daemonSubtitle": "Runs the D1–D4 actions and pushes values to the dial",
         "system.daemonTitle": "Keys daemon",
+        "system.hideDockIcon": "Hide Dock icon",
+        "system.hideDockIconNote": "Keep Everest in the menu bar, even with its window open. Open it again from the menu-bar icon.",
         "system.keepRunning": "Keep Everest running when I close the window",
         "system.keepRunningNote": "The D1–D4 keys, profiles and effects keep working; the icon stays in the menu bar. To quit: icon menu or ⌘Q.",
         "system.keyboardCard": "Keyboard",

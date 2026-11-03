@@ -143,6 +143,8 @@ struct Config: Codable {
     var daemonEnabled: Bool = true
     /// Closing the window keeps Everest in the menu bar instead of quitting.
     var keepRunning: Bool = true
+    /// Keep the app out of the Dock even while its window is open.
+    var hideDockIcon: Bool = false
     /// Switch profiles automatically when a linked app comes to the front.
     var autoSwitch: Bool = true
     /// Profile to return to when the front app has no profile of its own.
@@ -206,6 +208,7 @@ struct Config: Codable {
     enum CodingKeys: String, CodingKey {
         case clockStyle, clockFormat, dialImagePath, monitorMode, mainDisplayMode, applyClockOnStart
         case language, padBrightness, nightSleepsDisplays, layoutOverride, lastLayout, keepFlashActions, daemonEnabled, keepRunning, profiles, selectedProfile, autoSwitch, defaultProfile
+        case hideDockIcon
         case buttons, lighting   // legacy
     }
 
@@ -222,6 +225,7 @@ struct Config: Codable {
         lastLayout = try c.decodeIfPresent(KeyboardLayout.self, forKey: .lastLayout)
         daemonEnabled = try c.decodeIfPresent(Bool.self, forKey: .daemonEnabled) ?? true
         keepRunning = try c.decodeIfPresent(Bool.self, forKey: .keepRunning) ?? true
+        hideDockIcon = try c.decodeIfPresent(Bool.self, forKey: .hideDockIcon) ?? false
         selectedProfile = try c.decodeIfPresent(Int.self, forKey: .selectedProfile) ?? 1
         autoSwitch = try c.decodeIfPresent(Bool.self, forKey: .autoSwitch) ?? true
         defaultProfile = try c.decodeIfPresent(Int.self, forKey: .defaultProfile) ?? 1
@@ -253,6 +257,7 @@ struct Config: Codable {
         try c.encodeIfPresent(lastLayout, forKey: .lastLayout)
         try c.encode(daemonEnabled, forKey: .daemonEnabled)
         try c.encode(keepRunning, forKey: .keepRunning)
+        try c.encode(hideDockIcon, forKey: .hideDockIcon)
         try c.encode(profiles, forKey: .profiles)
         try c.encode(selectedProfile, forKey: .selectedProfile)
         try c.encode(autoSwitch, forKey: .autoSwitch)

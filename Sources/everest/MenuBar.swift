@@ -148,6 +148,9 @@ final class StatusBarController: NSObject, NSMenuDelegate {
         menu.addItem(langItem)
 
         menu.addItem(BlockItem(tr("menu.open"), symbol: "macwindow", key: "o") { [openWindow] in openWindow(nil) })
+        menu.addItem(BlockItem(tr("system.hideDockIcon"), symbol: "dock.rectangle", checked: model.config.hideDockIcon) { [model] in
+            model.setHideDockIcon(!model.config.hideDockIcon)
+        })
         menu.addItem(BlockItem(tr("menu.launchAtLogin"), symbol: "power", checked: model.launchAtLogin) { [model] in
             model.setLaunchAtLogin(!model.launchAtLogin)
         })

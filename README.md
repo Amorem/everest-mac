@@ -165,6 +165,9 @@ To open at login, tick **System → Launch Everest at login**
   **System** — daemon, login item, recovery.
 - Closing the window keeps Everest running in the menu bar (profile switcher,
   lighting, D1–D4 on/off). ⌘Q or the menu's *Quit Everest* quits for real.
+- Enable **Hide Dock icon** in the menu-bar menu or **System → Application**
+  to keep Everest out of the Dock even with its window open. The choice is
+  saved; use **Open Everest…** in the menu bar to bring the window back.
 - Defaults for D1–D4 are the factory behaviour (Base Camp's own pictures):
   D1 opens this app, D2 Finder, D3 sleeps the Mac (`pmset sleepnow`!), D4
   Activity Monitor. Change them on the **Keys D1–D4** page.

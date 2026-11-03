@@ -445,6 +445,8 @@ extension L10n {
         "system.background": "Everest jobber i bakgrunnen, fra menylinjen",
         "system.daemonSubtitle": "Kjører D1–D4-handlingene og sender verdier til dreieknappen",
         "system.daemonTitle": "Tastedaemon",
+        "system.hideDockIcon": "Skjul Dock-symbolet",
+        "system.hideDockIconNote": "Everest er fortsatt tilgjengelig i menylinjen, også når vinduet er åpent. Åpne det igjen fra symbolet i menylinjen.",
         "system.keepRunning": "La Everest kjøre når jeg lukker vinduet",
         "system.keepRunningNote": "Tastene D1–D4, profilene og effektene fortsetter å virke; ikonet blir i menylinjen. Avslutt: ikonmenyen eller ⌘Q.",
         "system.keyboardCard": "Tastatur",

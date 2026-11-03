@@ -445,6 +445,8 @@ extension L10n {
         "system.background": "Everest는 메뉴 막대에서 백그라운드로 작동합니다",
         "system.daemonSubtitle": "D1–D4 동작을 실행하고 다이얼에 값을 보냅니다",
         "system.daemonTitle": "키 데몬",
+        "system.hideDockIcon": "Dock 아이콘 숨기기",
+        "system.hideDockIconNote": "창이 열려 있어도 메뉴 막대에서 Everest에 접근할 수 있습니다. 메뉴 막대 아이콘에서 창을 다시 여세요.",
         "system.keepRunning": "윈도우를 닫아도 Everest 계속 실행",
         "system.keepRunningNote": "D1–D4 키, 프로필, 효과가 계속 작동하며 아이콘은 메뉴 막대에 남습니다. 종료: 아이콘 메뉴 또는 ⌘Q.",
         "system.keyboardCard": "키보드",

@@ -73,7 +73,12 @@ extension EverestModel {
         report(tr("status.daemonOff"))
     }
 
-    // MARK: - Launch at login
+    // MARK: - Application preferences
+
+    func setHideDockIcon(_ hidden: Bool) {
+        config.hideDockIcon = hidden
+        persist()
+    }
 
 
     func setLaunchAtLogin(_ on: Bool) {

@@ -445,6 +445,8 @@ extension L10n {
         "system.background": "Everest פועל ברקע, משורת התפריטים",
         "system.daemonSubtitle": "מריץ את פעולות D1–D4 ושולח ערכים לחוגה",
         "system.daemonTitle": "daemon המקשים",
+        "system.hideDockIcon": "הסתרת הסמל ב-Dock",
+        "system.hideDockIconNote": "Everest נשאר נגיש בשורת התפריטים גם כשהחלון פתוח. ניתן לפתוח אותו שוב דרך הסמל בשורת התפריטים.",
         "system.keepRunning": "השאר את Everest פועל כשאני סוגר את החלון",
         "system.keepRunningNote": "המקשים D1–D4, הפרופילים והאפקטים ממשיכים לעבוד; הסמל נשאר בשורת התפריטים. ליציאה: תפריט הסמל או ⌘Q.",
         "system.keyboardCard": "מקלדת",

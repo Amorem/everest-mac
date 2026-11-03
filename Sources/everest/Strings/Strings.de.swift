@@ -445,6 +445,8 @@ extension L10n {
         "system.background": "Everest arbeitet im Hintergrund, über die Menüleiste",
         "system.daemonSubtitle": "Führt die D1–D4-Aktionen aus und sendet Werte an das Dial",
         "system.daemonTitle": "Tasten-Daemon",
+        "system.hideDockIcon": "Dock-Symbol ausblenden",
+        "system.hideDockIconNote": "Everest bleibt über die Menüleiste erreichbar, auch bei geöffnetem Fenster. Öffne es erneut über das Menüleistensymbol.",
         "system.keepRunning": "Everest weiterlaufen lassen, wenn ich das Fenster schließe",
         "system.keepRunningNote": "Die Tasten D1–D4, Profile und Effekte funktionieren weiter; das Symbol bleibt in der Menüleiste. Beenden: Symbolmenü oder ⌘Q.",
         "system.keyboardCard": "Tastatur",

@@ -445,6 +445,8 @@ extension L10n {
         "system.background": "Everest travaille en arrière-plan, depuis la barre de menus",
         "system.daemonSubtitle": "Exécute les actions de D1–D4 et pousse les valeurs vers la molette",
         "system.daemonTitle": "Daemon des touches",
+        "system.hideDockIcon": "Masquer l’icône dans le Dock",
+        "system.hideDockIconNote": "Everest reste accessible dans la barre de menus, même lorsque sa fenêtre est ouverte. Rouvrez-la depuis cette icône.",
         "system.keepRunning": "Garder Everest actif quand je ferme la fenêtre",
         "system.keepRunningNote": "Les touches D1–D4, les profils et les effets continuent de fonctionner ; l'icône reste dans la barre de menus. Quitter : menu de l'icône ou ⌘Q.",
         "system.keyboardCard": "Clavier",
