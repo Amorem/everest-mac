@@ -275,6 +275,7 @@ extension L10n {
         "macfx.waves": "Vågor",
 
         // MARK: menu
+        "menu.about": "Om",
         "menu.allowAccessibility": "Tillåt Hjälpmedel…",
         "menu.disconnected": "Tangentbordet är frånkopplat",
         "menu.firmwareBlocked": "Firmware stöds inte — tangentbordet lämnas orört",
@@ -283,8 +284,9 @@ extension L10n {
         "menu.macEffects": "Mac-effekter",
         "menu.manageProfiles": "Hantera profiler…",
         "menu.newProfile": "Ny profil",
-        "menu.open": "Öppna Everest…",
+        "menu.open": "Öppna",
         "menu.pauseEffect": "Pausa effekten",
+        "menu.quit": "Avsluta",
         "menu.profile": "Profil: %1$@",
         "menu.resumeEffect": "Återuppta effekten",
 

@@ -275,6 +275,7 @@ extension L10n {
         "macfx.waves": "Bølger",
 
         // MARK: menu
+        "menu.about": "Om",
         "menu.allowAccessibility": "Tillat Tilgjengelighet…",
         "menu.disconnected": "Tastaturet er frakoblet",
         "menu.firmwareBlocked": "Firmware støttes ikke — tastaturet blir latt være i fred",
@@ -283,8 +284,9 @@ extension L10n {
         "menu.macEffects": "Mac-effekter",
         "menu.manageProfiles": "Administrer profiler…",
         "menu.newProfile": "Ny profil",
-        "menu.open": "Åpne Everest…",
+        "menu.open": "Åpne",
         "menu.pauseEffect": "Sett effekten på pause",
+        "menu.quit": "Avslutt",
         "menu.profile": "Profil: %1$@",
         "menu.resumeEffect": "Gjenoppta effekten",
 

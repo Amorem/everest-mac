@@ -275,6 +275,7 @@ extension L10n {
         "macfx.waves": "Vagues",
 
         // MARK: menu
+        "menu.about": "À propos",
         "menu.allowAccessibility": "Autoriser l'accessibilité…",
         "menu.disconnected": "Clavier déconnecté",
         "menu.firmwareBlocked": "Firmware non pris en charge — clavier ignoré",
@@ -283,8 +284,9 @@ extension L10n {
         "menu.macEffects": "Effets Mac",
         "menu.manageProfiles": "Gérer les profils…",
         "menu.newProfile": "Nouveau profil",
-        "menu.open": "Ouvrir Everest…",
+        "menu.open": "Ouvrir",
         "menu.pauseEffect": "Mettre l'effet en pause",
+        "menu.quit": "Quitter",
         "menu.profile": "Profil : %1$@",
         "menu.resumeEffect": "Reprendre l'effet",
 

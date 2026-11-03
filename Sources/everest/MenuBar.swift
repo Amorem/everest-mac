@@ -64,6 +64,9 @@ final class StatusBarController: NSObject, NSMenuDelegate {
     func menuNeedsUpdate(_ menu: NSMenu) {
         menu.removeAllItems()
 
+        menu.addItem(BlockItem(tr("menu.about"), symbol: "info.circle") { [about] in about() })
+        menu.addItem(.separator())
+
         // Profiles
         let profiles = NSMenu()
         for p in model.profiles {
@@ -113,8 +116,7 @@ final class StatusBarController: NSObject, NSMenuDelegate {
         menu.addItem(.separator())
 
         menu.addItem(BlockItem(tr("menu.open"), symbol: "macwindow", key: "o") { [openWindow] in openWindow(nil) })
-        menu.addItem(BlockItem(tr("app.about"), symbol: "info.circle") { [about] in about() })
         menu.addItem(.separator())
-        menu.addItem(BlockItem(tr("app.quit"), key: "q") { [quit] in quit() })
+        menu.addItem(BlockItem(tr("menu.quit"), key: "q") { [quit] in quit() })
     }
 }

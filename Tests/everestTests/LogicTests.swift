@@ -31,13 +31,15 @@ final class LogicTests: XCTestCase {
             controller.menuNeedsUpdate(menu)
             let actions = menu.items.filter { !$0.isSeparatorItem }
             XCTAssertEqual(actions.map(\.title), [
+                tr("menu.about"),
                 tr("menu.profile", model.activeProfile?.title ?? "—"), tr("lighting.title"),
-                tr("menu.open"), tr("app.about"), tr("app.quit"),
+                tr("menu.open"), tr("menu.quit"),
             ])
-            XCTAssertNotNil(actions[0].submenu)
+            XCTAssertEqual(menu.items.map(\.isSeparatorItem), [false, true, false, false, true, false, true, false])
             XCTAssertNotNil(actions[1].submenu)
+            XCTAssertNotNil(actions[2].submenu)
             for item in actions.prefix(4) { XCTAssertNotNil(item.image) }
-            for item in actions.suffix(3) {
+            for item in actions where item.submenu == nil {
                 XCTAssertTrue(NSApp.sendAction(item.action!, to: item.target, from: item))
             }
             XCTAssertTrue(opened)

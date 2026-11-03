@@ -275,6 +275,7 @@ extension L10n {
         "macfx.waves": "גלים",
 
         // MARK: menu
+        "menu.about": "אודות",
         "menu.allowAccessibility": "אפשר נגישות…",
         "menu.disconnected": "המקלדת מנותקת",
         "menu.firmwareBlocked": "קושחה לא נתמכת — המקלדת לא נוגעים בה",
@@ -283,8 +284,9 @@ extension L10n {
         "menu.macEffects": "אפקטים של ה-Mac",
         "menu.manageProfiles": "ניהול פרופילים…",
         "menu.newProfile": "פרופיל חדש",
-        "menu.open": "פתח את Everest…",
+        "menu.open": "פתיחה",
         "menu.pauseEffect": "השהה את האפקט",
+        "menu.quit": "יציאה",
         "menu.profile": "פרופיל: %1$@",
         "menu.resumeEffect": "המשך את האפקט",
 

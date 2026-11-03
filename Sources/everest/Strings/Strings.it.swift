@@ -275,6 +275,7 @@ extension L10n {
         "macfx.waves": "Onde",
 
         // MARK: menu
+        "menu.about": "Informazioni",
         "menu.allowAccessibility": "Consenti Accessibilità…",
         "menu.disconnected": "Tastiera disconnessa",
         "menu.firmwareBlocked": "Firmware non supportato — tastiera ignorata",
@@ -283,8 +284,9 @@ extension L10n {
         "menu.macEffects": "Effetti del Mac",
         "menu.manageProfiles": "Gestisci profili…",
         "menu.newProfile": "Nuovo profilo",
-        "menu.open": "Apri Everest…",
+        "menu.open": "Apri",
         "menu.pauseEffect": "Metti in pausa l'effetto",
+        "menu.quit": "Esci",
         "menu.profile": "Profilo: %1$@",
         "menu.resumeEffect": "Riprendi l'effetto",
 

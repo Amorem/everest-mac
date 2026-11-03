@@ -275,6 +275,7 @@ extension L10n {
         "macfx.waves": "Wogen",
 
         // MARK: menu
+        "menu.about": "Über",
         "menu.allowAccessibility": "Bedienungshilfen erlauben…",
         "menu.disconnected": "Tastatur getrennt",
         "menu.firmwareBlocked": "Firmware nicht unterstützt — Tastatur wird ignoriert",
@@ -283,8 +284,9 @@ extension L10n {
         "menu.macEffects": "Mac-Effekte",
         "menu.manageProfiles": "Profile verwalten…",
         "menu.newProfile": "Neues Profil",
-        "menu.open": "Everest öffnen…",
+        "menu.open": "Öffnen",
         "menu.pauseEffect": "Effekt pausieren",
+        "menu.quit": "Beenden",
         "menu.profile": "Profil: %1$@",
         "menu.resumeEffect": "Effekt fortsetzen",
 

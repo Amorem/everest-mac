@@ -275,6 +275,7 @@ extension L10n {
         "macfx.waves": "Waves",
 
         // MARK: menu
+        "menu.about": "About",
         "menu.allowAccessibility": "Allow Accessibility…",
         "menu.disconnected": "Keyboard disconnected",
         "menu.firmwareBlocked": "Firmware not supported — keyboard left alone",
@@ -283,8 +284,9 @@ extension L10n {
         "menu.macEffects": "Mac effects",
         "menu.manageProfiles": "Manage profiles…",
         "menu.newProfile": "New profile",
-        "menu.open": "Open Everest…",
+        "menu.open": "Open",
         "menu.pauseEffect": "Pause the effect",
+        "menu.quit": "Quit",
         "menu.profile": "Profile: %1$@",
         "menu.resumeEffect": "Resume the effect",
 

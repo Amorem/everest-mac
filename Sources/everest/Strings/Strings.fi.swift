@@ -275,6 +275,7 @@ extension L10n {
         "macfx.waves": "Aallot",
 
         // MARK: menu
+        "menu.about": "Tietoja",
         "menu.allowAccessibility": "Salli Käytön apu…",
         "menu.disconnected": "Näppäimistö irrotettu",
         "menu.firmwareBlocked": "Laiteohjelmistoa ei tueta — näppäimistöä ei käytetä",
@@ -283,8 +284,9 @@ extension L10n {
         "menu.macEffects": "Macin tehosteet",
         "menu.manageProfiles": "Hallitse profiileja…",
         "menu.newProfile": "Uusi profiili",
-        "menu.open": "Avaa Everest…",
+        "menu.open": "Avaa",
         "menu.pauseEffect": "Keskeytä tehoste",
+        "menu.quit": "Lopeta",
         "menu.profile": "Profiili: %1$@",
         "menu.resumeEffect": "Jatka tehostetta",
 

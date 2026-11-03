@@ -275,6 +275,7 @@ extension L10n {
         "macfx.waves": "파도",
 
         // MARK: menu
+        "menu.about": "정보",
         "menu.allowAccessibility": "손쉬운 사용 허용…",
         "menu.disconnected": "키보드 연결 끊김",
         "menu.firmwareBlocked": "지원되지 않는 펌웨어 — 키보드 무시됨",
@@ -283,8 +284,9 @@ extension L10n {
         "menu.macEffects": "Mac 효과",
         "menu.manageProfiles": "프로필 관리…",
         "menu.newProfile": "새 프로필",
-        "menu.open": "Everest 열기…",
+        "menu.open": "열기",
         "menu.pauseEffect": "효과 일시 정지",
+        "menu.quit": "종료",
         "menu.profile": "프로필: %1$@",
         "menu.resumeEffect": "효과 재개",
 
