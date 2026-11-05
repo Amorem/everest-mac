@@ -544,6 +544,10 @@ struct SystemPage: View {
 
             MRRCalendarCard(model: model)
 
+            if model.updates.isEnabled {
+                UpdatesCard(updates: model.updates)
+            }
+
             Card(tr("action.app"), subtitle: tr("system.background"),
                  icon: "menubar.rectangle", tint: Theme.violet) {
                 VStack(alignment: .leading, spacing: 14) {
@@ -691,6 +695,60 @@ struct AccessibilityBanner: View {
 /// MRRCalendar connection, in two states: not connected (paste a personal
 /// access token, Connect checks it before keeping it) and connected (the
 /// numbers it reads, and Disconnect).
+/// System › Updates. Only in release builds (see UpdateController).
+struct UpdatesCard: View {
+    @ObservedObject var updates: UpdateController
+
+    private var status: String {
+        switch updates.phase {
+        case .ready(let version): return tr("updates.restart", version)
+        case .available(let version): return tr("updates.available", version)
+        case .idle:
+            guard let last = updates.lastCheck else { return tr("updates.never") }
+            return tr("updates.lastCheck", last.formatted(date: .abbreviated, time: .shortened))
+        }
+    }
+
+    var body: some View {
+        Card(tr("updates.title"), subtitle: tr("updates.subtitle"),
+             icon: "arrow.down.circle", tint: Theme.indigo) {
+            VStack(alignment: .leading, spacing: 14) {
+                HStack(spacing: 10) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(tr("updates.current", AppVersion.display))
+                            .font(.ui(13, .semibold).monospacedDigit()).foregroundStyle(Theme.text)
+                        Text(status).font(.ui(12)).foregroundStyle(Theme.textSecondary)
+                    }
+                    Spacer()
+                    Button { updates.performPrimaryAction() } label: {
+                        Text(updates.phase == .idle ? tr("updates.check") : status)
+                    }
+                    .buttonStyle(.primary(Theme.indigo))
+                    .disabled(updates.phase == .idle && !updates.canCheck)
+                }
+                Divider().overlay(Theme.stroke)
+                updateToggle(tr("updates.autoCheck"), tr("updates.autoCheckNote"),
+                             Binding(get: { updates.automaticChecks }, set: { updates.setAutomaticChecks($0) }))
+                Divider().overlay(Theme.stroke)
+                updateToggle(tr("updates.autoInstall"), tr("updates.autoInstallNote"),
+                             Binding(get: { updates.automaticInstall }, set: { updates.setAutomaticInstall($0) }))
+                    .disabled(!updates.automaticChecks)
+            }
+        }
+    }
+
+    private func updateToggle(_ title: String, _ note: String, _ value: Binding<Bool>) -> some View {
+        Toggle(isOn: value) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title).font(.ui(13, .medium)).foregroundStyle(Theme.text)
+                Text(note).font(.ui(11.5)).foregroundStyle(Theme.textSecondary)
+            }
+        }
+        .toggleStyle(.switch)
+        .tint(Theme.indigo)
+    }
+}
+
 struct MRRCalendarCard: View {
     @ObservedObject var model: EverestModel
     @State private var token = ""

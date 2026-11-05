@@ -539,5 +539,19 @@ extension L10n {
         "pad.status.sent": "%1$@: sent to the DisplayPad.",
         "pad.status.savedOffline": "%1$@: saved — shown when the DisplayPad is plugged in.",
         "pad.status.failed": "DisplayPad: %1$@",
+        // MARK: updates
+        "app.credit": "Originally created by %1$@",
+        "updates.check": "Check for Updates…",
+        "updates.restart": "Restart to Update (%1$@)",
+        "updates.available": "Update Available: %1$@",
+        "updates.title": "Updates",
+        "updates.subtitle": "New versions of Everest, signed and verified before they install. The keyboard's firmware is never touched.",
+        "updates.current": "Version %1$@",
+        "updates.lastCheck": "Last checked: %1$@",
+        "updates.never": "Not checked yet",
+        "updates.autoCheck": "Check for updates automatically",
+        "updates.autoCheckNote": "Once a day. Nothing is sent but the request for the latest version.",
+        "updates.autoInstall": "Download and install automatically",
+        "updates.autoInstallNote": "The update installs when you quit Everest, or right away with Restart to Update.",
     ]
 }

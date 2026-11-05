@@ -222,16 +222,8 @@ struct KeyboardCanvas<Dial: View>: View {
         ctx.fill(top, with: .linearGradient(
             Gradient(colors: [Color(hex: 0xD9DCE2), Color(hex: 0x9EA3AD)]),
             startPoint: CGPoint(x: b.minX, y: b.minY), endPoint: CGPoint(x: b.maxX, y: b.maxY)))
-        // The Mountain mark, tinted by the key's LED (grey when unlit).
-        let lit = (led?.luminance ?? 0) > 0.02
-        let tint: Color = lit ? Color(rgb: led!).opacity(0.95) : Color(hex: 0x5A5E66)
-        let w = b.width * 0.64, h = w / MountainMark.aspect
-        let rect = CGRect(x: b.midX - w / 2, y: b.midY - h / 2, width: w, height: h)
-        ctx.drawLayer { layer in
-            layer.draw(Image(nsImage: MountainMark.image), in: rect)
-            layer.blendMode = .sourceIn
-            layer.fill(Path(rect), with: .color(tint))
-        }
+        ctx.draw(Text("Esc").font(.system(size: b.height * 0.3, weight: .semibold)).foregroundColor(Color(hex: 0x2A2D33)),
+                 at: CGPoint(x: b.midX, y: b.midY))
     }
 
     private func drawDisplayKey(_ ctx: inout GraphicsContext, _ key: LedLayout.Key, _ tf: Transform) {

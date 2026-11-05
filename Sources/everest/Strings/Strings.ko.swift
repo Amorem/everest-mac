@@ -539,5 +539,19 @@ extension L10n {
         "pad.status.sent": "%1$@: DisplayPad로 전송했습니다.",
         "pad.status.savedOffline": "%1$@: 저장됨 — DisplayPad를 연결하면 표시됩니다.",
         "pad.status.failed": "DisplayPad: %1$@",
+        // MARK: updates
+        "app.credit": "최초 제작자: %1$@",
+        "updates.check": "업데이트 확인…",
+        "updates.restart": "재시작하여 업데이트 (%1$@)",
+        "updates.available": "업데이트 가능: %1$@",
+        "updates.title": "업데이트",
+        "updates.subtitle": "Everest의 새 버전은 설치 전에 서명과 검증을 거칩니다. 키보드 펌웨어는 절대 변경하지 않습니다.",
+        "updates.current": "버전 %1$@",
+        "updates.lastCheck": "마지막 확인: %1$@",
+        "updates.never": "아직 확인하지 않음",
+        "updates.autoCheck": "자동으로 업데이트 확인",
+        "updates.autoCheckNote": "하루에 한 번. 최신 버전 요청 외에는 아무것도 보내지 않습니다.",
+        "updates.autoInstall": "자동으로 다운로드 및 설치",
+        "updates.autoInstallNote": "Everest를 종료할 때 설치되며, 재시작하여 업데이트를 누르면 바로 설치됩니다.",
     ]
 }

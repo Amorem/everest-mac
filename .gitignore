@@ -14,3 +14,6 @@ tools/*.png
 1791082007666.jpg
 tools/*.py
 Everest-*.zip
+# release output
+dist/
+build/

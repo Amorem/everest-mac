@@ -153,7 +153,7 @@ final class LogicTests: XCTestCase {
         let keys = FactoryKeys.buttons
         XCTAssertEqual(keys.count, 4)
         XCTAssertEqual(keys[0].action.type, .shell)
-        XCTAssertEqual(keys[0].action.value, "open -b local.everest-mac")
+        XCTAssertEqual(keys[0].action.value, "open -b com.mrrcalendar.everest")
         XCTAssertEqual(keys[1].action.value, "/System/Library/CoreServices/Finder.app")
         XCTAssertEqual(keys[2].action.value, "pmset sleepnow")
         XCTAssertEqual(keys[3].action.value, "/System/Applications/Utilities/Activity Monitor.app")
@@ -161,17 +161,25 @@ final class LogicTests: XCTestCase {
         XCTAssertEqual(Config().buttons.map(\.action.value), keys.map(\.action.value))
     }
 
-    func testFactoryPicturesAreEmbedded() {
+    func testFactoryPicturesAreDrawn() {
         for i in 0..<4 {
             let img = FactoryIcons.image(i)
             XCTAssertNotNil(img, "D\(i + 1)")
             XCTAssertEqual(img?.size.width, 256)
         }
         XCTAssertNil(FactoryIcons.image(4))
-        XCTAssertGreaterThan(MountainMark.image.size.width, 100, "the logo mark is embedded")
+        XCTAssertGreaterThan(BrandMark.image.size.width, 100, "the mark is drawn")
     }
 
     // MARK: Config
+
+    func testOldOpenAppActionFollowsTheNewIdentifier() throws {
+        var old = Config()
+        old.profiles[0].buttons[0].action.value = "open -b local.everest-mac"
+        let data = try JSONEncoder().encode(old)
+        let decoded = try JSONDecoder().decode(Config.self, from: data)
+        XCTAssertEqual(decoded.profiles[0].buttons[0].action.value, "open -b com.mrrcalendar.everest")
+    }
 
     func testRoundTrip() throws {
         var cfg = Config()
@@ -272,7 +280,7 @@ final class LogicTests: XCTestCase {
     func testAutoSwitchOffAndSelf() {
         var cfg = linkedConfig()
         let sw = AutoSwitcher()
-        XCTAssertNil(sw.update(frontApp: "local.everest-mac", current: 1, config: cfg), "our own window is ignored")
+        XCTAssertNil(sw.update(frontApp: AppVersion.bundleIdentifier, current: 1, config: cfg), "our own window is ignored")
         cfg.autoSwitch = false
         XCTAssertNil(AutoSwitcher().update(frontApp: "com.example.logic", current: 1, config: cfg))
     }

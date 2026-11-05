@@ -86,9 +86,12 @@ enum FirmwareBlock: Equatable {
 
 @MainActor
 final class EverestModel: ObservableObject {
+    /// App updates (release builds only).
+    let updates = UpdateController()
     /// `EVEREST_SNAPSHOT` renders the pages and quits: no daemon, nothing
     /// written to the devices, whatever config it is given.
     static let snapshotMode = ProcessInfo.processInfo.environment["EVEREST_SNAPSHOT"] != nil
+        || UpdateController.testMode
 
     @Published var config: Config
     @Published var section: Section = .overview

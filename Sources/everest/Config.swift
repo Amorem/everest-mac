@@ -63,7 +63,7 @@ enum FactoryKeys {
     static var names: [String] { ["Everest", "Finder", tr("factory.sleep"), tr("factory.activityMonitor")] }
 
     static let actions: [ButtonAction] = [
-        ButtonAction(type: .shell, value: "open -b local.everest-mac"),                       // Base Camp → this app
+        ButtonAction(type: .shell, value: "open -b \(AppVersion.bundleIdentifier)"),            // Base Camp → this app
         ButtonAction(type: .app, value: "/System/Library/CoreServices/Finder.app"),           // File Explorer
         ButtonAction(type: .shell, value: "pmset sleepnow"),                                  // Sleep
         ButtonAction(type: .app, value: "/System/Applications/Utilities/Activity Monitor.app"), // Task Manager
@@ -242,6 +242,21 @@ struct Config: Codable {
             profiles = [p]
         }
         if profileIndex(selectedProfile) == nil { selectedProfile = profiles[0].id }
+        migrateOpenAppAction()
+    }
+
+    /// Saved D1 actions open the app by its identifier, which changed in 0.2.0.
+    private mutating func migrateOpenAppAction() {
+        let old = "open -b \(AppVersion.legacyBundleIdentifier)"
+        let new = "open -b \(AppVersion.bundleIdentifier)"
+        for i in profiles.indices {
+            for k in profiles[i].buttons.indices where profiles[i].buttons[k].action.value == old {
+                profiles[i].buttons[k].action.value = new
+            }
+            for k in (profiles[i].pad ?? []).indices where profiles[i].pad?[k].action.value == old {
+                profiles[i].pad?[k].action.value = new
+            }
+        }
     }
 
     func encode(to encoder: Encoder) throws {

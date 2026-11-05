@@ -539,5 +539,19 @@ extension L10n {
         "pad.status.sent": "%1$@: נשלח ל־DisplayPad.",
         "pad.status.savedOffline": "%1$@: נשמר — יוצג כשה־DisplayPad יחובר.",
         "pad.status.failed": "DisplayPad: %1$@",
+        // MARK: updates
+        "app.credit": "נוצר במקור על ידי %1$@",
+        "updates.check": "בדיקת עדכונים…",
+        "updates.restart": "הפעלה מחדש לעדכון (%1$@)",
+        "updates.available": "עדכון זמין: %1$@",
+        "updates.title": "עדכונים",
+        "updates.subtitle": "גרסאות חדשות של Everest, חתומות ומאומתות לפני ההתקנה. הקושחה של המקלדת לעולם לא משתנה.",
+        "updates.current": "גרסה %1$@",
+        "updates.lastCheck": "בדיקה אחרונה: %1$@",
+        "updates.never": "טרם נבדק",
+        "updates.autoCheck": "בדיקת עדכונים אוטומטית",
+        "updates.autoCheckNote": "פעם ביום. נשלחת רק הבקשה לגרסה האחרונה.",
+        "updates.autoInstall": "הורדה והתקנה אוטומטיות",
+        "updates.autoInstallNote": "העדכון מותקן כשיוצאים מ-Everest, או מיד עם הפעלה מחדש לעדכון.",
     ]
 }

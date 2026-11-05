@@ -550,6 +550,8 @@ case "effect": Command.effect(rest)
 case "menubar-sheet": MainActor.assumeIsolated { Gui.menuBarSheet(to: rest.first ?? "menubar.png") }
 case "selftest": SelfTest.run(rest)
 case "layout-sheet": MainActor.assumeIsolated { Gui.layoutSheet(to: rest.first ?? "layouts.png") }
+case "app-icon":
+    do { try BrandMark.writeIconset(to: rest.first ?? "AppIcon.iconset") } catch { fail("\(error)") }
 case "icon-sheet": MainActor.assumeIsolated { Gui.iconSheet(to: rest.first ?? "icons.png") }
 case "effect-sheet": MainActor.assumeIsolated { Gui.effectSheet(to: rest.first ?? "effects.png") }
 case "layout-dump": Command.layoutDump()

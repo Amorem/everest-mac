@@ -1,0 +1,11 @@
+{
+  "version": "0.2.0",
+  "date": "2026-11-05",
+  "headline": "The first signed release: download it, drag it to Applications, and it keeps itself up to date.",
+  "items": [
+    { "title": "Notarized by Apple", "detail": "One universal app for Apple silicon and Intel Macs, which macOS opens without any workaround." },
+    { "title": "Automatic updates", "detail": "Everest checks once a day and installs when you choose Restart to Update. It never touches the keyboard's firmware." },
+    { "title": "A new icon", "detail": "Everest now has its own icon and pictures." },
+    { "title": "After upgrading", "detail": "macOS sees a new app once: grant Accessibility and Full Disk Access again if you use them." }
+  ]
+}

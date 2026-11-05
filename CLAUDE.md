@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-Unofficial macOS companion for the **Mountain Everest Max** keyboard and the **Mountain DisplayPad** (Swift 5.9, SwiftPM, macOS 13+, no dependencies). One executable target `everest` is both the CLI and the SwiftUI/menu-bar app. The UI is translated (en, fr, de, es, it, pt, nb, sv, da, fi, ko, he) through keys: never write user-facing text inline, use `tr("key", args…)` and add the key to all `Sources/everest/Strings/Strings.<lang>.swift` catalogs (`LocalizationTests` enforces completeness; values read at draw time must not be cached in `static let`). Code, docs and commit messages are English. Protocol details live in `docs/PROTOCOL.md`, user docs in `README.md`.
+Unofficial macOS companion for the **Mountain Everest Max** keyboard and the **Mountain DisplayPad** (Swift 5.9, SwiftPM, macOS 13+; one dependency, Sparkle, for app updates only). One executable target `everest` is both the CLI and the SwiftUI/menu-bar app. The UI is translated (en, fr, de, es, it, pt, nb, sv, da, fi, ko, he) through keys: never write user-facing text inline, use `tr("key", args…)` and add the key to all `Sources/everest/Strings/Strings.<lang>.swift` catalogs (`LocalizationTests` enforces completeness; values read at draw time must not be cached in `static let`). Code, docs and commit messages are English. Protocol details live in `docs/PROTOCOL.md`, user docs in `README.md`.
 
 ## Commands
 
@@ -11,13 +11,15 @@ swift build                          # debug build -> .build/debug/everest
 swift test                           # unit tests, no keyboard needed
 swift test --filter LayoutTests/testKeySetsAndGeometry   # single test
 ./make-app.sh [--install | --zip]    # builds + signs Everest.app (use this, not swift build, for the app)
+scripts/release.sh [--publish]       # the notarized release, see docs/RELEASING.md
+scripts/update-test.sh               # a real update, old build to new, before publishing
 .build/debug/everest selftest [--lighting] [--upload N]  # talks to the REAL keyboard
 .build/debug/everest selftest --pad [--draw]             # the REAL DisplayPad (--draw: RAM-only test pattern)
 ```
 
 There is no linter. `selftest --upload N` writes the keyboard's flash; `--lighting` switches the lighting slot and restores it. Run plain `selftest` after touching anything in `Keyboard.swift`, `Transport.swift`, `Daemon.swift` or `Firmware.swift`, and `selftest --pad` after touching the DisplayPad files or `Transport.swift`.
 
-Dev aids (not user features): `EVEREST_SNAPSHOT=<dir> Everest.app/Contents/MacOS/everest gui` renders every page to PNG and quits; `everest effect-sheet|icon-sheet|layout-sheet|menubar-sheet <out.png>` render contact sheets; `everest rgb ... --dry-run` prints packets without sending; `everest displays off|on` switches the dial and D1–D4 screens as night mode does and prints the bytes read back; `EVEREST_DEBUG=1` logs raw HID traffic; `EVEREST_CONFIG_DIR` overrides `~/.config/everest-mac` (tests rely on it so they never touch the real config).
+Dev aids (not user features): `EVEREST_SNAPSHOT=<dir> Everest.app/Contents/MacOS/everest gui` renders every page to PNG and quits; `everest effect-sheet|icon-sheet|layout-sheet|menubar-sheet <out.png>` render contact sheets; `everest app-icon <out.iconset>` draws the icon (then `iconutil -c icns`, to `assets/AppIcon.icns`); `everest rgb ... --dry-run` prints packets without sending; `everest displays off|on` switches the dial and D1–D4 screens as night mode does and prints the bytes read back; `EVEREST_DEBUG=1` logs raw HID traffic; `EVEREST_CONFIG_DIR` overrides `~/.config/everest-mac` (tests rely on it so they never touch the real config).
 
 ## Architecture
 
@@ -50,7 +52,9 @@ Dev aids (not user features): `EVEREST_SNAPSHOT=<dir> Everest.app/Contents/MacOS
 
 ## Gotchas
 
-- **Signing**: `make-app.sh` signs the bundle with the explicit requirement `identifier "local.everest-mac"` so the Accessibility grant survives rebuilds. A plain ad-hoc signature pins a `cdhash` and silently invalidates the permission on every build (symptom: entry ticked, D1–D4 key combos do nothing). The bundle executable is the binary itself; with no arguments inside a `.app` it opens the GUI (`main.swift`).
+- **Signing**: `make-app.sh` signs a local build ad hoc with the explicit requirement `identifier "com.mrrcalendar.everest"` so the Accessibility grant survives rebuilds. A plain ad-hoc signature pins a `cdhash` and silently invalidates the permission on every build (symptom: entry ticked, D1–D4 key combos do nothing). `--release` signs with the Developer ID, hardened runtime, inside out. The bundle executable is the binary itself; with no arguments inside a `.app` it opens the GUI (`main.swift`).
+- **Updates** (`UpdateController.swift`, `docs/RELEASING.md`): only `--release` builds carry `SUFeedURL`/`SUPublicEDKey`; a build from source shows nothing. Never regenerate the signing key, and keep the Sparkle version in step between `Package.swift` and `scripts/sparkle-tools.sh`. A Sparkle delegate method with a slightly wrong name compiles with only a "nearly matches" warning and is never called: read the warnings when touching them. The relaunch waits for `FlashBusy`.
+- **The binary loads `Sparkle.framework`**: a copy of it elsewhere does not start. `~/bin/everest` is a symlink into the app (`install.sh`); `swift build` binaries find the framework next to them (rpaths in `Package.swift`).
 - The keyboard stores its own Windows-style shortcut per D key and a picture reset restores it (⌘1… types digits/opens apps on a Mac). App and daemon overwrite them with a no-op via `neutraliseKeyActions()`; call it after any `13 42` reset.
-- `FactoryIcons.swift`, `MountainMark.swift` and `assets/AppIcon.icns` embed Mountain's pictures/logo; `tools/make-icon.swift` regenerates the icon and the embedded mark.
+- No Mountain logo or picture ships in the app: `BrandMark.swift` draws the mark in code (app icon, sidebar, menu bar, D1), `FactoryIcons.swift` draws what the app shows for a key without a picture. The keyboard's own factory pictures stay in its flash. Do not embed Mountain's again.
 - `.gitignore` deliberately excludes `extracted/`, `reference/`, the MSI, `venv/`, `tools/*.py` and the personal photo; keep them out of any commit.

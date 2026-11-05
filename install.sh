@@ -1,22 +1,18 @@
 #!/bin/sh
-# Build, install ~/bin/everest and the Everest.app bundle.
+# Builds and installs Everest.app, and puts the `everest` command in ~/bin.
 #
-# macOS 15 kills freshly copied binaries that carry a provenance xattr or an
-# invalid signature, so every copy is cleaned and re-signed ad-hoc.
+# The command is a link into the app, not a copy: the binary loads Sparkle from
+# the bundle, and a link also follows the app's updates.
 set -e
 cd "$(dirname "$0")"
 
-swift build -c release
+./make-app.sh --install >/dev/null
 
 mkdir -p "$HOME/bin"
-cp .build/release/everest "$HOME/bin/everest"
-xattr -c "$HOME/bin/everest" 2>/dev/null || true
-codesign --force --sign - "$HOME/bin/everest" >/dev/null 2>&1 || true
-
-./make-app.sh >/dev/null
+ln -sf /Applications/Everest.app/Contents/MacOS/everest "$HOME/bin/everest"
 
 echo "Installed:"
-echo "  $HOME/bin/everest        (CLI + 'everest gui')"
-echo "  $(pwd)/Everest.app        (double-click)"
+echo "  /Applications/Everest.app  (double-click)"
+echo "  $HOME/bin/everest          (CLI + 'everest gui')"
 echo
 echo "Make sure ~/bin is on your PATH (see ~/.zshrc)."

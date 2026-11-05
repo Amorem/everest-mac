@@ -37,6 +37,7 @@ enum MRRCalendar {
 
     // MARK: Token (login keychain)
 
+    /// Only a label: kept as it was so a saved token stays where it is.
     private static let service = "local.everest-mac.mrrcalendar"
     private static let account = "personal-access-token"
 
@@ -137,7 +138,7 @@ enum MRRCalendar {
         }
         var request = URLRequest(url: url, timeoutInterval: 20)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        request.setValue("everest-mac", forHTTPHeaderField: "User-Agent")
+        request.setValue(AppVersion.userAgent, forHTTPHeaderField: "User-Agent")
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
             let status = (response as? HTTPURLResponse)?.statusCode ?? 0

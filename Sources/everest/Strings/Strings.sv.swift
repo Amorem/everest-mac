@@ -539,5 +539,19 @@ extension L10n {
         "pad.status.sent": "%1$@: skickad till DisplayPad.",
         "pad.status.savedOffline": "%1$@: sparad — visas när DisplayPad ansluts.",
         "pad.status.failed": "DisplayPad: %1$@",
+        // MARK: updates
+        "app.credit": "Ursprungligen skapad av %1$@",
+        "updates.check": "Sök efter uppdateringar…",
+        "updates.restart": "Starta om för att uppdatera (%1$@)",
+        "updates.available": "Uppdatering tillgänglig: %1$@",
+        "updates.title": "Uppdateringar",
+        "updates.subtitle": "Nya versioner av Everest, signerade och kontrollerade före installation. Tangentbordets firmware rörs aldrig.",
+        "updates.current": "Version %1$@",
+        "updates.lastCheck": "Senast kontrollerad: %1$@",
+        "updates.never": "Inte kontrollerad än",
+        "updates.autoCheck": "Sök efter uppdateringar automatiskt",
+        "updates.autoCheckNote": "En gång om dagen. Bara begäran om den senaste versionen skickas.",
+        "updates.autoInstall": "Hämta och installera automatiskt",
+        "updates.autoInstallNote": "Uppdateringen installeras när du avslutar Everest, eller direkt med Starta om för att uppdatera.",
     ]
 }

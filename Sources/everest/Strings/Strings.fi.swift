@@ -539,5 +539,19 @@ extension L10n {
         "pad.status.sent": "%1$@: lähetetty DisplayPadiin.",
         "pad.status.savedOffline": "%1$@: tallennettu — näytetään, kun DisplayPad kytketään.",
         "pad.status.failed": "DisplayPad: %1$@",
+        // MARK: updates
+        "app.credit": "Alkuperäinen tekijä: %1$@",
+        "updates.check": "Tarkista päivitykset…",
+        "updates.restart": "Käynnistä uudelleen ja päivitä (%1$@)",
+        "updates.available": "Päivitys saatavilla: %1$@",
+        "updates.title": "Päivitykset",
+        "updates.subtitle": "Everestin uudet versiot, allekirjoitettuina ja tarkistettuina ennen asennusta. Näppäimistön laiteohjelmistoon ei kosketa.",
+        "updates.current": "Versio %1$@",
+        "updates.lastCheck": "Viimeksi tarkistettu: %1$@",
+        "updates.never": "Ei vielä tarkistettu",
+        "updates.autoCheck": "Tarkista päivitykset automaattisesti",
+        "updates.autoCheckNote": "Kerran päivässä. Vain pyyntö uusimmasta versiosta lähetetään.",
+        "updates.autoInstall": "Lataa ja asenna automaattisesti",
+        "updates.autoInstallNote": "Päivitys asennetaan, kun lopetat Everestin, tai heti toiminnolla Käynnistä uudelleen ja päivitä.",
     ]
 }

@@ -19,7 +19,7 @@ struct DialFace: View {
                     if let image {
                         Image(nsImage: image).resizable().interpolation(.high).aspectRatio(contentMode: .fill)
                     } else {
-                        MountainLogo().padding(d * 0.28)
+                        BrandLogo().padding(d * 0.28)
                     }
                 case .clock:
                     TimelineView(.periodic(from: .now, by: 1)) { ctx in
@@ -38,9 +38,9 @@ struct DialFace: View {
     }
 }
 
-struct MountainLogo: View {
+struct BrandLogo: View {
     var body: some View {
-        Image(nsImage: MountainMark.image)
+        Image(nsImage: BrandMark.image)
             .resizable()
             .interpolation(.high)
             .aspectRatio(contentMode: .fit)

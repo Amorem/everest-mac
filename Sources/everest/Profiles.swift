@@ -47,7 +47,7 @@ final class AutoSwitcher {
         guard cfg.autoSwitch, frontApp != lastApp else { return nil }
         lastApp = frontApp
         // Our own windows (the app itself) don't count.
-        if frontApp == Bundle.main.bundleIdentifier || frontApp == "local.everest-mac" { return nil }
+        if frontApp == Bundle.main.bundleIdentifier || frontApp == AppVersion.bundleIdentifier { return nil }
         if let p = ProfileSwitch.profile(forApp: frontApp, in: cfg) {
             autoSwitched = true
             return p.id == current ? nil : p.id

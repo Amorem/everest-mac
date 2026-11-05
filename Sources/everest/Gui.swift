@@ -78,10 +78,13 @@ final class EverestAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegat
     private var bag = Set<AnyCancellable>()
 
     func showAbout() {
-        let credits = NSAttributedString(string: "GitHub · Amorem/everest-mac", attributes: [
-            .link: AppVersion.repositoryURL,
-            .font: NSFont.systemFont(ofSize: 12),
+        let font = NSFont.systemFont(ofSize: 12)
+        let credits = NSMutableAttributedString(string: "GitHub · Amorem/everest-mac\n", attributes: [
+            .link: AppVersion.repositoryURL, .font: font,
         ])
+        credits.append(NSAttributedString(string: tr("app.credit", "Axel Louisy-Louis"), attributes: [
+            .link: AppVersion.originalRepositoryURL, .font: font,
+        ]))
         NSApp.orderFrontStandardAboutPanel(options: [
             .applicationName: "Everest",
             .applicationVersion: AppVersion.display,
@@ -99,6 +102,9 @@ final class EverestAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegat
         menu.addItem(appItem)
         let appMenu = NSMenu()
         appMenu.addItem(BlockItem(tr("app.about")) { [weak self] in self?.showAbout() })
+        if model.updates.isEnabled {
+            appMenu.addItem(BlockItem(tr("updates.check")) { [weak self] in self?.model.updates.checkForUpdates() })
+        }
         appMenu.addItem(.separator())
         appMenu.addItem(withTitle: tr("app.hide"), action: #selector(NSApplication.hide(_:)), keyEquivalent: "h")
         appMenu.addItem(.separator())
@@ -148,6 +154,7 @@ final class EverestAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegat
         self.window = window
 
         model.start()
+        if ProcessInfo.processInfo.environment["EVEREST_SNAPSHOT"] == nil { model.updates.start() }
         statusBar = StatusBarController(model: model,
                                         openWindow: { [weak self] section in self?.showWindow(section) },
                                         about: { [weak self] in self?.showAbout() },
@@ -697,7 +704,7 @@ extension Gui {
     @MainActor
     static func menuBarSheet(to path: String) {
         func tinted(_ warning: Bool, _ color: NSColor) -> NSImage {
-            let src = MountainMark.menuBarImage(warning: warning)
+            let src = BrandMark.menuBarImage(dot: warning)
             let scale: CGFloat = 8
             let size = NSSize(width: src.size.width * scale, height: src.size.height * scale)
             return NSImage(size: size, flipped: false) { rect in

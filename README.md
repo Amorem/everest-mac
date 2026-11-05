@@ -1,9 +1,13 @@
 # Everest for macOS
 
-An unofficial companion app for the **Mountain Everest Max** keyboard on macOS.
-Mountain only ships *Base Camp* for Windows; this talks to the keyboard
-directly (IOKit HID — no driver, no Wine, no Python) and gives its extra
-hardware a job.
+An unofficial, free and open-source companion app for the **Mountain Everest
+Max** keyboard and the **Mountain DisplayPad** on macOS. Mountain only ships
+*Base Camp* for Windows; this talks to the devices directly (IOKit HID — no
+driver, no Wine, no Python) and gives their extra hardware a job.
+
+**[Download Everest for Mac](https://mrrcalendar.com/everest/download)** — one
+universal app (Apple silicon and Intel), macOS 13 or later, notarized by Apple,
+and it keeps itself up to date.
 
 ![Overview](docs/screenshots/overview.png)
 
@@ -19,7 +23,7 @@ hardware a job.
   rain, …) with your own palettes, and per-key painting.
 - **Display keys D1–D4** — ready-made icons, any installed app's icon, or your
   own image, each with an action: shell command, URL, open/bring forward an
-  app, key combo, typed text. Factory pictures and actions can be restored.
+  app, key combo, typed text. The keyboard's factory pictures can be restored.
 - **DisplayPad** — the separate twelve-key Mountain DisplayPad, with the same
   pictures (presets, app icons, your images) and actions as D1–D4, per
   profile, plus its brightness; keys can also show live CPU, GPU, RAM,
@@ -118,39 +122,59 @@ The software is provided as is, without warranty (see [LICENSE](LICENSE)).
 
 ## Install
 
-Requirements: macOS 13 or later; for building, the Xcode command-line tools
-(Swift 5.9+).
+Requirement: macOS 13 or later.
 
-### Build from source (recommended)
+1. [Download the disk image](https://mrrcalendar.com/everest/download). The same
+   file works on Apple silicon and Intel Macs.
+2. Open it and drag **Everest** onto **Applications**.
+3. Open Everest from Applications.
+
+The app is signed with a Developer ID and notarized by Apple, so macOS opens it
+without any workaround.
+
+### Updates
+
+Everest checks for a new version once a day. It downloads in the background, a
+dot appears on the menu-bar icon, and **Restart to Update** in the menu installs
+it and reopens the app (or it installs the next time you quit). **Check for
+Updates…** is in the same menu and in *System → Updates*, where automatic checks
+and installation can be switched off.
+
+Updates are signed and verified with [Sparkle](https://sparkle-project.org).
+The check only asks for the latest version: no analytics, no account. They
+concern the app only: Everest never touches the firmware (see
+[Firmware](#firmware)), and it waits for a picture transfer to finish before it
+restarts.
+
+### Command-line tool
+
+The `everest` command is the app's own binary: link it, do not copy it (it loads
+a framework from the app bundle).
 
 ```sh
-git clone <this repository> && cd everest-mac
+ln -s /Applications/Everest.app/Contents/MacOS/everest ~/bin/everest
+```
+
+### Build from source
+
+Requires the Xcode command-line tools (Swift 5.9+).
+
+```sh
+git clone https://github.com/Amorem/everest-mac.git && cd everest-mac
 ./make-app.sh --install      # builds Everest.app and copies it to /Applications
+./install.sh                 # the same, plus the `everest` command in ~/bin
 open /Applications/Everest.app
 ```
 
-A locally built app is not quarantined, so macOS does not warn about it.
-`./install.sh` additionally installs the `everest` command-line tool to
-`~/bin`.
-
-### Prebuilt app
-
-The release `.zip` is **not signed or notarised** (that needs a paid Apple
-developer account). macOS will refuse to open it the first time:
-
-1. Move `Everest.app` to `/Applications`.
-2. Right-click it → **Open** → **Open**, or run
-   `xattr -dr com.apple.quarantine /Applications/Everest.app`.
-
-`./make-app.sh --zip` builds such a zip.
+A build from source has no update feed: it stays as it is until you rebuild it.
 
 ### First launch
 
 Key combinations and typed text are sent as synthetic key presses, which macOS
 only allows after you grant **Accessibility**: System Settings → Privacy &
 Security → Accessibility → add **Everest.app**. If Everest is already ticked
-but D1–D4 do nothing, the entry is stale (it belonged to an older build):
-select it, remove it with **−**, and add it again. The app shows a banner when
+but D1–D4 do nothing, the entry is stale (it belonged to a build from before
+0.2.0, or from source): select it, remove it with **−**, and add it again. The app shows a banner when
 the permission is missing.
 
 To open at login, tick **System → Launch Everest at login**
@@ -169,7 +193,7 @@ To open at login, tick **System → Launch Everest at login**
 - Enable **Hide Dock icon** in **System → Application**
   to keep Everest out of the Dock even with its window open. The choice is
   saved; use **Open** in the menu bar to bring the window back.
-- Defaults for D1–D4 are the factory behaviour (Base Camp's own pictures):
+- Defaults for D1–D4 are the factory behaviour:
   D1 opens this app, D2 Finder, D3 sleeps the Mac (`pmset sleepnow`!), D4
   Activity Monitor. Change them on the **Keys D1–D4** page.
 - The keyboard also stores its own shortcut for each D key (Windows-style
@@ -223,6 +247,7 @@ flags — that lighting and picture uploads still work. Please run
 | "Firmware not supported" covers the window | The keyboard is not on firmware 57 — see [Firmware](#firmware) |
 | The `\|` key left of Z prints nothing | macOS treats the board as ANSI: *Layout → Remap the ISO key* |
 | The keyboard stops answering after an interrupted upload | `everest recover`, or replug |
+| macOS asks to use the MRRCalendar token after upgrading to 0.2.0 | The app's signature changed once: choose *Always Allow*, or paste the token again |
 | The DisplayPad stays black | Plug it straight into the Mac (some hubs do not power its screen), and let the app or `everest listen` run: the pad shows nothing until a host switches it on |
 
 ## Limitations
@@ -268,16 +293,19 @@ upload safer. Please say which keyboard layout and firmware you have.
 
 ## Credits and legal
 
+- **[Axel Louisy-Louis](https://github.com/alouisy)** created this project
+  ([alouisy/everest-mac](https://github.com/alouisy/everest-mac)): the keyboard
+  protocol work, the app's architecture and the twelve translations. It has
+  since been developed separately, with the DisplayPad, live keys, night mode,
+  signed releases and updates.
 - [BaseCamp-Linux](https://github.com/ramisotti13-eng/BaseCamp-Linux) —
   hardware-validated protocol work this project learned from (that project is
   under its own licence, GPL v3 + non-commercial; none of its code is included).
-- Mountain's Base Camp supplied the protocol semantics, the layout tables'
-  keycap text and the four default display-key pictures, which are included so
-  the app can show what the keyboard shows after a reset. The app icon is built
-  from Mountain's logo (`tools/make-icon.swift`; replace `assets/AppIcon.icns`
-  and `Sources/everest/MountainMark.swift` to use another). The same mark is
-  used in the sidebar, the menu-bar icon and on the Esc key. These remain Mountain's property and will be removed on
-  request.
-- Mountain's DisplayPad SDK (MIT) — the DisplayPad protocol was read from it;
-  see [docs/DISPLAYPAD.md](docs/DISPLAYPAD.md).
-- Code: [MIT](LICENSE).
+- Mountain's Base Camp supplied the protocol semantics and the layout tables'
+  keycap text. Mountain's DisplayPad SDK (MIT) — the DisplayPad protocol was
+  read from it; see [docs/DISPLAYPAD.md](docs/DISPLAYPAD.md).
+- [Sparkle](https://sparkle-project.org) (MIT) installs the app's updates.
+- Everest's icon and pictures are its own. "Mountain", "Everest", "DisplayPad"
+  and "Base Camp" are used only to say which devices this software works with.
+- Maintained by the team behind [MRR Calendar](https://mrrcalendar.com). Code:
+  [MIT](LICENSE).

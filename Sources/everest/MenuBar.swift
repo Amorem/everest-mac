@@ -45,15 +45,15 @@ final class StatusBarController: NSObject, NSMenuDelegate {
         refreshIcon()
         // The icon dims while the keyboard is away and shows a dot for a
         // missing permission.
-        model.$connected.combineLatest(model.$accessibilityOK)
+        model.$connected.combineLatest(model.$accessibilityOK, model.updates.$phase)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] _, _ in self?.refreshIcon() }
+            .sink { [weak self] _, _, _ in self?.refreshIcon() }
             .store(in: &bag)
     }
 
     private func refreshIcon() {
-        // The Mountain mark; a dot warns that a permission is missing.
-        let img = MountainMark.menuBarImage(warning: !model.accessibilityOK)
+        // A dot: a permission is missing, or an update is waiting.
+        let img = BrandMark.menuBarImage(dot: !model.accessibilityOK || model.updates.phase != .idle)
         img.accessibilityDescription = "Everest"
         item.button?.image = img
         item.button?.appearsDisabled = !model.connected
@@ -65,6 +65,20 @@ final class StatusBarController: NSObject, NSMenuDelegate {
         menu.removeAllItems()
 
         menu.addItem(BlockItem(tr("menu.about"), symbol: "info.circle") { [about] in about() })
+        if model.updates.isEnabled {
+            let updates = model.updates
+            switch updates.phase {
+            case .ready(let version):
+                menu.addItem(BlockItem(tr("updates.restart", version), symbol: "arrow.clockwise.circle.fill") { updates.performPrimaryAction() })
+            case .available(let version):
+                menu.addItem(BlockItem(tr("updates.available", version), symbol: "arrow.down.circle.fill") { updates.performPrimaryAction() })
+            case .idle:
+                let check = BlockItem(tr("updates.check"), symbol: "arrow.down.circle") { updates.checkForUpdates() }
+                check.isEnabled = updates.canCheck
+                menu.autoenablesItems = false
+                menu.addItem(check)
+            }
+        }
         menu.addItem(.separator())
 
         // Profiles

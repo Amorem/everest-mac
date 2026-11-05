@@ -539,5 +539,19 @@ extension L10n {
         "pad.status.sent": "%1$@: an das DisplayPad gesendet.",
         "pad.status.savedOffline": "%1$@: gespeichert — wird angezeigt, sobald das DisplayPad angeschlossen ist.",
         "pad.status.failed": "DisplayPad: %1$@",
+        // MARK: updates
+        "app.credit": "Ursprünglich erstellt von %1$@",
+        "updates.check": "Nach Updates suchen…",
+        "updates.restart": "Neu starten und aktualisieren (%1$@)",
+        "updates.available": "Update verfügbar: %1$@",
+        "updates.title": "Updates",
+        "updates.subtitle": "Neue Everest-Versionen, signiert und vor der Installation geprüft. Die Firmware der Tastatur wird nie angetastet.",
+        "updates.current": "Version %1$@",
+        "updates.lastCheck": "Zuletzt geprüft: %1$@",
+        "updates.never": "Noch nicht geprüft",
+        "updates.autoCheck": "Automatisch nach Updates suchen",
+        "updates.autoCheckNote": "Einmal täglich. Gesendet wird nur die Anfrage nach der neuesten Version.",
+        "updates.autoInstall": "Automatisch laden und installieren",
+        "updates.autoInstallNote": "Das Update wird beim Beenden von Everest installiert oder sofort mit „Neu starten und aktualisieren“.",
     ]
 }
