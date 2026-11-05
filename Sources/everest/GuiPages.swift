@@ -738,14 +738,15 @@ struct UpdatesCard: View {
     }
 
     private func updateToggle(_ title: String, _ note: String, _ value: Binding<Bool>) -> some View {
-        Toggle(isOn: value) {
-            VStack(alignment: .leading, spacing: 2) {
+        HStack(alignment: .center, spacing: 14) {
+            VStack(alignment: .leading, spacing: 3) {
                 Text(title).font(.ui(13, .medium)).foregroundStyle(Theme.text)
                 Text(note).font(.ui(11.5)).foregroundStyle(Theme.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
+            Spacer(minLength: 12)
+            Toggle("", isOn: value).toggleStyle(.switch).labelsHidden().tint(Theme.indigo)
         }
-        .toggleStyle(.switch)
-        .tint(Theme.indigo)
     }
 }
 
