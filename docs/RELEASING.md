@@ -29,7 +29,7 @@ days: it reaches every keyboard, and pictures use the firmware-update mechanism.
 
 | What | Where |
 |---|---|
-| Downloads | R2 bucket `mrrcalendar-downloads`, prefix `everest/`, served at `https://downloads.mrrcalendar.com/everest-mac/` |
+| Downloads | R2 bucket `mrrcalendar-downloads`, prefix `everest/`, served at `https://downloads.mrrcalendar.com/everest/` |
 | Update feed | `everest/appcast.xml` (5 minutes of cache), read by `SUFeedURL` |
 | Website manifest | `everest/latest.json`, read by `mrrcalendar.com/everest-mac` |
 | Download link | `https://mrrcalendar.com/everest-mac/download`: counts, then redirects to the DMG |
