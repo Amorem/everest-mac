@@ -8,7 +8,7 @@ enum AppVersion {
     static let bundleIdentifier = "com.mrrcalendar.everest"
     /// The identifier before 0.2.0: still found in saved D1 actions.
     static let legacyBundleIdentifier = "local.everest-mac"
-    static let repositoryURL = URL(string: "https://github.com/Amorem/everest-mac")!
+    static let repositoryURL = URL(string: "https://github.com/Avalonia-SaaS/everest-mac")!
     /// The project this one started from.
     static let originalRepositoryURL = URL(string: "https://github.com/alouisy/everest-mac")!
 

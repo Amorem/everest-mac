@@ -79,7 +79,7 @@ final class EverestAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegat
 
     func showAbout() {
         let font = NSFont.systemFont(ofSize: 12)
-        let credits = NSMutableAttributedString(string: "GitHub · Amorem/everest-mac\n", attributes: [
+        let credits = NSMutableAttributedString(string: "GitHub · Avalonia-SaaS/everest-mac\n", attributes: [
             .link: AppVersion.repositoryURL, .font: font,
         ])
         credits.append(NSAttributedString(string: tr("app.credit", "Axel Louisy-Louis"), attributes: [

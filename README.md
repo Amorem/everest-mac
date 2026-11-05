@@ -160,7 +160,7 @@ ln -s /Applications/Everest.app/Contents/MacOS/everest ~/bin/everest
 Requires the Xcode command-line tools (Swift 5.9+).
 
 ```sh
-git clone https://github.com/Amorem/everest-mac.git && cd everest-mac
+git clone https://github.com/Avalonia-SaaS/everest-mac.git && cd everest-mac
 ./make-app.sh --install      # builds Everest.app and copies it to /Applications
 ./install.sh                 # the same, plus the `everest` command in ~/bin
 open /Applications/Everest.app
