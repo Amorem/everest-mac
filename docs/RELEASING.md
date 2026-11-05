@@ -29,9 +29,9 @@ days: it reaches every keyboard, and pictures use the firmware-update mechanism.
 
 | What | Where |
 |---|---|
-| Downloads | R2 bucket `mrrcalendar-downloads`, prefix `everest/`, served at `https://downloads.mrrcalendar.com/everest/` |
+| Downloads | R2 bucket `mrrcalendar-downloads`, prefix `everest/`, served at `https://downloads.mrrcalendar.com/everest-mac/` |
 | Update feed | `everest/appcast.xml` (5 minutes of cache), read by `SUFeedURL` |
-| Website manifest | `everest/latest.json`, read by `mrrcalendar.com/everest` |
+| Website manifest | `everest/latest.json`, read by `mrrcalendar.com/everest-mac` |
 | Download link | `https://mrrcalendar.com/everest-mac/download`: counts, then redirects to the DMG |
 | Private signing key | Infisical `agents`, `prod`, `/apple`, `SPARKLE_ED_PRIVATE_KEY_EVEREST_MAC` |
 | Public signing key | `SPARKLE_PUBLIC_KEY` in `make-app.sh` |

@@ -66,7 +66,7 @@ if [[ "${SKIP_BUILD:-0}" != "1" ]]; then
   # 6. Sign and write the appcast. The private key goes from Infisical to
   # generate_appcast through a pipe: no file, no keychain item.
   TOOLS=$(scripts/sparkle-tools.sh)
-  args=(--download-url-prefix "$FEED/" --maximum-deltas 3 --link "https://mrrcalendar.com/everest" -o "$UPDATES/appcast.xml")
+  args=(--download-url-prefix "$FEED/" --maximum-deltas 3 --link "https://mrrcalendar.com/everest-mac" -o "$UPDATES/appcast.xml")
   [[ -n "${PHASED_ROLLOUT_INTERVAL:-}" ]] && args+=(--phased-rollout-interval "$PHASED_ROLLOUT_INTERVAL")
   sec /apple SPARKLE_ED_PRIVATE_KEY_EVEREST_MAC | "$TOOLS/generate_appcast" --ed-key-file - "${args[@]}" "$UPDATES"
   grep -q "<sparkle:shortVersionString>$VERSION</sparkle:shortVersionString>" "$UPDATES/appcast.xml"
