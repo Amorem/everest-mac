@@ -15,7 +15,7 @@ SIGN_IDENTITY="Developer ID Application: AMOREM (962QD3N57U)"
 # installed apps for ever. Never change the key (Infisical agents, /apple,
 # SPARKLE_ED_PRIVATE_KEY_EVEREST_MAC holds the private half).
 FEED_URL="${EVEREST_FEED_URL:-https://downloads.mrrcalendar.com/everest/appcast.xml}"
-SPARKLE_PUBLIC_KEY="${EVEREST_SPARKLE_PUBLIC_KEY:-__SPARKLE_PUBLIC_KEY__}"
+SPARKLE_PUBLIC_KEY="${EVEREST_SPARKLE_PUBLIC_KEY:-F8KA22bV9r4p3U1/8J3OW25UGT21PNFDJLENE6e6RJI=}"
 
 if [ "$1" = "--release" ]; then
     ARCHS="--arch arm64 --arch x86_64"
@@ -54,7 +54,6 @@ BUILD="${EVEREST_BUILD:-$BUILD}"
 # Only a release build updates itself: a build from source stays as it is.
 UPDATE_KEYS=""
 if [ "$1" = "--release" ]; then
-    [ "$SPARKLE_PUBLIC_KEY" != "__SPARKLE_PUBLIC_KEY__" ] || { echo "No Sparkle public key in make-app.sh" >&2; exit 1; }
     UPDATE_KEYS="    <key>SUFeedURL</key><string>$FEED_URL</string>
     <key>SUPublicEDKey</key><string>$SPARKLE_PUBLIC_KEY</string>
     <key>SUEnableAutomaticChecks</key><true/>

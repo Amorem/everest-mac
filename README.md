@@ -5,7 +5,7 @@ Max** keyboard and the **Mountain DisplayPad** on macOS. Mountain only ships
 *Base Camp* for Windows; this talks to the devices directly (IOKit HID — no
 driver, no Wine, no Python) and gives their extra hardware a job.
 
-**[Download Everest for Mac](https://mrrcalendar.com/everest/download)** — one
+**[Download Everest for Mac](https://mrrcalendar.com/everest/download?from=readme)** — one
 universal app (Apple silicon and Intel), macOS 13 or later, notarized by Apple,
 and it keeps itself up to date.
 
@@ -124,7 +124,7 @@ The software is provided as is, without warranty (see [LICENSE](LICENSE)).
 
 Requirement: macOS 13 or later.
 
-1. [Download the disk image](https://mrrcalendar.com/everest/download). The same
+1. [Download the disk image](https://mrrcalendar.com/everest/download?from=readme). The same
    file works on Apple silicon and Intel Macs.
 2. Open it and drag **Everest** onto **Applications**.
 3. Open Everest from Applications.
