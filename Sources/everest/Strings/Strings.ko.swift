@@ -539,6 +539,7 @@ extension L10n {
         "pad.status.sent": "%1$@: DisplayPad로 전송했습니다.",
         "pad.status.savedOffline": "%1$@: 저장됨 — DisplayPad를 연결하면 표시됩니다.",
         "pad.status.failed": "DisplayPad: %1$@",
+        "mrr.guide": "MRR Calendar를 연결하고 수치를 표시하는 방법",
         // MARK: updates
         "app.credit": "최초 제작자: %1$@",
         "updates.check": "업데이트 확인…",

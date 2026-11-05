@@ -539,6 +539,7 @@ extension L10n {
         "pad.status.sent": "%1$@: נשלח ל־DisplayPad.",
         "pad.status.savedOffline": "%1$@: נשמר — יוצג כשה־DisplayPad יחובר.",
         "pad.status.failed": "DisplayPad: %1$@",
+        "mrr.guide": "איך לחבר את MRR Calendar ולהציג את המספרים שלך",
         // MARK: updates
         "app.credit": "נוצר במקור על ידי %1$@",
         "updates.check": "בדיקת עדכונים…",

@@ -808,6 +808,9 @@ struct MRRCalendarCard: View {
                 Caption(error, icon: "exclamationmark.triangle.fill").foregroundStyle(Theme.amber)
             }
             Caption(tr("mrr.note"), icon: "key")
+            Link(tr("mrr.guide"), destination: AppVersion.mrrCalendarGuideURL)
+                .font(.ui(12, .medium))
+                .tint(Theme.emerald)
         }
     }
 
